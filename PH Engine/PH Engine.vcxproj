@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\PC-M\Documents\Visual Studio 2017\Projects\PH-Engine-master\PH Engine\External\glad\include;C:\Users\PC-M\Documents\Visual Studio 2017\Projects\PH-Engine-master\PH Engine\External\glm;C:\Users\PC-M\Documents\Visual Studio 2017\Projects\PH-Engine-master\PH Engine\External;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\PC-M\Documents\Visual Studio 2017\Projects\PH-Engine-master\PH Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\PC-M\Documents\Placeholders-Engine\External\glad\include;C:\Users\PC-M\Documents\Placeholders-Engine\External\glm;C:\Users\PC-M\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\PC-M\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
