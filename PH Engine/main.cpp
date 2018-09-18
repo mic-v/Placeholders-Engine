@@ -16,6 +16,12 @@ int main()
 	while (!window.closed())
 	{
 		window.clear();
+		
+		if (window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
+		{
+			std::cout << "PRESSED!" << std::endl;
+		}
+
 		window.update();
 
 		glDrawArrays(GL_ARRAY_BUFFER, 0, 6);

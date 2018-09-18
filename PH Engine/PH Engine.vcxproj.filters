@@ -9,29 +9,28 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics">
+      <UniqueIdentifier>{ecf9c13f-caf3-46cd-8b4a-53c0ec789330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{8c154e7e-87af-4149-bbcc-fb58f6128f3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Window.cpp">
+      <Filter>Header Files\graphics</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Window.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\1.colors.fs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Shaders\1.colors.vs">
       <Filter>Shaders</Filter>
     </None>
@@ -39,6 +38,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\1.lamp.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\1.colors.fs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -50,7 +52,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
