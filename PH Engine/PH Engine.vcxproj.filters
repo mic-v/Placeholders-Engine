@@ -18,6 +18,9 @@
     <Filter Include="Header Files\input">
       <UniqueIdentifier>{8c154e7e-87af-4149-bbcc-fb58f6128f3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -28,6 +31,15 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Matrix33.cpp">
+      <Filter>Header Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector2.cpp">
+      <Filter>Header Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\Vector3.cpp">
+      <Filter>Header Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +65,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Matrix33.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector2.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\Vector3.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
