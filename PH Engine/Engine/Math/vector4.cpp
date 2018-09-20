@@ -8,14 +8,6 @@ vec4::vec4()
 	w = 0.0f;
 }
 
-vec4::vec4(vec4 vec, float scalar)
-{
-	x = vec.x;
-	y = vec.y;
-	z = vec.z;
-	w = scalar;
-}
-
 vec4::vec4(vec3 vec, float scalar)
 {
 	x = vec.x;

@@ -45,17 +45,17 @@
       <Filter>Header Files\math</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Math\mat44.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files\math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\1.colors.vs">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Shaders\1.lamp.fs">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\1.lamp.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\1.colors.vs">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\1.colors.fs">
@@ -85,6 +85,9 @@
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\mat44.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\math.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
