@@ -1,30 +1,33 @@
 #pragma once
 #include "Vector3.h"
 #include <ostream>
-class Matrix33
+
+#define SIZE 9
+class mat33
 {
 public:
 	float mV[9];
-	Matrix33() {};
-	~Matrix33() {};
+	mat33();
+	~mat33() {};
 	//Text Output
-	friend std::ostream& operator<<(std::ostream& out, const Matrix33 source);
+	friend std::ostream& operator<<(std::ostream& out, const mat33 source);
 	//Basic Operations
-	Matrix33 operator+(const Matrix33 rhs) const;
-	Matrix33 operator-(const Matrix33 rhs) const;
-	Matrix33 operator*(const Matrix33 rhs) const;
-	Matrix33 operator*(const float scalar) const;
+	mat33 operator+(const mat33 rhs) const;
+	mat33 operator-(const mat33 rhs) const;
+	mat33 operator*(const mat33 rhs) const;
+	mat33 operator*(const float scalar) const;
 	//Row Manipulators
-	void SetRows(Vector3 row1, Vector3 row2, Vector3 row3);
-	void GetRows(Vector3 row1, Vector3 row2, Vector3 row3);
-	Vector3 GetRow(int i);
+	void SetRows(vec3 row1, vec3 row2, vec3 row3);
+	void GetRows(vec3 row1, vec3 row2, vec3 row3);
+	vec3 GetRow(int i);
 	//Column Manipulators
-	void SetColumns(Vector3 col1, Vector3 col2, Vector3 col3);
-	void GetColumns(Vector3 col1, Vector3 col2, Vector3 col3);
-	Vector3 GetColumn(int i);
+	void SetColumns(vec3 col1, vec3 col2, vec3 col3);
+	void GetColumns(vec3 col1, vec3 col2, vec3 col3);
+	vec3 GetColumn(int i);
 	//Manipulators
-	Matrix33 Inverse();
-	Matrix33 Transpose();
+	mat33 transform(vec3 vec);
+	mat33 Inverse();
+	mat33 Transpose();
 	void Identity();
 	float Determinant();
 	float Trace();

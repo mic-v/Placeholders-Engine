@@ -2,50 +2,139 @@
 #include <ostream>
 #include <math.h>
 #define PI 3.141592635
-class Vector2
+class vec2
 {
 public:
 
 	//Actual Data
 	float x, y;
 
-	Vector2();
-	//Vector2 vec1 = {x,y};
-	Vector2(float X, float Y) :x(X), y(Y) {}
+	vec2();
+	//vec2 vec1 = {x,y};
+	vec2(float X, float Y) :x(X), y(Y) {}
 
-	~Vector2();
+	~vec2();
 	//vec1.set(x,y)
 	void set(float X, float Y) { x = X; y = Y; }
 
-	Vector2 operator*(const float scalar) const
+	/*
+		Operators
+		*
+		+
+		-
+		<<
+		==
+		!=
+		>
+		<
+		>=
+		<=
+		
+	*/
+	vec2 operator*(const float scalar)
 	{
 		//vec1 * 5
-		return Vector2((x*scalar), (y*scalar));
+		return vec2((x*scalar), (y*scalar));
 	}
-	Vector2 operator+(const Vector2 rhs) const
+	vec2 operator+(const vec2 right)
 	{
 		//vec1 + vec2
-		return Vector2((x + rhs.x), (y + rhs.y));
+		return vec2((x + right.x), (y + right.y));
 	}
-	Vector2 operator-(const Vector2 rhs) const
+	vec2 operator-(const vec2 right)
 	{
 		//vec1 - vec2
-		return Vector2((x - rhs.x), (y - rhs.y));
+		return vec2((x - right.x), (y - right.y));
 	}
-	friend std::ostream& operator<< (std::ostream& out ,const Vector2 source)
+
+	vec2& operator+=(const vec2& right)
+	{
+		*this = *this + right;
+		return *this;
+	}
+
+	vec2& operator-=(const vec2& right)
+	{
+		*this = *this - right;
+		return *this;
+	}
+
+	vec2& operator *= (const float scalar)
+	{
+		*this = *this * scalar;
+		return *this;
+	}
+
+	friend std::ostream& operator<< (std::ostream& out ,const vec2 source)
 	{
 		//Example: std::cout << vec1 << std::endl
 		//output in cmd: (x,y)
 		return out << "(" << source.x << "," << source.y << ")";
 	}
 
+	bool operator==(const vec2 right)
+	{
+		if (x == right.x && y == right.y)
+		{
+			return true;
+		}
+		return false;
+
+	}
+
+	bool operator!=(const vec2 right)
+	{
+		if (x != right.x && y != right.y)
+		{
+			return true;
+		}
+		return false;
+
+	}
+
+	bool operator> (const vec2 right)
+	{
+		if (x > right.x && y > right.y)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator< (const vec2 right)
+	{
+		if (x < right.x && y < right.y)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator>= (const vec2 right)
+	{
+		if (x >= right.x && y >= right.y)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator<= (const vec2 right)
+	{
+		if (x <= right.x && y <= right.y)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	//2D Functions
-	float Length(Vector2 v1);
-	Vector2 Normalize(Vector2 v1);
-	float DotProduct(Vector2 v1, Vector2 v2);
-	float ProjLength(Vector2 v1, Vector2 v2);
-	Vector2 ProjPoint(Vector2 v1, Vector2 v2);
-	float ProjAngle(Vector2 v1, Vector2 v2);
-	float DistanceBetweenObj(Vector2 v1, Vector2 v2);
-	Vector2 CrossProduct(Vector2 v1, Vector2 v2);
+	float Length(vec2 v1);
+	vec2 Normalize(vec2 v1);
+	float DotProduct(vec2 v1, vec2 v2);
+	float ProjLength(vec2 v1, vec2 v2);
+	vec2 ProjPoint(vec2 v1, vec2 v2);
+	float ProjAngle(vec2 v1, vec2 v2);
+	float DistanceBetweenObj(vec2 v1, vec2 v2);
+	vec2 CrossProduct(vec2 v1, vec2 v2);
 };

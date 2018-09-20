@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "Engine/Window.h"
+#include "Engine/Math/Vector2.h"
+#include "Engine/Math/Vector3.h"
 using namespace plaho;
 using namespace graphics;
 
@@ -13,6 +15,10 @@ int main()
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
+	vec3 vec1(1, 2, 3);
+	vec3 vec2(0, 1, 3);
+	vec2 *= 2;
+	std::cout << vec2 << std::endl;
 	while (!window.closed())
 	{
 		window.clear();
@@ -21,6 +27,7 @@ int main()
 		{
 			std::cout << "PRESSED!" << std::endl;
 		}
+		//window.getMousePos();
 
 		window.update();
 

@@ -41,6 +41,12 @@
     <ClCompile Include="Engine\Math\Vector3.cpp">
       <Filter>Header Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Math\vector4.cpp">
+      <Filter>Header Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Math\mat44.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\1.colors.vs">
@@ -73,6 +79,12 @@
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector3.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\vector4.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Math\mat44.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>

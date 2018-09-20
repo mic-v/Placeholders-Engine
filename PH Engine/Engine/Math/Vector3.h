@@ -1,52 +1,144 @@
 #pragma once
 #include <ostream>
 #include <math.h>
+#include "Vector2.h"
 #define PI 3.141592635
-class Vector3
+class vec3
 {
 public:
 
 	//Actual Data
 	float x, y, z;
 
-	Vector3();
-	//Vector3 vec1 = {x,y,z};
-	Vector3(float X, float Y, float Z) :x(X), y(Y), z(Z) {}
+	vec3();
+	//vec3 vec1 = {x,y,z};
+	vec3(float X, float Y, float Z) :x(X), y(Y), z(Z) {}
+	vec3(vec2 vec, float scalar);
 
-	~Vector3();
+	~vec3();
 	//vec1.set(4,5,6)
 	void set(float X, float Y, float Z) { x = X; y = Y; z = Z; }
 
-	Vector3 operator*(const float scalar) const
+	/*
+	Operators
+	*
+	+
+	-
+	<<
+	==
+	!=
+	>
+	<
+	>=
+	<=
+
+*/
+	
+	vec3 operator*(const float scalar) const
 	{
 		///vec1 * 5
-		return Vector3((x*scalar), (y*scalar), (z*scalar));
+		return vec3((x*scalar), (y*scalar), (z*scalar));
 	}
-	Vector3 operator+(const Vector3 rhs) const
+	vec3 operator+(const vec3 right) const
 	{
 		//vec1 + vec2
-		return Vector3((x + rhs.x), (y + rhs.y), (z + rhs.z));
+		return vec3((x + right.x), (y + right.y), (z + right.z));
 	}
-	Vector3 operator-(const Vector3 rhs) const
+	vec3 operator-(const vec3 right) const
 	{
 		//vec1 - vec2
-		return Vector3((x - rhs.x), (y - rhs.y), (z - rhs.z));
+		return vec3((x - right.x), (y - right.y), (z - right.z));
 	}
-	friend std::ostream& operator<< (std::ostream& out, const Vector3 source)
+
+	vec3& operator+=(const vec3& right)
+	{
+		*this = *this + right;
+		return *this;
+	}
+
+	vec3& operator-=(const vec3& right)
+	{
+		*this = *this - right;
+		return *this;
+	}
+
+	vec3& operator *= (const float scalar)
+	{
+		*this = *this * scalar;
+		return *this;
+	}
+
+	friend std::ostream& operator<< (std::ostream& out, const vec3 source)
 	{
 		//Example: std::cout << vec1 << std::endl
 		//output in cmd: (vec1.x,vec1.y,vec1.z)
 		return out << "(" << source.x << "," << source.y << "," << source.z << ")";
 	}
+
+	bool operator==(const vec3 right)
+	{
+		if (x == right.x && y == right.y && z == right.z)
+		{
+			return true;
+		}
+		return false;
+
+	}
+
+	bool operator!=(const vec3 right)
+	{
+		if (x != right.x && y != right.y && z != right.z)
+		{
+			return true;
+		}
+		return false;
+
+	}
+
+	bool operator> (const vec3 right)
+	{
+		if (x > right.x && y > right.y && z > right.z)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator< (const vec3 right)
+	{
+		if (x < right.x && y < right.y && z < right.z)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator>= (const vec3 right)
+	{
+		if (x >= right.x && y >= right.y && z >= right.z)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	bool operator<= (const vec3 right)
+	{
+		if (x <= right.x && y <= right.y && z <= right.z)
+		{
+			return true;
+		}
+		return false;
+	}
 	//3D Functions
-	float Length(Vector3 v1);
-	Vector3 Normalize(Vector3 v1);
-	float DotProduct(Vector3 v1, Vector3 v2);
-	float ProjLength(Vector3 v1, Vector3 v2);
-	Vector3 ProjPoint(Vector3 v1, Vector3 v2);
-	float ProjAngle(Vector3 v1, Vector3 v2);
-	float DistanceBetweenObj(Vector3 v1, Vector3 v2);
-	Vector3 CrossProduct(Vector3 v1, Vector3 v2);
+	float Length(vec3 v1);
+	vec3 Normalize(vec3 v1);
+	float DotProduct(vec3 v1, vec3 v2);
+	float ProjLength(vec3 v1, vec3 v2);
+	vec3 ProjPoint(vec3 v1, vec3 v2);
+	float ProjAngle(vec3 v1, vec3 v2);
+	float DistanceBetweenObj(vec3 v1, vec3 v2);
+	vec3 CrossProduct(vec3 v1, vec3 v2);
 
 
 

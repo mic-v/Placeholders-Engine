@@ -11,6 +11,7 @@ namespace plaho {
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void mouse_callback(GLFWwindow* window, int button, int action, int mods);
+		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 		/*
 			@Constructor for the window class
 			@param name The title for the window
@@ -70,12 +71,18 @@ namespace plaho {
 				return false;
 			}
 
+			/*
+				COMMENT
+			
+			*/
+
 			glfwMakeContextCurrent(_window);
 			glfwSetWindowUserPointer(_window, this);
 			glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
 			glfwSetWindowSizeCallback(_window, framebuffer_size_callback);
 			glfwSetKeyCallback(_window, key_callback);
 			glfwSetMouseButtonCallback(_window, mouse_callback);
+			glfwSetCursorPosCallback(_window, cursor_position_callback);
 
 			// glad: load all OpenGL function pointers
 // ---------------------------------------
@@ -110,22 +117,29 @@ namespace plaho {
 			//std::cout << _width << " " << _height << std::endl;
 		}
 
+		/*
+			Checks if the window should close
+			@return true if the window should close
+		*/
+		void Window::clear() const
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
+		/*
+			COMMENT
+			
+		*/
+
 		void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 		{
 			glViewport(0, 0, width, height);
 		}
 
-		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			Window* win = (Window*) glfwGetWindowUserPointer(window);
-			win->_keys[key] = action != GLFW_RELEASE;
-		}
-
-		void mouse_callback(GLFWwindow* window, int button, int action, int mods)
-		{
-			Window* win = (Window*)glfwGetWindowUserPointer(window);
-			win->_mouseButtons[button] = action != GLFW_RELEASE;
-		}
+		/*
+			COMMENT
+		
+		*/
 
 
 		bool Window::isKeyPressed(unsigned int keycode)
@@ -138,6 +152,12 @@ namespace plaho {
 			return _keys[keycode];
 		}
 
+		/*
+			COMMENT
+
+		*/
+
+
 		bool Window::isMouseButtonPressed(unsigned int button)
 		{
 			if (button >= MAX_BUTTONS)
@@ -147,16 +167,50 @@ namespace plaho {
 			return _mouseButtons[button];
 		}
 
-
 		/*
-			Checks if the window should close
-			@return true if the window should close
+			COMMENT
+
 		*/
-		void Window::clear() const
+
+
+		void Window::getMousePos()
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			std::cout << _mx << " " << _my << std::endl;
 		}
 
+		/*
+			COMMENT	
+		
+		*/
+
+		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			Window* win = (Window*) glfwGetWindowUserPointer(window);
+			win->_keys[key] = action != GLFW_RELEASE;
+		}
+
+		/*
+			COMMENT
+		
+		*/
+
+		void mouse_callback(GLFWwindow* window, int button, int action, int mods)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			win->_mouseButtons[button] = action != GLFW_RELEASE;
+		}
+
+		/*
+			COMMENT
+		
+		*/
+
+		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			win->_mx = xpos;
+			win->_my = ypos;
+		}
 	}
 
 }
