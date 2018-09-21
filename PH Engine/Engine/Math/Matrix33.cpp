@@ -20,7 +20,7 @@ mat33::mat33()
 {
 	for (int i = 0; i < 9; i++)
 	{
-		mV[i] = 0;
+		mV[i] = 0.0f;
 	}
 }
 

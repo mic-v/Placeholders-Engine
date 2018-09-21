@@ -1,13 +1,19 @@
 #pragma once
 
-#include "math.h  "
+#include "math.h "
 
 #define SIZE 16
+
+
 
 class mat44
 {
 public:
-	float _m[SIZE];
+	union
+	{
+		float _m[16];
+		vec4 row[4];
+	};
 public:
 	mat44();
 	mat44(float diagonal);

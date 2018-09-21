@@ -1,5 +1,10 @@
 #include "mat44.h"
 
+float toRad(float degrees)
+{
+	return degrees * (PI / 180.0f);
+}
+
 mat44::mat44()
 {
 	for (int i = 0; i < 16; i++)
@@ -84,8 +89,8 @@ mat44 mat44::perspective(float fov, float aspectRatio, float near, float far)
 	result._m[15] = 0.0f;
 	result._m[14] = 1.0f;
 
-	result._m[0] = 1 / ((aspectRatio)* tan(fov / 2));
-	result._m[5] = 1 / (tan(fov / 2));
+	result._m[0] = 1 / ((aspectRatio)* tan(toRad(fov / 2)));
+	result._m[5] = 1 / (tan(toRad(fov / 2)));
 	result._m[10] = (-near - far) / (near - far);
 	result._m[11] = (2 * far * near) / (near - far);
 
@@ -94,16 +99,47 @@ mat44 mat44::perspective(float fov, float aspectRatio, float near, float far)
 
 mat44 mat44::translation(const vec3 & translation)
 {
-	return mat44();
+	mat44 result(1.0f);
+
+	result._m[3] = translation.x;
+	result._m[7] = translation.y;
+	result._m[11] = translation.z;
+	
+	return result;
 }
 
 mat44 mat44::rotation(float angle, const vec3 & axis)
 {
-	return mat44();
+	mat44 result(1.0f);
+	float rotation = toRad(angle);
+	float c = cos(rotation);
+	float s = sin(rotation);
+	float _c = 1.0f - c;
+
+	result._m[0] = axis.x * axis.x * _c + c;
+	result._m[1] = axis.x * axis.y * _c - (axis.z * s);
+	result._m[2] = axis.x * axis.z * _c + (axis.y * s);
+	
+	result._m[4] = axis.x * axis.y * _c + (axis.z * s);
+	result._m[5] = axis.y * axis.y * _c + c;
+	result._m[6] = axis.y * axis.z * _c - (axis.x * s);
+
+	result._m[8] = axis.x * axis.z * _c - (axis.y * s);
+	result._m[9] = axis.y * axis.z * _c + (axis.x * s);
+	result._m[10] = axis.z * axis.z * _c + c;
+
+	return result;
+
 }
 
 mat44 mat44::scale(const vec3 & scale)
 {
-	return mat44();
+	mat44 result(1.0f);
+
+	result._m[0] = scale.x;
+	result._m[5] = scale.y;
+	result._m[10] = scale.z;
+
+	return result;
 }
 

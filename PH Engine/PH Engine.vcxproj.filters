@@ -29,9 +29,6 @@
     <ClCompile Include="Engine\Window.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Math\Matrix33.cpp">
       <Filter>Header Files\math</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
     <ClCompile Include="Engine\Math\mat44.cpp">
       <Filter>Header Files\math</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\1.lamp.fs">
@@ -59,6 +59,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\1.colors.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="4.2.texture.fs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="4.2.texture.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

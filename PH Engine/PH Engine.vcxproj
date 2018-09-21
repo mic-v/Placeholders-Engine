@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\100657260\Documents\Placeholders-Engine\External\glad\include;C:\Users\100657260\Documents\Placeholders-Engine\External\glm;C:\Users\100657260\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\100657260\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\PC-M\Documents\Placeholders-Engine\External\glad\include;C:\Users\PC-M\Documents\Placeholders-Engine\External\glm;C:\Users\PC-M\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\PC-M\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -142,6 +142,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="4.2.texture.fs" />
+    <None Include="4.2.texture.vs" />
     <None Include="Shaders\1.colors.fs" />
     <None Include="Shaders\1.colors.vs" />
     <None Include="Shaders\1.lamp.fs" />

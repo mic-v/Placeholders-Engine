@@ -12,13 +12,11 @@ public:
 	float x, y, z, w;
 
 	vec4();
-	//vec4 vec1 = {x,y,z};
 	vec4(float X, float Y, float Z, float W) :x(X), y(Y), z(Z), w(W) {}
 	vec4(vec3 vec, float scalar);
 	vec4(vec2 left, vec2 right);
 	vec4(vec2 vec, float left, float right);
 	~vec4();
-	//vec1.set(4,5,6)
 	void set(float X, float Y, float Z) { x = X; y = Y; z = Z; }
 
 	/*

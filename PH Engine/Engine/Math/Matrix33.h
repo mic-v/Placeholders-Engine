@@ -32,3 +32,5 @@ public:
 	float Determinant();
 	float Trace();
 };
+
+
