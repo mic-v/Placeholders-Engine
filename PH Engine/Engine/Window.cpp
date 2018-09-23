@@ -12,6 +12,7 @@ namespace plaho {
 		void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void mouse_callback(GLFWwindow* window, int button, int action, int mods);
 		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+		void processInput(GLFWwindow * window);
 		/*
 			@Constructor for the window class
 			@param name The title for the window
@@ -39,7 +40,7 @@ namespace plaho {
 			{
 				_mouseButtons[i] = false;
 			}
-
+			firstMouse = true;
 			//Window::INSTANCE = this;
 		}
 
@@ -54,6 +55,9 @@ namespace plaho {
 
 		bool Window::init()
 		{
+			camera = Camera(vec3(0.0f,0.0f,-3.0f));
+			_mx = 1280.f / 2.f;
+			_my = 720.f / 2.f;
 			if (glfwInit() == NULL)
 			{
 				std::cout << "Failed to initialize GLFW" << std::endl;
@@ -75,7 +79,6 @@ namespace plaho {
 				COMMENT
 			
 			*/
-
 			glfwMakeContextCurrent(_window);
 			glfwSetWindowUserPointer(_window, this);
 			glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
@@ -112,6 +115,13 @@ namespace plaho {
 		*/
 		void Window::update()
 		{
+			float currentFrame = glfwGetTime();
+			deltaTime = currentFrame - lastFrame;
+			lastFrame = currentFrame;
+
+			processInput(_window);
+
+
 			glfwSwapBuffers(_window);
 			glfwPollEvents();
 			//std::cout << _width << " " << _height << std::endl;
@@ -208,8 +218,29 @@ namespace plaho {
 		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 		{
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
-			win->_mx = xpos;
-			win->_my = ypos;
+			if (win->firstMouse)
+			{
+				win->_mx = xpos;
+				win->_my = ypos;
+				win->firstMouse = false;
+			}
+			float xoff = xpos - win->_mx;
+			float yoff = win->_my - ypos;
+
+			win->camera.processMouseMovement(xoff, yoff);
+		}
+		void processInput(GLFWwindow * window)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+				win->camera.processKeyboard(FORWARD, win->deltaTime);
+			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+				win->camera.processKeyboard(BACKWARD, win->deltaTime);
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				win->camera.processKeyboard(LEFT, win->deltaTime);
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+				win->camera.processKeyboard(RIGHT, win->deltaTime);
 		}
 	}
 

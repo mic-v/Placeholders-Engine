@@ -2,8 +2,10 @@
 #define CAMERA_H
 
 #include <glad\glad.h>
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
+//#include <glm\glm.hpp>
+//#include <glm\gtc\matrix_transform.hpp>
+#include "Math/math.h"
+
 
 enum Camera_Movement {
 	FORWARD,
@@ -15,7 +17,7 @@ enum Camera_Movement {
 const float YAW = -90.0F;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+const float SENSITIVITY = 0.0050f;
 const float ZOOM = 45.0f;
 
 class Camera
@@ -23,11 +25,16 @@ class Camera
 public:
 	// Objects
 	// -------
-	glm::vec3 position;
-	glm::vec3 front;
-	glm::vec3 up;
-	glm::vec3 right;
-	glm::vec3 worldUp;
+	//glm::vec3 position;
+	//glm::vec3 front;
+	//glm::vec3 up;
+	//glm::vec3 right;
+	//glm::vec3 worldUp;
+	vec3 position;
+	vec3 front;
+	vec3 up;
+	vec3 right;
+	vec3 worldUp;
 	//euler angles
 	float yaw;
 	float pitch;
@@ -38,22 +45,32 @@ public:
 
 	// Constructors
 	// ------------
-	Camera(glm::vec3 position_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up_ = glm::vec3(0.0f, 1.0f, 0.0f), float yaw_ = YAW, float pitch_ = PITCH) 
-		: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM)
+	//Camera(glm::vec3 position_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up_ = glm::vec3(0.0f, 1.0f, 0.0f), float yaw_ = YAW, float pitch_ = PITCH) 
+	//	: front(glm::vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM)
+	//{
+	//	position = position_;
+	//	yaw = yaw_;
+	//	pitch = pitch_;
+	//	worldUp = up_;
+	//	updateCameraVectors();
+	//}
+	//
+
+	Camera(vec3 position_ = vec3(0.0f, 0.0f, 0.0f), vec3 up_ = vec3(0.0f, 1.0f, 0.0f), vec3 right_ = vec3(1.0f,0.0f,0.0f), float yaw_ = YAW, float pitch_ = PITCH)
+		: front(vec3(0.0f, 0.0f, -1.0f)), movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM)
 	{
 		position = position_;
 		yaw = yaw_;
 		pitch = pitch_;
 		worldUp = up_;
+		right = right_;
 		updateCameraVectors();
 	}
-	
-
 	// Methods
 	// -------
-	glm::mat4 getLookMatrix()
+	mat44 getLookMatrix()
 	{
-		return glm::lookAt(position, position + front, worldUp);
+		return mat44::lookAt(position, worldUp, right, position + front);
 	}
 
 	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -100,14 +117,15 @@ public:
 private:
 	void updateCameraVectors()
 	{
-		glm::vec3 Front;
-		Front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		Front.y = sin(glm::radians(pitch));
-		Front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-		front = glm::normalize(Front);
+		vec3 Front;
+		Front.x = cos((3.14/ 180.f) * (yaw)) * cos((3.14/ 180.f) * (pitch));
+		Front.y = sin((3.14/ 180.f) * (pitch));
+		Front.z = sin((3.14/ 180.f) * (yaw)) * cos((3.14/ 180.f) * (pitch));
+		front = Front.Normalize(Front);
 
-		right = glm::normalize(glm::cross(front, worldUp));
-		up = glm::normalize(glm::cross(right, front));
+		right = right.Normalize(right.CrossProduct(front, worldUp));
+		up = up.Normalize(up.CrossProduct(right, front));
+
 	}
 };
 

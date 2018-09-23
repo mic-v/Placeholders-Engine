@@ -9,9 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\graphics">
       <UniqueIdentifier>{ecf9c13f-caf3-46cd-8b4a-53c0ec789330}</UniqueIdentifier>
     </Filter>
@@ -20,6 +17,9 @@
     </Filter>
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shaders">
+      <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,22 +50,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\1.lamp.fs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Shaders\1.lamp.vs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Shaders\1.colors.vs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Shaders\1.colors.fs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="4.2.texture.fs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="4.2.texture.vs">
-      <Filter>Shaders</Filter>
+      <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

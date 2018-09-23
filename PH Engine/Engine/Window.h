@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "Camera.h"
 #include <iostream>
 
 namespace plaho {
@@ -22,6 +23,7 @@ namespace plaho {
 			static bool _keys[1024];
 			static bool _mouseButtons[MAX_BUTTONS];
 			static double _mx, _my;
+			static double _lastX, _lastY;
 		public:
 			Window(const char*, int, int);
 			~Window();
@@ -29,6 +31,10 @@ namespace plaho {
 			bool closed() const;
 			void clear() const;
 			void update();
+			bool firstMouse;
+			Camera camera;
+			float deltaTime = 0.0f;
+			float lastFrame = 0.0f;
 			//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 			inline int getWidth() const { return _width; }
@@ -42,7 +48,7 @@ namespace plaho {
 			friend static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 			friend static void mouse_callback(GLFWwindow* window, int button, int action, int mods);
 			friend static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
-
+			friend static void processInput(GLFWwindow * window);
 		};
 	}
 }

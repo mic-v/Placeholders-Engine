@@ -1,4 +1,5 @@
 #include "mat44.h"
+#include <iostream>
 
 float toRad(float degrees)
 {
@@ -25,6 +26,7 @@ mat44::mat44(float diagonal)
 	_m[15] = diagonal;
 }
 
+
 mat44::~mat44()
 {
 }
@@ -48,9 +50,28 @@ mat44& mat44::operator*(const mat44 & right)
 
 }
 
-mat44 & mat44::operator*=(const mat44& right)
+
+mat44& mat44::operator*=(const mat44& right)
 {
 	return *this * right;
+}
+
+mat44 & operator*(const mat44 & left, const mat44 & right)
+{
+	mat44 result;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			float sum = 0.0f;
+			for (int s = 0; s < 4; s++)
+			{
+				sum += left._m[j + s * 4] * right._m[s + i * 4];
+			}
+			result._m[i * 4 + j] = sum;
+		}
+	}
+	return result;
 }
 
 std::ostream& operator<<(std::ostream & out, const mat44 & source)
@@ -61,9 +82,29 @@ std::ostream& operator<<(std::ostream & out, const mat44 & source)
 		<< source._m[12] << ", " << source._m[13] << ", " << source._m[14] << ", " << source._m[15];
 }
 
+mat44 mat44::setPosition(vec3 position)
+{
+	mat44 result = mat44::identity();
+	result._m[3] = -(position.x);
+	result._m[7] = -(position.y);
+	result._m[11] = -(position.z);
+
+	return result;
+}
+
 mat44 mat44::identity()
 {
 	return mat44(1.0f);
+}
+
+mat44 mat44::diagonal(float scalar)
+{
+	mat44 result = mat44::identity();
+	result._m[0] = scalar;
+	result._m[5] = scalar;
+	result._m[10] = scalar;
+	result._m[15] = scalar;
+	return result;
 }
 
 /*
@@ -101,9 +142,9 @@ mat44 mat44::translation(const vec3 & translation)
 {
 	mat44 result(1.0f);
 
-	result._m[3] = translation.x;
-	result._m[7] = translation.y;
-	result._m[11] = translation.z;
+	result._m[12] = translation.x;
+	result._m[13] = translation.y;
+	result._m[14] = translation.z;
 	
 	return result;
 }
@@ -141,5 +182,17 @@ mat44 mat44::scale(const vec3 & scale)
 	result._m[10] = scale.z;
 
 	return result;
+}
+
+mat44 mat44::lookAt(vec3 position,const vec3 & right, const vec3 & up, const vec3 & direction)
+{
+	mat44 pos = mat44::setPosition(position);
+	mat44 camera = mat44::identity();
+	camera._m[0] = right.x; camera._m[1] = right.y; camera._m[2] = right.z;
+	camera._m[4] = up.x; camera._m[5] = up.y; camera._m[6] = up.z;
+	camera._m[8] = direction.x; camera._m[9] = direction.y; camera._m[10] = direction.z;
+	mat44 result = camera * pos;
+	return result;
+
 }
 
