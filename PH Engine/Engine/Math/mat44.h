@@ -32,9 +32,10 @@ public:
 	static mat44 perspective(float fov, float aspectRatio, float near, float far);
 
 	static mat44 translation(const vec3& translation);
-	static mat44 rotation(float angle, const vec3& axis);
+	static mat44 rotation(const mat44& rotate,float angle, const vec3& axis);
 	static mat44 scale(const vec3& scale);
 	static mat44 lookAt(vec3 position, const vec3& right, const vec3& up, const vec3& direction);
+	static mat44 lookAt2(vec3 position, vec3 target, vec3 up);
 
 
 private:

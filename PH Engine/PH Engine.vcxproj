@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\100657260\Documents\Placeholders-Engine\External\glad\include;C:\Users\100657260\Documents\Placeholders-Engine\External\glm;C:\Users\100657260\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\100657260\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\PC-M\Documents\Placeholders-Engine\External\glad\include;C:\Users\PC-M\Documents\Placeholders-Engine\External\glm;C:\Users\PC-M\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\PC-M\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -158,6 +158,7 @@
     <ClInclude Include="Engine\Math\Vector3.h" />
     <ClInclude Include="Engine\Math\vector4.h" />
     <ClInclude Include="Engine\Shader.h" />
+    <ClInclude Include="Engine\Shader2.h" />
     <ClInclude Include="Engine\Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

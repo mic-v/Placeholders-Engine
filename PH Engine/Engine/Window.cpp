@@ -55,9 +55,9 @@ namespace plaho {
 
 		bool Window::init()
 		{
-			camera = Camera(vec3(0.0f,0.0f,-3.0f));
-			_mx = 1280.f / 2.f;
-			_my = 720.f / 2.f;
+			camera = Camera(vec3(0.0f,0.0f,3.0f));
+			_mx = 800.f / 2.f;
+			_my = 600.f/ 2.f;
 			if (glfwInit() == NULL)
 			{
 				std::cout << "Failed to initialize GLFW" << std::endl;
@@ -86,15 +86,6 @@ namespace plaho {
 			glfwSetKeyCallback(_window, key_callback);
 			glfwSetMouseButtonCallback(_window, mouse_callback);
 			glfwSetCursorPosCallback(_window, cursor_position_callback);
-
-			// glad: load all OpenGL function pointers
-// ---------------------------------------
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-			{
-				std::cout << "Failed to initialize GLAD" << std::endl;
-				return false;
-			}
-
 			return true;
 		}
 

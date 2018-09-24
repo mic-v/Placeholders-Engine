@@ -1,102 +1,43 @@
-///
-///
-///  Placeholders Engine
-///
-///
-///
-///
-
-#include <iostream>
-#include "Engine/Window.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Engine/stb_image.h"
 
-#include "Engine/Math/math.h"
-#include "Engine/Shader.h"
-#include "Engine/Camera.h"
-using namespace plaho;
-using namespace graphics;
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/ext.hpp>
+
+#include "Engine/Shader2.h"
+
+#include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
-unsigned int loadTexture(const char *path);
+unsigned int loadTexture(const char* path);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-vec3 cameraPos = vec3(0.0f, 0.0f, 3.0f);
-vec3 cameraFront = vec3(0.0f, 0.0f, -1.0f);
-vec3 cameraUp = vec3(0.0f, 1.0f, 0.0f);
-
-Camera camera(cameraPos);
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 bool firstMouse = true;
 float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
 float pitch = 0.0f;
 float lastX = 800.0f / 2.0;
-float lastY = 600.0f / 2.0;
+float lastY = 600.0 / 2.0;
 float fov = 45.0f;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
-
-//int main()
-//{
-//	Window window("Plaho", 800, 600);
-//	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-//	//lightingShader.use();
-//	//lightingShader.setInt("material.diffuse", 0);
-//	//lightingShader.setInt("material.specular", 1);
-//
-//	while (!window.closed())
-//	{
-//		window.clear();
-//		
-//		if (window.isMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
-//		{
-//			std::cout << "PRESSED!" << std::endl;
-//		}
-//		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//		glActiveTexture(GL_TEXTURE0);
-//		glBindTexture(GL_TEXTURE_2D, diffuseMap);
-//		glActiveTexture(GL_TEXTURE1);
-//		glBindTexture(GL_TEXTURE_2D, specularMap);
-//
-//		// render container
-//		ourShader.use();
-//
-//		mat44 project = mat44::perspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-//		ourShader.setMat4("projection", project);
-//
-//		mat44 view = window.camera.getLookMatrix2();
-//		ourShader.setMat4("view", view);
-//		//std::cout << view << std::endl;
-//
-//		glBindVertexArray(VAO);
-//
-//		for (int i = 0; i < 10; i++)
-//		{
-//			mat44 model = mat44();
-//			model = mat44::translation(cubePositions[i]);
-//			ourShader.setMat4("model", model);
-//			glDrawArrays(GL_TRIANGLES, 0, 36);
-//		}
-//		
-//
-//		window.update();
-//	}
-//	glDeleteVertexArrays(1, &VAO);
-//	glDeleteBuffers(1, &VBO);
-//
-//	return 0;
-//}
 
 int main()
 {
@@ -190,17 +131,17 @@ int main()
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 	// world space positions of our cubes
-	vec3 cubePositions[] = {
-		vec3(0.0f,  0.0f,  0.0f),
-		vec3(2.0f,  5.0f, -15.0f),
-		vec3(-1.5f, -2.2f, -2.5f),
-		vec3(-3.8f, -2.0f, -12.3f),
-		vec3(2.4f, -0.4f, -3.5f),
-		vec3(-1.7f,  3.0f, -7.5f),
-		vec3(1.3f, -2.0f, -2.5f),
-		vec3(1.5f,  2.0f, -2.5f),
-		vec3(1.5f,  0.2f, -1.5f),
-		vec3(-1.3f,  1.0f, -1.5f)
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -218,9 +159,6 @@ int main()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-
-	// load and create a texture 
-	// -------------------------
 	std::string my_str = "container2.png";
 	unsigned int diffuseMap = loadTexture(my_str.c_str());
 	std::string my_str2 = "container2_specular.png";
@@ -231,6 +169,7 @@ int main()
 	ourShader.use();
 	ourShader.setInt("texture1", 0);
 	ourShader.setInt("texture2", 1);
+
 
 
 	// render loop
@@ -264,23 +203,25 @@ int main()
 		ourShader.use();
 
 		// pass projection matrix to shader (note that in this case it could change every frame)
-		mat44 projection = mat44::perspective(45, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("projection", projection);
+
 		// camera/view transformation
-		mat44 view = mat44::lookAt2(camera.position, camera.position + camera.front, camera.up);
-		//std::cout << view << std::endl;
+		glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		ourShader.setMat4("view", view);
+		//std::cout << glm::to_string(view) << std::endl;
 
 		// render boxes
 		glBindVertexArray(VAO);
-
-		for (int i = 0; i < 10; i++)
+		for (unsigned int i = 0; i < 10; i++)
 		{
-			mat44 model = mat44::identity();
-			model = mat44::translation(cubePositions[i]);
+			// calculate the model matrix for each object and pass it to shader before drawing
+			glm::mat4 model;
+			model = glm::translate(model, cubePositions[i]);
 			float angle = 20.0f * i;
-			model = mat44::rotation(model,angle, vec3(1.0f, 0.3f, 0.5f));
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			ourShader.setMat4("model", model);
+
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
@@ -298,6 +239,7 @@ int main()
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
+	return 0;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
@@ -307,14 +249,15 @@ void processInput(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	float cameraSpeed = 2.5 * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.processKeyboard(FORWARD, deltaTime);
+		cameraPos += cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.processKeyboard(BACKWARD, deltaTime);
+		cameraPos -= cameraSpeed * cameraFront;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.processKeyboard(LEFT, deltaTime);
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.processKeyboard(RIGHT, deltaTime);
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -342,20 +285,24 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
-	//float sensitivity = 0.1f; // change this value to your liking
-	//xoffset *= sensitivity;
-	//yoffset *= sensitivity;
+	float sensitivity = 0.1f; // change this value to your liking
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
 
-	//yaw += xoffset;
-	//pitch += yoffset;
+	yaw += xoffset;
+	pitch += yoffset;
 
-	//// make sure that when pitch is out of bounds, screen doesn't get flipped
-	//if (pitch > 89.0f)
-	//	pitch = 89.0f;
-	//if (pitch < -89.0f)
-	//	pitch = -89.0f;
+	// make sure that when pitch is out of bounds, screen doesn't get flipped
+	if (pitch > 89.0f)
+		pitch = 89.0f;
+	if (pitch < -89.0f)
+		pitch = -89.0f;
 
-	camera.processMouseMovement(xoffset, yoffset);
+	glm::vec3 front;
+	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(front);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called

@@ -96,5 +96,8 @@
     <ClInclude Include="Engine\Math\math.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Shader2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

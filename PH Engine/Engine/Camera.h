@@ -2,10 +2,12 @@
 #define CAMERA_H
 
 #include <glad\glad.h>
-//#include <glm\glm.hpp>
-//#include <glm\gtc\matrix_transform.hpp>
+#include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
 #include "Math/math.h"
-
+#include <iostream>
+#define _USE_MATH_DEFINES // for C++  
+#include <cmath>  
 
 enum Camera_Movement {
 	FORWARD,
@@ -17,7 +19,7 @@ enum Camera_Movement {
 const float YAW = -90.0F;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.0050f;
+const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
 class Camera
@@ -70,7 +72,16 @@ public:
 	// -------
 	mat44 getLookMatrix()
 	{
-		return mat44::lookAt(position, worldUp, right, position + front);
+		return mat44::lookAt(position, right, worldUp, position + front);
+	}
+
+	mat44 getLookMatrix2()
+	{
+		std::cout << position << std::endl;
+		std::cout << front << std::endl;
+		std::cout << position + front << std::endl;
+		std::cout << "testing" << std::endl;
+		return mat44::lookAt2(position, position + front, up);
 	}
 
 	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
@@ -118,15 +129,24 @@ private:
 	void updateCameraVectors()
 	{
 		vec3 Front;
-		Front.x = cos((3.14/ 180.f) * (yaw)) * cos((3.14/ 180.f) * (pitch));
-		Front.y = sin((3.14/ 180.f) * (pitch));
-		Front.z = sin((3.14/ 180.f) * (yaw)) * cos((3.14/ 180.f) * (pitch));
-		front = Front.Normalize(Front);
+		//Front.x = cos((0.01745329251994329576923690768489f) * (yaw)) * cos((0.01745329251994329576923690768489f) * (pitch));
+		//Front.y = sin((0.01745329251994329576923690768489f) * (pitch));
+		//Front.z = sin((0.01745329251994329576923690768489f) * (yaw)) * cos((0.01745329251994329576923690768489f) * (pitch));
+		//front = Front.Normalize();
+		//Front.x = cos(yaw * (3.14159265358979323846 / 180.0f)) * cos(pitch *(3.14159265358979323846 / 180.0f));
+		//Front.y = sin(pitch * (3.14159265358979323846 / 180.0f));
+		//Front.z = sin( yaw * (3.14159265358979323846 / 180.0f)) * cos(pitch * (3.14159265358979323846 / 180.0f));
+		Front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		Front.y = sin(glm::radians(pitch));
+		Front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front = vec3::Normalize(Front);
+		std::cout << front << std::endl;
 
-		right = right.Normalize(right.CrossProduct(front, worldUp));
-		up = up.Normalize(up.CrossProduct(right, front));
+		right = (vec3::CrossProduct2(front, worldUp)).Normalize();
+		up = (vec3::CrossProduct2(right, front)).Normalize();
+		//right = glm::normalize(glm::cross(Front, worldUp));
 
-	}
+	} 
 };
 
 #endif

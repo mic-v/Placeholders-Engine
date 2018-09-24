@@ -2,7 +2,10 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+
 #include "Camera.h"
+#include "Shader.h"
 #include <iostream>
 
 namespace plaho {
@@ -43,6 +46,8 @@ namespace plaho {
 			static bool isKeyPressed(unsigned int keycode); 
 			static bool isMouseButtonPressed(unsigned int button);
 			static void getMousePos();
+			unsigned int diffuseMap;
+			unsigned int specularMap;
 		private:
 			bool init();
 			friend static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

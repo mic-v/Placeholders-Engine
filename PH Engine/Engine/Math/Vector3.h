@@ -132,13 +132,16 @@ public:
 	}
 	//3D Functions
 	float Length(vec3 v1);
-	vec3 Normalize(vec3 v1);
+	float Length();
+	static vec3 Normalize(vec3 v1);
+	vec3 Normalize();
 	float DotProduct(vec3 v1, vec3 v2);
 	float ProjLength(vec3 v1, vec3 v2);
 	vec3 ProjPoint(vec3 v1, vec3 v2);
 	float ProjAngle(vec3 v1, vec3 v2);
 	float DistanceBetweenObj(vec3 v1, vec3 v2);
 	vec3 CrossProduct(vec3 v1, vec3 v2);
+	static vec3 CrossProduct2(vec3 v1, vec3 v2);
 
 
 
