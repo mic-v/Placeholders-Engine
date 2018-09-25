@@ -1,0 +1,29 @@
+#pragma once
+
+#include <string>
+#include "math.h"
+#include "../../../External/glad/include/glad/glad.h"
+
+class Mesh
+{
+public:
+	Mesh();
+	~Mesh();
+
+	bool loadFromFile(const std::string &file);
+
+	void unload();
+
+	unsigned int getNumFaces() const;
+	unsigned int getNumVertices() const;	
+
+	unsigned int VBO_verices = 0;
+	unsigned int VBO_UVS = 0;	
+	unsigned int VBO_Normals = 0;
+	unsigned int VAO = 0;
+
+private:
+	unsigned int numFaces_ = 0;
+	unsigned int numVertices_ = 0;
+
+};

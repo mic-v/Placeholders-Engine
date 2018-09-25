@@ -44,6 +44,11 @@ public:
 		//vec1 + vec2
 		return vec3((x + right.x), (y + right.y), (z + right.z));
 	}
+
+	//friend vec3 operator+(const vec3 left, const vec3 right)
+	//{
+	//	return vec3((left.x + right.x), (left.y + right.y), (left.z + right.z));
+	//}
 	vec3 operator-(const vec3 right) const
 	{
 		//vec1 - vec2
@@ -136,6 +141,7 @@ public:
 	static vec3 Normalize(vec3 v1);
 	vec3 Normalize();
 	float DotProduct(vec3 v1, vec3 v2);
+	static float dotProduct2(vec3 v1, vec3 v2);
 	float ProjLength(vec3 v1, vec3 v2);
 	vec3 ProjPoint(vec3 v1, vec3 v2);
 	float ProjAngle(vec3 v1, vec3 v2);

@@ -1,10 +1,6 @@
 #include "mat44.h"
 #include <iostream>
 
-float toRad(float degrees)
-{
-	return degrees * (PI / 180.0f);
-}
 
 mat44::mat44()
 {
@@ -213,10 +209,10 @@ mat44 mat44::lookAt2(vec3 position, vec3 target, vec3 up)
 	//std::cout << target.x << std::endl;
 	//std::cout << target.y << std::endl;
 	//std::cout << target.z << std::endl;
-	vec3 f = (target - position).Normalize();
 	//std::cout << f.x << std::endl;
 	//std::cout << f.y << std::endl;
 	//std::cout << f.z << std::endl;
+	vec3 f = (target - position).Normalize();
 	vec3 r = (vec3::CrossProduct2(f, up.Normalize()));
 	vec3 u = vec3::CrossProduct2(r, f);
 	mat44 pos = mat44::setPosition(position);

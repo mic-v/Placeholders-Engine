@@ -98,6 +98,11 @@ float lastFrame = 0.0f;
 //	return 0;
 //}
 
+float toRadii(float degrees)
+{
+	return degrees * (PI / 180.0f);
+}
+
 int main()
 {
 	// glfw: initialize and configure
@@ -264,11 +269,16 @@ int main()
 		ourShader.use();
 
 		// pass projection matrix to shader (note that in this case it could change every frame)
-		mat44 projection = mat44::perspective(45, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//mat44 projection = mat44::perspective(45, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//ourShader.setMat4("projection", projection);
+		//// camera/view transformation
+		//mat44 view = mat44::lookAt2(camera.position, camera.position + camera.front, camera.up);
+		////std::cout << view << std::endl;
+		//ourShader.setMat4("view", view);
+		mat4 projection = mat4::perspective(toRadii(45), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		ourShader.setMat4("projection", projection);
-		// camera/view transformation
-		mat44 view = mat44::lookAt2(camera.position, camera.position + camera.front, camera.up);
-		//std::cout << view << std::endl;
+
+		mat4 view = camera.getLookMatrix3();
 		ourShader.setMat4("view", view);
 
 		// render boxes
@@ -276,10 +286,11 @@ int main()
 
 		for (int i = 0; i < 10; i++)
 		{
-			mat44 model = mat44::identity();
-			model = mat44::translation(cubePositions[i]);
-			float angle = 20.0f * i;
-			model = mat44::rotation(model,angle, vec3(1.0f, 0.3f, 0.5f));
+			mat4 model = mat4::translation(cubePositions[i]);
+			//mat44 model = mat44::identity();
+			//model = mat44::translation(cubePositions[i]);
+			//float angle = 20.0f * i;
+			//model = mat44::rotation(model,angle, vec3(1.0f, 0.3f, 0.5f));
 			ourShader.setMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}

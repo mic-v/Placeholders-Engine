@@ -84,6 +84,11 @@ public:
 		return mat44::lookAt2(position, position + front, up);
 	}
 
+	mat4 getLookMatrix3()
+	{
+		return mat4::lookat(position, position + front, up);
+	}
+
 	void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
 	{
 		xoffset *= mouseSensitivity;
@@ -129,13 +134,6 @@ private:
 	void updateCameraVectors()
 	{
 		vec3 Front;
-		//Front.x = cos((0.01745329251994329576923690768489f) * (yaw)) * cos((0.01745329251994329576923690768489f) * (pitch));
-		//Front.y = sin((0.01745329251994329576923690768489f) * (pitch));
-		//Front.z = sin((0.01745329251994329576923690768489f) * (yaw)) * cos((0.01745329251994329576923690768489f) * (pitch));
-		//front = Front.Normalize();
-		//Front.x = cos(yaw * (3.14159265358979323846 / 180.0f)) * cos(pitch *(3.14159265358979323846 / 180.0f));
-		//Front.y = sin(pitch * (3.14159265358979323846 / 180.0f));
-		//Front.z = sin( yaw * (3.14159265358979323846 / 180.0f)) * cos(pitch * (3.14159265358979323846 / 180.0f));
 		Front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 		Front.y = sin(glm::radians(pitch));
 		Front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));

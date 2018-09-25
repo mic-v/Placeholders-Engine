@@ -46,6 +46,11 @@ float vec3::DotProduct(vec3 v1, vec3 v2)
 	return ((v1.x * v2.x) + (v1.y * v2.y)+(v1.z * v2.z));
 }
 
+float vec3::dotProduct2(vec3 v1, vec3 v2)
+{
+	return ((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
+}
+
 float vec3::ProjLength(vec3 v1, vec3 v2)
 {
 	return (DotProduct(v1, v2) / Length(v1));
