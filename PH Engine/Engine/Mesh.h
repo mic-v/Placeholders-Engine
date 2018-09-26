@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "math.h"
 #include "../../../External/glad/include/glad/glad.h"
 
@@ -17,7 +18,7 @@ public:
 	unsigned int getNumFaces() const;
 	unsigned int getNumVertices() const;	
 
-	unsigned int VBO_verices = 0;
+	unsigned int VBO_Verticies = 0;
 	unsigned int VBO_UVS = 0;	
 	unsigned int VBO_Normals = 0;
 	unsigned int VAO = 0;

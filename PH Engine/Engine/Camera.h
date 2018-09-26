@@ -77,10 +77,6 @@ public:
 
 	mat44 getLookMatrix2()
 	{
-		std::cout << position << std::endl;
-		std::cout << front << std::endl;
-		std::cout << position + front << std::endl;
-		std::cout << "testing" << std::endl;
 		return mat44::lookAt2(position, position + front, up);
 	}
 
@@ -138,7 +134,6 @@ private:
 		Front.y = sin(glm::radians(pitch));
 		Front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 		front = vec3::Normalize(Front);
-		std::cout << front << std::endl;
 
 		right = (vec3::CrossProduct2(front, worldUp)).Normalize();
 		up = (vec3::CrossProduct2(right, front)).Normalize();

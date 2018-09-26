@@ -47,7 +47,7 @@
     <ClCompile Include="Engine\Math\mat4.cpp">
       <Filter>Header Files\math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Mesh.cpp">
+    <ClCompile Include="Engine\Mesh.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -102,7 +102,7 @@
     <ClInclude Include="Engine\Math\mat4.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Math\Mesh.h">
+    <ClInclude Include="Engine\Mesh.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
