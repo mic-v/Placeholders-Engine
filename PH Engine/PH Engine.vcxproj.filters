@@ -21,6 +21,9 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\atop">
+      <UniqueIdentifier>{2d9b8264-f315-4579-90f7-83df2a344ae2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -50,32 +53,15 @@
     <ClCompile Include="Engine\Mesh.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\1.lamp.fs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="Shaders\1.lamp.vs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="Shaders\1.colors.vs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="Shaders\1.colors.fs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="4.2.texture.fs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="4.2.texture.vs">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
+    <ClCompile Include="Engine\Shader.cpp">
+      <Filter>Header Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Header Files\atop</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
@@ -96,14 +82,43 @@
     <ClInclude Include="Engine\Math\math.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Shader2.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\mat4.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Shader.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\atop</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\1.colors.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\1.colors.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\1.lamp.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\1.lamp.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\4.2.texture.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\4.2.texture.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\passthrough.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\passthrough.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

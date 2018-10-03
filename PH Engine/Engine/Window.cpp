@@ -112,10 +112,13 @@ namespace plaho {
 
 			processInput(_window);
 
+			//std::cout << _width << " " << _height << std::endl;
+		}
 
+		void Window::poll()
+		{
 			glfwSwapBuffers(_window);
 			glfwPollEvents();
-			//std::cout << _width << " " << _height << std::endl;
 		}
 
 		/*

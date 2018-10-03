@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\PC-M\Documents\Placeholders-Engine\External\glad\include;C:\Users\PC-M\Documents\Placeholders-Engine\External\glm;C:\Users\PC-M\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\PC-M\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\100657260\Documents\Placeholders-Engine\External\glad\include;C:\Users\100657260\Documents\Placeholders-Engine\External\glm;C:\Users\100657260\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\100657260\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -138,17 +138,11 @@
     <ClCompile Include="Engine\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Math\vector4.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
+    <ClCompile Include="Engine\Shader.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="4.2.texture.fs" />
-    <None Include="4.2.texture.vs" />
-    <None Include="Shaders\1.colors.fs" />
-    <None Include="Shaders\1.colors.vs" />
-    <None Include="Shaders\1.lamp.fs" />
-    <None Include="Shaders\1.lamp.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera.h" />
@@ -160,8 +154,18 @@
     <ClInclude Include="Engine\Math\vector4.h" />
     <ClInclude Include="Engine\Mesh.h" />
     <ClInclude Include="Engine\Shader.h" />
-    <ClInclude Include="Engine\Shader2.h" />
     <ClInclude Include="Engine\Window.h" />
+    <ClInclude Include="Game.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\1.colors.fs" />
+    <None Include="Shaders\1.colors.vs" />
+    <None Include="Shaders\1.lamp.fs" />
+    <None Include="Shaders\1.lamp.vs" />
+    <None Include="Shaders\4.2.texture.fs" />
+    <None Include="Shaders\4.2.texture.vs" />
+    <None Include="Shaders\passthrough.fs" />
+    <None Include="Shaders\passthrough.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

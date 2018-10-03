@@ -82,23 +82,23 @@ bool Mesh::loadFromFile(const std::string & file)
 
 	while (!input.eof())
 	{
-		//input.getline(inputString, CHAR_BUFFER_SIZE);
-		//if (std::strstr(inputString, != nullptr)
+		//input.getline(&inputString, CHAR_BUFFER_SIZE);
+		//if (std::strstr(&inputString, != nullptr)
 		//{
 
 		//}
-		input.getline(&inputString, CHAR_BUFFER_SIZE);
+		input.getline(inputString, sizeof(inputString));
 		if (std::strstr(&inputString, "#") != nullptr)
 		{
 			//this line is aocmment
 			continue;
 		}
-		else if (std::strstr(&inputString, "vt") != nullptr)
+		else if (std::strstr(&inputString, "vn") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
-			std::sscanf(&inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
-			vertexData.push_back(temp);
+			std::sscanf(&inputString, "vn %f %f %f %f", &temp.x, &temp.y, &temp.z);
+			normalData.push_back(temp);
 		}
 		else if (std::strstr(&inputString, "vt") != nullptr)
 		{
@@ -107,11 +107,11 @@ bool Mesh::loadFromFile(const std::string & file)
 			std::sscanf(&inputString, "vt %f %f", &temp.x, &temp.y);
 			textureData.push_back(temp);
 		}
-		else if (std::strstr(&inputString, "vn") != nullptr)
+		else if (std::strstr(&inputString, "v") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
-			std::sscanf(&inputString, "vn %f %f %f %f", &temp.x, &temp.y, &temp.z);
+			std::sscanf(&inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
 			vertexData.push_back(temp);
 		}
 		else if (std::strstr(&inputString, "f") != nullptr)

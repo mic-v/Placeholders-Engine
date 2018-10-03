@@ -34,6 +34,7 @@ namespace plaho {
 			bool closed() const;
 			void clear() const;
 			void update();
+			void poll();
 			bool firstMouse;
 			Camera camera;
 			float deltaTime = 0.0f;
