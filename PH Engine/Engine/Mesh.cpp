@@ -67,7 +67,7 @@ bool Mesh::loadFromFile(const std::string & file)
 		std::cout << "Could not open the file" << std::endl;
 	}
 
-	char inputString(CHAR_BUFFER_SIZE);
+	char inputString[CHAR_BUFFER_SIZE];
 
 	//Unqieue data
 	std::vector<vec3> vertexData;
@@ -88,37 +88,37 @@ bool Mesh::loadFromFile(const std::string & file)
 
 		//}
 		input.getline(inputString, sizeof(inputString));
-		if (std::strstr(&inputString, "#") != nullptr)
+		if (std::strstr(inputString, "#") != nullptr)
 		{
 			//this line is aocmment
 			continue;
 		}
-		else if (std::strstr(&inputString, "vn") != nullptr)
+		else if (std::strstr(inputString, "vn") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
-			std::sscanf(&inputString, "vn %f %f %f %f", &temp.x, &temp.y, &temp.z);
+			std::sscanf(inputString, "vn %f %f %f %f", &temp.x, &temp.y, &temp.z);
 			normalData.push_back(temp);
 		}
-		else if (std::strstr(&inputString, "vt") != nullptr)
+		else if (std::strstr(inputString, "vt") != nullptr)
 		{
 			//this line is aocmment
 			vec2 temp;
-			std::sscanf(&inputString, "vt %f %f", &temp.x, &temp.y);
+			std::sscanf(inputString, "vt %f %f", &temp.x, &temp.y);
 			textureData.push_back(temp);
 		}
-		else if (std::strstr(&inputString, "v") != nullptr)
+		else if (std::strstr(inputString, "v") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
-			std::sscanf(&inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
+			std::sscanf(inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
 			vertexData.push_back(temp);
 		}
-		else if (std::strstr(&inputString, "f") != nullptr)
+		else if (std::strstr(inputString, "f") != nullptr)
 		{
 			//this line is aocmment
 			MeshFace temp;
-			std::sscanf(&inputString, "f %u/%u/%u %u/%u/%u %u/%u/%u",
+			std::sscanf(inputString, "f %u/%u/%u %u/%u/%u %u/%u/%u",
 				&temp.vertices[0], &temp.textures[0], &temp.normals[0],
 				&temp.vertices[1], &temp.textures[1], &temp.normals[1],
 				&temp.vertices[2], &temp.textures[2], &temp.normals[2]

@@ -28,8 +28,8 @@ void Game::startUp()
 {
 	window_ = new Window("Plaho", 1280, 720);
 
-	program = Shader("Shaders/passthrough.fs", "Shaders/passthrough.vs");
-	monkey.loadFromFile("Monkey.obj");
+	//Shader program("Shaders/passthrough.vs","Shaders/passthrough.fs");
+	//monkey.loadFromFile("Monkey.obj");
 }
 
 void Game::shutDown()

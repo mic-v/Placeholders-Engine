@@ -31,7 +31,6 @@ private:
 	Window* window_;
 
 	Mesh monkey;
-	Shader program;
 	//Window
 	
 
