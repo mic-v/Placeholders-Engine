@@ -10,9 +10,9 @@ public:
 	//Actual Data
 	float x, y, z;
 
-	vec3();
+	//vec3();
 	//vec3 vec1 = {x,y,z};
-	vec3(float X, float Y, float Z) :x(X), y(Y), z(Z) {}
+	vec3(float X = 0.0f, float Y = 0.0f, float Z = 0.0f) :x(X), y(Y), z(Z) {}
 	vec3(vec2 vec, float scalar);
 
 	~vec3();

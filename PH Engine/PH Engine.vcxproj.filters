@@ -18,11 +18,11 @@
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\atop">
       <UniqueIdentifier>{2d9b8264-f315-4579-90f7-83df2a344ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shaders">
+      <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +57,7 @@
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Header Files\atop</Filter>
+      <Filter>Header Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

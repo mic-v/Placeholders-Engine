@@ -1,12 +1,5 @@
 #include "Vector3.h"
 
-vec3::vec3()
-{
-	x = 0.0f;
-	y = 0.0f;
-	z = 0.0f;
-}
-
 vec3::vec3(vec2 vec, float scalar)
 {
 	x = vec.x;

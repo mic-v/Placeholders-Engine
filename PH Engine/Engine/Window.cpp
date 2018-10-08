@@ -95,6 +95,8 @@ namespace plaho {
 				return -1;
 			}
 
+			glEnable(GL_DEPTH_TEST);
+
 			return true;
 		}
 

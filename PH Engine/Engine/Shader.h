@@ -13,6 +13,7 @@ class Shader
 public:
 	GLuint ID;
 	// constructor generates the shader on the fly
+	Shader() { }
 	// ------------------------------------------------------------------------
 	Shader(const char* vertexPath, const char* fragmentPath);
 	// activate the shader

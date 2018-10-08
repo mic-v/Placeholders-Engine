@@ -8,6 +8,9 @@
 #include "Engine/Window.h"
 #include "Engine/Mesh.h"
 #include "Engine/Shader.h"
+#include "Engine/Math/math.h"
+#include "Engine/Camera.h"
+#include "Engine/stb_image.h"
 
 using namespace plaho;
 using namespace graphics;
@@ -22,6 +25,7 @@ public:
 	void shutDown();
 	void update();
 	void render();
+	void test();
 
 private:
 	Game();
@@ -31,6 +35,15 @@ private:
 	Window* window_;
 
 	Mesh monkey;
+	Shader sh;
+	Shader *sh2;
+	mat4 cameraTransform;
+	mat4 cameraProjection;
+	mat4 monkeyTransform;
+	unsigned int VBO, VAO;
+	unsigned int diffuseMap, specularMap;
+	//vec3 position(0, 0, 3);
+	Camera *camera;
 	//Window
 	
 

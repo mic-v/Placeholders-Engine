@@ -1,2 +1,19 @@
-lmao
-ay;
+Locations for VC directories
+
+This will be needed if you pull in the latest version of the project because the solution
+doesn't keep the location for the libraries/headers
+
+Michael:
+C:\Users\100657260\Documents\Placeholders-Engine\External\glad\include;C:\Users\100657260\Documents\Placeholders-Engine\External\glm;C:\Users\100657260\Documents\Placeholders-Engine\External;$(IncludePath)
+C:\Users\100657260\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)
+
+Zack:
+
+Bryan:
+
+Quinn:
+
+Faisal:
+
+
+Sepehr:
