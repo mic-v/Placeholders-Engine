@@ -183,6 +183,8 @@ void Game::startUp()
 	_camera = &_window->camera;
 	cameraTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
 	cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
+<<<<<<< HEAD
+=======
 	
 	sh = Shader("Shaders/passthrough.vs", "Shaders/passthrough.fs");
 
@@ -191,6 +193,7 @@ void Game::startUp()
 
 
 	
+>>>>>>> 9096ee947a7a11d461abc4abc75ceb50f361db4a
 
 	//glGenVertexArrays(
 	//	1,					// We only want to generate 1 VAO.

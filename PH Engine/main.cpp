@@ -42,6 +42,7 @@
 
 #include <iostream>
 #include "Game.h"
+#include <glad/glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Engine/stb_image.h"
