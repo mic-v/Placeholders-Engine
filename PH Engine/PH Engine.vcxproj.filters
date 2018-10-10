@@ -54,7 +54,7 @@
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
-      <Filter>Header Files\graphics</Filter>
+      <Filter>Header Files\atop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
