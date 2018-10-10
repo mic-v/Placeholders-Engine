@@ -87,6 +87,8 @@ namespace plaho {
 			glfwSetMouseButtonCallback(_window, mouse_callback);
 			glfwSetCursorPosCallback(_window, cursor_position_callback);
 
+			glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 			// glad: load all OpenGL function pointers
 			// ---------------------------------------
 			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -138,7 +140,7 @@ namespace plaho {
 		*/
 		void Window::clear() const
 		{
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClearColor(0.f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
@@ -232,6 +234,9 @@ namespace plaho {
 			}
 			float xoff = xpos - win->_mx;
 			float yoff = win->_my - ypos;
+
+			win->_mx = xpos;
+			win->_my = ypos;
 
 			win->camera.processMouseMovement(xoff, yoff);
 		}

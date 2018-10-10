@@ -146,8 +146,8 @@ bool Mesh::loadFromFile(const std::string & file)
 		}
 	}
 
-	numFaces_ = faceData.size();
-	numVertices_ = numFaces_ * 3;
+	_numFaces = faceData.size();
+	_numVertices = _numFaces * 3;
 
 	//send data to opengl
 	glGenVertexArrays(1, &VAO);
@@ -199,16 +199,16 @@ void Mesh::unload()
 	VBO_Verticies = 0;
 	VAO = 0;
 
-	numFaces_ = 0;
-	numVertices_ = 0;
+	_numFaces = 0;
+	_numVertices = 0;
 }
 
 unsigned int Mesh::getNumFaces() const
 {
-	return numFaces_;
+	return _numFaces;
 }
 
 unsigned int Mesh::getNumVertices() const
 {
-	return numVertices_;
+	return _numVertices;
 }

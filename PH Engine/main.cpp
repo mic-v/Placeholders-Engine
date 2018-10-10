@@ -6,6 +6,40 @@
 ////
 ////
 
+/*
+
+	Explanations:
+	// Mesh comes from the Emillian series. Don't ask me about that
+
+	// Camera and Shader class comes from https://learnopengl.com/Getting-started/Camera
+	https://learnopengl.com/Getting-started/Shaders
+	We might need to completely remove this and make our own shader class, but for now they work
+	and we need to make sure important stuff works.
+	// Camera is FPS, WASD, mouse to aim around, etc.
+
+	// Using a picture library called stbi_image https://github.com/nothings/stb/blob/master/stb_image.h
+	to load in pictures for texture
+
+	//Mat4 class is created by Michael. VecX classes provided by First year Tutorial which we might need to create our own.
+	Mat4 class has no new stuff
+
+	//We are using GLFW and not GLUT. What's the difference? None, most of what I saw in Emilians base projects for assignments
+	they do the similar thing. It's just that there are a bunch of resources like learnopegnl or cherno that uses
+	glfw compare to GLUT. I also emaied emillian and he said it was fine.
+
+	//GLAD just tells the compilar what version of OPENGL we are using
+
+	//Window class wraps the functions of GLFW. It setups the important glfw callbacks for input, the color of the screen, etc.
+
+	//Game is where we do the heavy initializing stuff. We could further to have another class that handles what objects load in
+	when we start play but initializeGame() works for now.
+
+	//Window::poll() is just way to swap frames every millisecond to make sure that the next image comes up.
+
+	//.vs for vertex shader, .fs is for fragment shader It doesn't really matter, it could be .vert and/or .frag. Doesn't really matter.
+	Ask me any other questions
+*/
+
 #include <iostream>
 #include "Game.h"
 
@@ -20,8 +54,8 @@ using namespace graphics;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(const char *path);
 
 
@@ -32,6 +66,12 @@ int main()
 	Game::instance().update();
 	Game::instance().shutDown();
 }
+
+/*
+	Above is the good shit, its clean
+	Below is the old stuff
+*/
+
 
 //// settings
 //const unsigned int SCR_WIDTH = 800;
@@ -61,7 +101,7 @@ int main()
 //	- Michael
 //*/
 //
-//float toRadii(float degrees)
+//float toRadii3(float degrees)
 //{
 //	return degrees * (PI / 180.0f);
 //}
@@ -110,7 +150,7 @@ int main()
 //
 //	// build and compile our shader zprogram
 //	// ------------------------------------
-//	Shader ourShader("4.2.texture.vs", "4.2.texture.fs");
+//	Shader ourShader("Shaders/4.2.texture.vs", "Shaders/4.2.texture.fs");
 //	
 //	// set up vertex data (and buffer(s)) and configure vertex attributes
 //	// ------------------------------------------------------------------
@@ -235,7 +275,7 @@ int main()
 //		//mat44 view = mat44::lookAt2(camera.position, camera.position + camera.front, camera.up);
 //		////std::cout << view << std::endl;
 //		//ourShader.setMat4("view", view);
-//		mat4 projection = mat4::perspective(toRadii(45), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+//		mat4 projection = mat4::perspective(toRadii3(45), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 //		ourShader.setMat4("projection", projection);
 //
 //		mat4 view = camera.getLookMatrix3();
@@ -270,9 +310,9 @@ int main()
 //	// ------------------------------------------------------------------
 //	glfwTerminate();
 //}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+//
+//// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+//// ---------------------------------------------------------------------------------------------------------
 //void processInput(GLFWwindow *window)
 //{
 //	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -287,18 +327,18 @@ int main()
 //	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 //		camera.processKeyboard(RIGHT, deltaTime);
 //}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
-
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
+//
+//// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+//// ---------------------------------------------------------------------------------------------
+//void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+//{
+//	// make sure the viewport matches the new window dimensions; note that width and 
+//	// height will be significantly larger than specified on retina displays.
+//	glViewport(0, 0, width, height);
+//}
+//
+//// glfw: whenever the mouse moves, this callback is called
+//// -------------------------------------------------------
 //void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 //{
 //	if (firstMouse)
@@ -313,24 +353,24 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 //	lastX = xpos;
 //	lastY = ypos;
 //
-//	//float sensitivity = 0.1f; // change this value to your liking
-//	//xoffset *= sensitivity;
-//	//yoffset *= sensitivity;
+//	float sensitivity = 0.1f; // change this value to your liking
+//	xoffset *= sensitivity;
+//	yoffset *= sensitivity;
 //
-//	//yaw += xoffset;
-//	//pitch += yoffset;
+//	yaw += xoffset;
+//	pitch += yoffset;
 //
-//	//// make sure that when pitch is out of bounds, screen doesn't get flipped
-//	//if (pitch > 89.0f)
-//	//	pitch = 89.0f;
-//	//if (pitch < -89.0f)
-//	//	pitch = -89.0f;
+//	// make sure that when pitch is out of bounds, screen doesn't get flipped
+//	if (pitch > 89.0f)
+//		pitch = 89.0f;
+//	if (pitch < -89.0f)
+//		pitch = -89.0f;
 //
 //	camera.processMouseMovement(xoffset, yoffset);
 //}
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+//
+//// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+//// ----------------------------------------------------------------------
 //void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 //{
 //	if (fov >= 1.0f && fov <= 45.0f)
@@ -340,42 +380,3 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 //	if (fov >= 45.0f)
 //		fov = 45.0f;
 //}
-
-// utility function for loading a 2D texture from file
-// ---------------------------------------------------
-unsigned int loadTexture(char const * path)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}

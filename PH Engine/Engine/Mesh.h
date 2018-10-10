@@ -24,7 +24,7 @@ public:
 	unsigned int VAO = 0;
 
 private:
-	unsigned int numFaces_ = 0;
-	unsigned int numVertices_ = 0;
+	unsigned int _numFaces = 0;
+	unsigned int _numVertices = 0;
 
 };

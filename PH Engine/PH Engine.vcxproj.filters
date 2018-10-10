@@ -32,9 +32,6 @@
     <ClCompile Include="Engine\Window.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Matrix33.cpp">
-      <Filter>Header Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Math\Vector2.cpp">
       <Filter>Header Files\math</Filter>
     </ClCompile>
@@ -66,9 +63,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Window.h">
       <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Matrix33.h">
-      <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Math\Vector2.h">
       <Filter>Header Files\math</Filter>

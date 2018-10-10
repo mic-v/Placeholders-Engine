@@ -19,7 +19,7 @@ enum Camera_Movement {
 const float YAW = -90.0F;
 const float PITCH = 0.0f;
 const float SPEED = 2.5f;
-const float SENSITIVITY = 0.1f;
+const float SENSITIVITY = 0.01f;
 const float ZOOM = 45.0f;
 
 class Camera
@@ -70,17 +70,7 @@ public:
 	}
 	// Methods
 	// -------
-	mat44 getLookMatrix()
-	{
-		return mat44::lookAt(position, right, worldUp, position + front);
-	}
-
-	mat44 getLookMatrix2()
-	{
-		return mat44::lookAt2(position, position + front, up);
-	}
-
-	mat4 getLookMatrix3()
+	mat4 getLookMatrix()
 	{
 		return mat4::lookat(position, position + front, up);
 	}
