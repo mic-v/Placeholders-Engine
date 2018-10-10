@@ -6,7 +6,7 @@ doesn't keep the location for the libraries/headers
 Michael:
 C:\Users\100657260\Documents\Placeholders-Engine\External\glad\include;C:\Users\100657260\Documents\Placeholders-Engine\External\glm;C:\Users\100657260\Documents\Placeholders-Engine\External;$(IncludePath)
 C:\Users\100657260\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)
-
+a
 Zack:
 
 Bryan:
