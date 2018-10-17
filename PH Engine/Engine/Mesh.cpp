@@ -1,3 +1,4 @@
+
 #define _CRT_SECURE_NO_WARNINGS
 #include "Mesh.h"
 #include <fstream>
@@ -27,8 +28,7 @@ struct MeshFace
 	MeshFace(
 		unsigned v1, unsigned v2, unsigned v3,
 		unsigned t1, unsigned t2, unsigned t3,
-		unsigned n1, unsigned n2, unsigned n3
-	)
+		unsigned n1, unsigned n2, unsigned n3)
 	{
 		vertices[0] = v1;
 		vertices[1] = v2;
@@ -93,11 +93,16 @@ bool Mesh::loadFromFile(const std::string & file)
 			//this line is aocmment
 			continue;
 		}
+		else if (std::strstr(inputString, "l") != nullptr)
+		{
+			continue;
+		}
 		else if (std::strstr(inputString, "vn") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
-			std::sscanf(inputString, "vn %f %f %f %f", &temp.x, &temp.y, &temp.z);
+			std::sscanf(inputString, "vn %f %f %f", &temp.x, &temp.y, &temp.z);
+			//std::cout << "vn " <<  temp.x << "," << temp.y << "," << temp.z << std::endl;
 			normalData.push_back(temp);
 		}
 		else if (std::strstr(inputString, "vt") != nullptr)
@@ -105,13 +110,16 @@ bool Mesh::loadFromFile(const std::string & file)
 			//this line is aocmment
 			vec2 temp;
 			std::sscanf(inputString, "vt %f %f", &temp.x, &temp.y);
+			//std::cout << "vt " << temp.x << "," << temp.y << std::endl;
 			textureData.push_back(temp);
 		}
 		else if (std::strstr(inputString, "v") != nullptr)
 		{
 			//this line is aocmment
 			vec3 temp;
+			//std::cout << "before " << temp.x << "," << temp.y << "," << temp.z << std::endl;
 			std::sscanf(inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
+			//std::cout << "v " << temp.x << "," << temp.y << "," << temp.z << std::endl;
 			vertexData.push_back(temp);
 		}
 		else if (std::strstr(inputString, "f") != nullptr)
@@ -122,8 +130,11 @@ bool Mesh::loadFromFile(const std::string & file)
 				&temp.vertices[0], &temp.textures[0], &temp.normals[0],
 				&temp.vertices[1], &temp.textures[1], &temp.normals[1],
 				&temp.vertices[2], &temp.textures[2], &temp.normals[2]
-				);
-			
+			);
+			//std::cout << "f " << temp.vertices[0] << "," << temp.textures[0] << "," << temp.normals[0] << "  "
+			//				<< temp.vertices[1] << "," << temp.textures[1] << "," << temp.normals[1] << "  "
+			//				<< temp.vertices[2] << "," << temp.textures[2] << "," << temp.normals[2] << std::endl;
+
 			faceData.push_back(temp);
 		}
 	}
@@ -133,16 +144,25 @@ bool Mesh::loadFromFile(const std::string & file)
 	{
 		for (unsigned j = 0; j < 3; j++)
 		{
+			//std::cout << i << std::endl;
+			//std::cout << j << std::endl;
+			//std::cout << faceData[i].vertices[j] - 1 << std::endl;
+			//std::cout << vertexData[faceData[i].vertices[j] - 1] << std::endl;
+			//std::cout << i << std::endl;
+			//std::cout << j << std::endl;
+			//std::cout << faceData[i].vertices[j] - 1 << std::endl;
+			//std::cout << normalData[faceData[i].normals[j] - 1] << std::endl;
+			std::cout << i << std::endl;
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].x);
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].y);
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].z);
 
 			unpackedTextureData.push_back(textureData[faceData[i].textures[j] - 1].x);
 			unpackedTextureData.push_back(textureData[faceData[i].textures[j] - 1].y);
-			
-			unpackedNormalData.push_back(normalData[faceData[i].vertices[j] - 1].x);
-			unpackedNormalData.push_back(normalData[faceData[i].vertices[j] - 1].y);
-			unpackedNormalData.push_back(normalData[faceData[i].vertices[j] - 1].z);
+
+			unpackedNormalData.push_back(normalData[faceData[i].normals[j] - 1].x);
+			unpackedNormalData.push_back(normalData[faceData[i].normals[j] - 1].y);
+			unpackedNormalData.push_back(normalData[faceData[i].normals[j] - 1].z);
 		}
 	}
 
