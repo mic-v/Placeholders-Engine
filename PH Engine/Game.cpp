@@ -6,6 +6,7 @@ This is the Asssignment 1 Cube Loader stuff. I've been trying to load the monkey
 
 Game* Game::_instance = nullptr;
 
+
 const float mesh[] = {
 	// Vertices start here:
 	-1.0f, 	-1.0f, 	-1.0f, 	 // triangle 1, Vertex 1
@@ -187,7 +188,7 @@ void Game::startUp()
 	sh = Shader("Shaders/passthrough.vs", "Shaders/passthrough.fs");
 
 	monkey = Mesh();
-	monkey.loadFromFile("Contents/Monkey.obj");
+	monkey.loadFromFile("Contents/Map2.obj");
 
 
 	
