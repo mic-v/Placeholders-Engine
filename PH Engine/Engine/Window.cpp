@@ -55,7 +55,7 @@ namespace plaho {
 
 		bool Window::init()
 		{
-			camera = Camera(vec3(0.0f, 0.0f, 3.0f));
+			_camera = nullptr;
 			_mx = 1280.f / 2.f;
 			_my = 720.f / 2.f;
 			if (glfwInit() == NULL)
@@ -132,6 +132,12 @@ namespace plaho {
 		{
 			glfwSwapBuffers(_window);
 			glfwPollEvents();
+		}
+
+		void Window::setCamera(Camera & camera)
+		{
+			_camera = &camera;
+			_camera->update();
 		}
 
 		/*
@@ -238,20 +244,20 @@ namespace plaho {
 			win->_mx = xpos;
 			win->_my = ypos;
 
-			win->camera.processMouseMovement(xoff, yoff);
+			win->_camera->processMouseMovement(xoff, yoff);
 		}
 		void processInput(GLFWwindow * window)
 		{
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-				win->camera.processKeyboard(FORWARD, win->deltaTime);
+				win->_camera->processKeyboard(FORWARD, win->deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-				win->camera.processKeyboard(BACKWARD, win->deltaTime);
+				win->_camera->processKeyboard(BACKWARD, win->deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-				win->camera.processKeyboard(LEFT, win->deltaTime);
+				win->_camera->processKeyboard(LEFT, win->deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-				win->camera.processKeyboard(RIGHT, win->deltaTime);
+				win->_camera->processKeyboard(RIGHT, win->deltaTime);
 		}
 	}
 

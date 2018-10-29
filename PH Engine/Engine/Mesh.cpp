@@ -144,15 +144,6 @@ bool Mesh::loadFromFile(const std::string & file)
 	{
 		for (unsigned j = 0; j < 3; j++)
 		{
-			//std::cout << i << std::endl;
-			//std::cout << j << std::endl;
-			//std::cout << faceData[i].vertices[j] - 1 << std::endl;
-			//std::cout << vertexData[faceData[i].vertices[j] - 1] << std::endl;
-			//std::cout << i << std::endl;
-			//std::cout << j << std::endl;
-			//std::cout << faceData[i].vertices[j] - 1 << std::endl;
-			//std::cout << normalData[faceData[i].normals[j] - 1] << std::endl;
-			std::cout << i << std::endl;
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].x);
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].y);
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].z);

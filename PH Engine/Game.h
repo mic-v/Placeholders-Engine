@@ -9,8 +9,10 @@
 #include "Engine/Mesh.h"
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
-#include "Engine/Camera.h"
 #include "Engine/stb_image.h"
+//#include "Engine/Camera.h"
+#include "Engine/Camera2.h"
+#include <vector>
 
 using namespace plaho;
 using namespace graphics;
@@ -25,16 +27,14 @@ public:
 	void shutDown();
 	void update();
 	void render();
-	void test();
 	Window* _window;
-
 private:
 	Game();
 
 	/***/	
 	static Game* _instance;
 	Camera *_camera;
-
+	std::vector<Camera> cameras;
 	Mesh monkey;
 	Shader sh;
 	Shader *sh2;

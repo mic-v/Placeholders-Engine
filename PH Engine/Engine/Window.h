@@ -4,7 +4,8 @@
 #include <GLFW/glfw3.h>
 
 
-#include "Camera.h"
+//#include "Camera.h"
+#include "Camera2.h"
 #include "Shader.h"
 #include <iostream>
 
@@ -28,6 +29,12 @@ namespace plaho {
 			static double _mx, _my;
 			static double _lastX, _lastY;
 		public:
+			bool firstMouse;
+			Camera* _camera;
+			float deltaTime = 0.0f;
+			float lastFrame = 0.0f;
+			unsigned int diffuseMap;
+			unsigned int specularMap;
 			Window(const char*, int, int);
 			~Window();
 
@@ -35,10 +42,7 @@ namespace plaho {
 			void clear() const;
 			void update();
 			void poll();
-			bool firstMouse;
-			Camera camera;
-			float deltaTime = 0.0f;
-			float lastFrame = 0.0f;
+			void setCamera(Camera&);
 			//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 			inline int getWidth() const { return _width; }
@@ -47,8 +51,6 @@ namespace plaho {
 			static bool isKeyPressed(unsigned int keycode); 
 			static bool isMouseButtonPressed(unsigned int button);
 			static void getMousePos();
-			unsigned int diffuseMap;
-			unsigned int specularMap;
 		private:
 			bool init();
 			friend static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

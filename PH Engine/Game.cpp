@@ -110,42 +110,6 @@ float toRadii(float degrees)
 	return degrees * (PI / 180.0f);
 }
 
-unsigned int loadTexture(char const * path)
-{
-	unsigned int textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
 
 
 Game::Game()
@@ -180,8 +144,15 @@ Game & Game::instance()
 void Game::startUp()
 {
 	_window = new Window("Plaho", 1280, 720);
-	//camera = new Camera(vec3(0.f, 0.f, 3.0f));
-	_camera = &_window->camera;
+	cameras.push_back(Camera(vec3(0.0, 10.0f, 30.0f)));
+	cameras.push_back(Camera(vec3(0.0, 5.0f, 20.0f)));
+	cameras.push_back(Camera(vec3(0.0, 10.0f, 10.0f)));
+	cameras.push_back(Camera(vec3(0.0, 5.0f, 5.0f)));
+	cameras.push_back(Camera(vec3(20.0, 0.0f, 30.0f)));
+	_camera = &cameras[0];
+
+	_window->setCamera(*_camera);
+
 	cameraTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
 	cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
 	
@@ -189,102 +160,11 @@ void Game::startUp()
 
 	monkey = Mesh();
 	monkey.loadFromFile("Contents/Map2.obj");
-
-
-	
-
-	//glGenVertexArrays(
-	//	1,					// We only want to generate 1 VAO.
-	//	&VAO);				// Address of the variable where OpenGL will output the new handle.
-	//glBindVertexArray(VAO); // Binding will allow subsequent openGL calls to affect this VAO.
-
-	//// Create Vertex Buffer Object (VBO) and send mesh to VRAM.
-	//glGenBuffers(1, &VBO);
-	//glBindBuffer(
-	//	GL_ARRAY_BUFFER,	// The type of the buffer. Meshes use GL_ARRAY_BUFFER.
-	//	VBO);				// The handle to the Vertex Buffer Object that we want bound.
-
-	//// Since we bound the VBO, this glBufferData() will upload data to it.
-	//glBufferData(
-	//	GL_ARRAY_BUFFER,	// Same type as the glBindBuffer call.
-	//	sizeof(mesh),		// The number of Bytes to upload (NOT the number of elements).
-	//	mesh,				// A pointer to the start of the data to upload.
-	//	GL_STATIC_DRAW);	// This usage hint allows openGL to place the data in the best place.
-	//						// "Static" means we do not intend to update the mesh after uploading it.
-	//						// "Draw" means we intend to use the buffer for drawing to the screen.
-
-	//// Now we setup our Streams. Streams describe the data inside of a VBO.
-	//// We will need two streams (one for each vertex attribute)
-	//// Stream 0 -> Vertices		(Matches with 'in vec3 mesh_position' in our vertex shader)
-	//// Stream 1 -> Colors		(Matches with 'in vec3 mesh_color' in our vertex shader)
-
-	//// Enable the streams we want OpenGL to actually use.
-	//glEnableVertexAttribArray(0);
-	//glEnableVertexAttribArray(1);
-
-	//// Describe to OpenGL where to find data for stream 0 (mesh_position).
-	//glVertexAttribPointer(
-	//	0,								// Stream ID
-	//	3,								// Number of Elements (3 floats in a vertex -> vec3)
-	//	GL_FLOAT,						// The type of our data (Same as our mesh array at the top of the file)
-	//	GL_FALSE,						// NOT vector normalization. Should be false unless you KNOW you need this.
-	//	0,								// Step in bytes to the next vertex. 0 = tightly packed with no gaps.
-	//	reinterpret_cast<void*>(0));	// Where does the data start in the VBO? 0 = start of buffer data.
-
-	//// Same as above except that Stream ID = 1 and the start of the data is after all the vertices.
-	//// Size in bytes of vertex data = size of a float * 3 floats per vertex * 3 vertices per triangle * 12 triangles.
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<void*>(sizeof(float) * 3 * 3 * 12));
-
-	//// Temp variable to store the result of our "Did you compile?" queries.
-	//int success = GL_FALSE;
-
-	//// Load shaders and compile them into a single Program object...
-	//// First, create the Program object handle.
-	//shaderProgram = glCreateProgram();
-
-	//// Create Vertex Shader...
-	//vertShader = glCreateShader(GL_VERTEX_SHADER);
-	//glShaderSource(
-	//	vertShader,				// Which shader is this for?
-	//	1,						// We are only sending 1 string.
-	//	&vertexShaderSource,	// Pointer to the string containing the Vertex Shader's source code.
-	//	nullptr);				// We don't need to specify an explicit size, OpenGL will stop reading at the null character.
-
-	//// Ask the drivers to compile the source code to Assembly code which the GPU can execute.
-	//// (Similar to how we must compile our C++ source code to a .exe before we can run it)
-	//glCompileShader(vertShader);
-
-	//// Ask OpenGL if it compiled successfully.
-	//glGetShaderiv(vertShader, GL_COMPILE_STATUS, &success);
-	//if (success == GL_FALSE) { exit(EXIT_FAILURE); }; // We should log something instead... 
-
-	//// Create Fragment Shader...
-	//fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-	//glShaderSource(fragShader, 1, &fragmentShaderSource, nullptr);
-	//glCompileShader(fragShader);
-
-	//glGetShaderiv(fragShader, GL_COMPILE_STATUS, &success);
-	//if (success == GL_FALSE) { exit(EXIT_FAILURE); };
-
-	//// Finish linking the two shaders together into the Program object.
-	//glAttachShader(shaderProgram, vertShader);
-	//glAttachShader(shaderProgram, fragShader);
-	//glLinkProgram(shaderProgram);
-
-	//// Ask if the link was successfull.
-	//glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	//if (success == GL_FALSE) { exit(EXIT_FAILURE); };
-
-	//// Cleanup our state. If we left our buffers bound, someone might accidentally modify them later.
-	//// This is not technically required, but can help reduce obscure errors.
-	//glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
-	//glBindVertexArray(GL_NONE);
 }
 
 void Game::shutDown()
 {
 	delete _window;
-	delete _camera;
 }
 
 void Game::update()
@@ -294,48 +174,39 @@ void Game::update()
 		if (_window->isKeyPressed(GLFW_KEY_ESCAPE))
 			break;
 
+		if (_window->isKeyPressed(GLFW_KEY_1))
+		{
+			_camera = &cameras[0];
+			_window->setCamera(*_camera);
+		}
+		else if (_window->isKeyPressed(GLFW_KEY_2))
+		{
+			_camera = &cameras[1];
+			_window->setCamera(*_camera);
+		}
+		else if (_window->isKeyPressed(GLFW_KEY_3))
+		{
+			_camera = &cameras[2];
+			_window->setCamera(*_camera);
+		}
+		else if (_window->isKeyPressed(GLFW_KEY_4))
+		{
+			_camera = &cameras[3];
+			_window->setCamera(*_camera);
+		}
+		else if (_window->isKeyPressed(GLFW_KEY_5))
+		{
+			_camera = &cameras[4];
+			_window->setCamera(*_camera);
+		}
+
 		_window->clear();
 		_window->update();
+		_camera->update();
 
 
 		cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
 		cameraTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
-
-		//glUseProgram(shaderProgram);
-
-		//// Ask for the handles identfying the uniform variables in our shader.
-		//int modelLoc = glGetUniformLocation(shaderProgram, "u_model");
-		//int viewLoc = glGetUniformLocation(shaderProgram, "u_view");
-		//int projectionLoc = glGetUniformLocation(shaderProgram, "u_projection");
-
-		//// Same as above, but remember that we must inverse the Camera matrix! (See lecture 3 slides) 
-		////glUniformMatrix4fv(viewLoc, 1, false, &camera->getLookMatrix3().m[0][0]);
-		//glUniformMatrix4fv(viewLoc, 1, false, &_camera->getLookMatrix().m[0][0]);
-		//// Projection matrix is uploaded as-is.
-		//glUniformMatrix4fv(projectionLoc, 1, false, &cameraProjection.m[0][0]);
-		//// Send our newest MVP matrices to the Vertex Shader (respecting the handles we just found)...
-		//glUniformMatrix4fv(
-		//	modelLoc,							// Target Variable (u_model).
-		//	1,									// We are only sending 1 matrix.
-		//	false,								// We don't need to transpose because both OpenGL and MiniMath are column-major.
-		//	&cameraTransform.m[0][0]); // The pointer to our actual matrix data (the float[16] in the mat4 class).
-
-
-		//// Switch on our mesh by binding the VAO - it remembers the streams as a "view" into our VBO data.
-		//glBindVertexArray(VAO);
-
-		//// This is the actual 'render' call.
-		//glDrawArrays(
-		//	GL_TRIANGLES,	// The contents viewed by the VAO should be treated as regular triangles.
-		//	0,				// Start at the begining of the mesh.
-		//	12 * 3);		// Number of vertices to render = 12 triangles * 3 vertices per triangle.
-
-		//// Revert the states we set during the function.
-		//// This is not technically required, but can help reduce obscure errors.
-
-
-
-		//camera->processMouseMovement(1280.f / 2.0f, 720.f / 2.0f);
 
 		render();
 	}

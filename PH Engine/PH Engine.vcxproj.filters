@@ -24,6 +24,9 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\camera">
+      <UniqueIdentifier>{09965e1e-1926-4298-9655-4db262b0a16b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -56,11 +59,11 @@
     <ClCompile Include="Game.cpp">
       <Filter>Header Files\atop</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Camera2.cpp">
+      <Filter>Header Files\camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Window.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
@@ -87,6 +90,12 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files\atop</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FPSCamera.h">
+      <Filter>Header Files\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera2.h">
+      <Filter>Header Files\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

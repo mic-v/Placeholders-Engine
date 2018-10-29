@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\PC-M\Documents\Placeholders-Engine\External\glad\include;C:\Users\PC-M\Documents\Placeholders-Engine\External\glm;C:\Users\PC-M\Documents\Placeholders-Engine\External;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\PC-M\Documents\Placeholders-Engine\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Camera2.cpp" />
     <ClCompile Include="Engine\Math\mat4.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
     <ClCompile Include="Engine\Math\Vector3.cpp" />
@@ -145,7 +146,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Camera.h" />
+    <ClInclude Include="Engine\Camera2.h" />
+    <ClInclude Include="Engine\FPSCamera.h" />
     <ClInclude Include="Engine\Math\mat4.h" />
     <ClInclude Include="Engine\Math\math.h" />
     <ClInclude Include="Engine\Math\Vector2.h" />
