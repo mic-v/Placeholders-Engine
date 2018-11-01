@@ -20,7 +20,7 @@ namespace plaho {
 			@param height The height/y of the window
 		
 		*/
-
+		//
 		Window::Window(const char* name, int width, int height)
 		{
 			_name = name;
