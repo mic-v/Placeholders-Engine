@@ -30,24 +30,26 @@ public:
 private:
 	Game();
 
-	/***/	
+	/***/
 	static Game* _instance;
 	Camera *_camera;
-
-	Mesh object;
+	std::vector<Camera> cameras;
+	Mesh monkey;
 	Shader sh;
 	Shader *sh2;
 	mat4 cameraTransform;
 	mat4 cameraProjection;
-	mat4 mapTransform;
+	mat4 monkeyTransform;
 	unsigned int VBO, VAO;
 	unsigned int diffuseMap, specularMap;
-
+	//vec3 position(0, 0, 3);
+	//Window
+	//unsigned int VBO = GL_NONE;
+	//unsigned int VAO = GL_NONE;
 	unsigned int shaderProgram = GL_NONE;
 	unsigned int vertShader = GL_NONE;
 	unsigned int fragShader = GL_NONE;
-	
+
 
 	// Don't know what to include yet
-
 };
