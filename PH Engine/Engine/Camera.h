@@ -44,7 +44,7 @@ public:
 	float movementSpeed;
 	float mouseSensitivity;
 	float zoom;
-
+	//
 	// Constructors
 	// ------------
 	//Camera(glm::vec3 position_ = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up_ = glm::vec3(0.0f, 1.0f, 0.0f), float yaw_ = YAW, float pitch_ = PITCH) 
@@ -97,13 +97,13 @@ public:
 	{
 		float velocity = movementSpeed * deltaTime;
 		if (direction == FORWARD)
-			position += front * velocity;
+			position += front * velocity * 2;
 		if (direction == BACKWARD)
-			position -= front * velocity;
+			position -= front * velocity * 2;
 		if (direction == LEFT)
-			position -= right * velocity;
+			position -= right * velocity * 2;
 		if (direction == RIGHT)
-			position += right * velocity;
+			position += right * velocity * 2;
 	}
 
 	void processMouseScroll(float yoffset)

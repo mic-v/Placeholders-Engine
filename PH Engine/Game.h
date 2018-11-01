@@ -9,11 +9,10 @@
 #include "Engine/Mesh.h"
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
-#include "Engine/stb_image.h"
-//#include "Engine/Camera.h"
-#include "Engine/Camera2.h"
-#include <vector>
+#include "Engine/Camera.h"
 
+//#include "SOIL2.h"
+//
 using namespace plaho;
 using namespace graphics;
 
@@ -31,7 +30,7 @@ public:
 private:
 	Game();
 
-	/***/	
+	/***/
 	static Game* _instance;
 	Camera *_camera;
 	std::vector<Camera> cameras;
@@ -50,8 +49,7 @@ private:
 	unsigned int shaderProgram = GL_NONE;
 	unsigned int vertShader = GL_NONE;
 	unsigned int fragShader = GL_NONE;
-	
+
 
 	// Don't know what to include yet
-
 };

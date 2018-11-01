@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "Math/math.h"
-
+//
 #define CHAR_BUFFER_SIZE 128
 #define BUFFER_OFFSET(i) ((char *)0 + (i))
 
@@ -124,8 +124,9 @@ bool Mesh::loadFromFile(const std::string & file)
 		}
 		else if (std::strstr(inputString, "f") != nullptr)
 		{
-			//this line is aocmment
+			//this line contains face data
 			MeshFace temp;
+
 			std::sscanf(inputString, "f %u/%u/%u %u/%u/%u %u/%u/%u",
 				&temp.vertices[0], &temp.textures[0], &temp.normals[0],
 				&temp.vertices[1], &temp.textures[1], &temp.normals[1],
