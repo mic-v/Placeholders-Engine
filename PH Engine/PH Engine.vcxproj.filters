@@ -56,6 +56,9 @@
     <ClCompile Include="Game.cpp">
       <Filter>Header Files\atop</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Header Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Camera.h">
@@ -87,6 +90,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Header Files\atop</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

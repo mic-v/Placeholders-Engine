@@ -50,7 +50,7 @@ Shader::Shader(const char * vertexPath, const char * fragmentPath)
 
 	checkCompileErrors(fragment, "FRAGMENT");
 	checkCompileErrors(vertex, "VERTEX");
-
+	//
 
 	// shader Program
 	glAttachShader(ID, vertex);

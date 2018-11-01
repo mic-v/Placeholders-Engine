@@ -40,12 +40,12 @@
 	Ask me any other questions
 */
 
+// test
+
 #include <iostream>
 #include "Game.h"
-#include <glad/glad.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "Engine/stb_image.h"
+
 
 #include "Engine/Math/math.h"
 #include "Engine/Shader.h"

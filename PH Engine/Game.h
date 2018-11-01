@@ -10,8 +10,9 @@
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
 #include "Engine/Camera.h"
-#include "Engine/stb_image.h"
 
+//#include "SOIL2.h"
+//
 using namespace plaho;
 using namespace graphics;
 
@@ -35,18 +36,15 @@ private:
 	static Game* _instance;
 	Camera *_camera;
 
-	Mesh monkey;
+	Mesh object;
 	Shader sh;
 	Shader *sh2;
 	mat4 cameraTransform;
 	mat4 cameraProjection;
-	mat4 monkeyTransform;
+	mat4 mapTransform;
 	unsigned int VBO, VAO;
 	unsigned int diffuseMap, specularMap;
-	//vec3 position(0, 0, 3);
-	//Window
-	//unsigned int VBO = GL_NONE;
-	//unsigned int VAO = GL_NONE;
+
 	unsigned int shaderProgram = GL_NONE;
 	unsigned int vertShader = GL_NONE;
 	unsigned int fragShader = GL_NONE;
