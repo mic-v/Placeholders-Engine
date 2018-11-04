@@ -62,6 +62,9 @@
     <ClCompile Include="Engine\Camera2.cpp">
       <Filter>Header Files\camera</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Window.h">
@@ -96,6 +99,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Camera2.h">
       <Filter>Header Files\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ private:
 	static Game* _instance;
 	Camera *_camera;
 	std::vector<Camera> cameras;
-	Mesh monkey;
+	Mesh object;
 	Shader sh;
 	Shader *sh2;
 	mat4 cameraTransform;
