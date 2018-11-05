@@ -13,7 +13,7 @@
 
 #include "mat4.h"
 #include <math.h>
-
+#include <iostream>
 mat4::mat4()
 {
 	m[0][0]= 0; m[1][0] = 0; m[2][0] = 0; m[3][0] = 0;

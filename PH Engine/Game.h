@@ -10,12 +10,14 @@
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
 #include "Engine/Camera.h"
-
+#include "Texture.h"
 //#include "SOIL2.h"
 //
 using namespace plaho;
 using namespace graphics;
 
+#define WINDOW_WIDTH			1280
+#define WINDOW_HEIGHT			720
 class Game
 {
 public:
@@ -33,13 +35,13 @@ private:
 	/***/
 	static Game* _instance;
 	Camera *_camera;
+	Texture test;
 	std::vector<Camera> cameras;
 	Mesh object;
-	Shader sh;
-	Shader *sh2;
+	Shaderclass passthrough;
 	mat4 cameraTransform;
 	mat4 cameraProjection;
-	mat4 monkeyTransform;
+	mat4 objectTransform;
 	unsigned int VBO, VAO;
 	unsigned int diffuseMap, specularMap;
 	//vec3 position(0, 0, 3);
