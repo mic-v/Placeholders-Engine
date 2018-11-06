@@ -43,7 +43,7 @@
 // test
 
 #include <iostream>
-#include "Game.h"
+#include "Engine.h"
 
 
 
@@ -62,7 +62,7 @@ unsigned int loadTexture(const char *path);
 
 int main()
 {
-	Game::instance().startUp();
-	Game::instance().update();
-	Game::instance().shutDown();
+	Engine::instance().startUp();
+	Engine::instance().update();
+	Engine::instance().shutDown();
 }

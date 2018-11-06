@@ -23,13 +23,13 @@ public:
 	int getUniformLocation(const std::string & location) const;
 
 	void setAttribLocation(unsigned int index, const std::string &location);
-	void setBool(const std::string &name, bool value) const;
-	void setInt(const std::string &name, int value) const;
-	void setFloat(const std::string &name, float value) const;
-	void setVec2(const std::string &name, vec2 vec) const;
-	void setVec3(const std::string & name, vec3 vec) const;
-	void setVec4(const std::string & name, vec4 vec) const;
-	void setMat4(const std::string & name, const mat4& mat) const;
+	void sendUniformBool(const std::string &name, bool value) const;
+	void sendUniformInt(const std::string &name, int value) const;
+	void sendUniformFloat(const std::string &name, float value) const;
+	void sendUniformVec2(const std::string &name, vec2 vec) const;
+	void sendUniformVec3(const std::string & name, vec3 vec) const;
+	void sendUniformVec4(const std::string & name, vec4 vec) const;
+	void sendUniformMat4(const std::string & name, const mat4& mat) const;
 
 private:
 	GLuint ID;

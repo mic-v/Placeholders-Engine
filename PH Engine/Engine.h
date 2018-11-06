@@ -16,11 +16,11 @@
 using namespace plaho;
 using namespace graphics;
 
-class Game
+class Engine
 {
 public:
-	~Game();
-	static Game& instance();
+	~Engine();
+	static Engine& instance();
 
 	void startUp();
 	void shutDown();
@@ -28,10 +28,10 @@ public:
 	void render();
 	Window* _window;
 private:
-	Game();
+	Engine();
 
 	/***/
-	static Game* _instance;
+	static Engine* _instance;
 	Camera *_camera;
 	std::vector<Camera> cameras;
 	Mesh object;

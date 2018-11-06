@@ -1,10 +1,10 @@
-#include "Game.h"
+#include "Engine.h"
 
 /*
 This is the Asssignment 1 Cube Loader stuff. I've been trying to load the monkey
 */
 
-Game* Game::_instance = nullptr;
+Engine* Engine::_instance = nullptr;
 
 
 
@@ -21,27 +21,27 @@ float toRadii(float degrees)
 
 
 
-Game::Game()
+Engine::Engine()
 {
 }
 
-Game::~Game()
+Engine::~Engine()
 {
 }
 
 /*
 	This is the Singleton Pattern. Read more here:
-	http://gameprogrammingpatterns.com/singleton.html
+	http://Engineprogrammingpatterns.com/singleton.html
 	Essentially, make sures there is only one instance of a certain class
-	I wanted to practice it so I decided to use this pattern for Game. You don't have to follow thi
+	I wanted to practice it so I decided to use this pattern for Engine. You don't have to follow thi
 	for every class
 */
-Game & Game::instance()
+Engine & Engine::instance()
 {
 	// TODO: insert return statement here
 	if (_instance == nullptr)
 	{
-		_instance = new Game();
+		_instance = new Engine();
 		return *_instance;
 	}
 	else
@@ -50,11 +50,11 @@ Game & Game::instance()
 	}
 }
 //
-void Game::startUp()
+void Engine::startUp()
 {
 	_window = new Window("Plaho", 1280, 720);
 	cameras.push_back(Camera(vec3(0.0, 19.0f, 13.0f)));
-	cameras[0].setYDirection(-50.f);
+	cameras[0].setYDirection(-56.f);
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 20.0f)));
 	cameras.push_back(Camera(vec3(0.0, 10.0f, 10.0f)));
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 5.0f)));
@@ -77,12 +77,12 @@ void Game::startUp()
 	
 }
 
-void Game::shutDown()
+void Engine::shutDown()
 {
 	delete _window;
 }
 
-void Game::update()
+void Engine::update()
 {
 	while (true)
 	{
@@ -134,12 +134,12 @@ void Game::update()
 	}
 }
 
-void Game::render()
+void Engine::render()
 {
 	sh.use();
-	sh.setMat4("model", cameraTransform);
-	sh.setMat4("projection", cameraProjection);
-	sh.setMat4("view", _camera->getLookMatrix());
+	sh.sendUniformMat4("model", cameraTransform);
+	sh.sendUniformMat4("projection", cameraProjection);
+	sh.sendUniformMat4("view", _camera->getLookMatrix());
 
 	glBindVertexArray(object.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
