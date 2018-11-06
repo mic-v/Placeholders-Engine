@@ -40,9 +40,6 @@ public:
 	virtual void processKeyboard(Camera_Movement direction, float deltaTime);
 	virtual void processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 	virtual void update();
-	void setYDirection(float y);
-	void moveUp();
-	void moveDown();
 	mat4 getLookMatrix();
 private:
 	float _dragSpeed;

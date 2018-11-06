@@ -53,8 +53,7 @@ Game & Game::instance()
 void Game::startUp()
 {
 	_window = new Window("Plaho", 1280, 720);
-	cameras.push_back(Camera(vec3(0.0, 19.0f, 13.0f)));
-	cameras[0].setYDirection(-50.f);
+	cameras.push_back(Camera(vec3(0.0, 10.0f, 30.0f)));
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 20.0f)));
 	cameras.push_back(Camera(vec3(0.0, 10.0f, 10.0f)));
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 5.0f)));
@@ -88,11 +87,6 @@ void Game::update()
 	{
 		if (_window->isKeyPressed(GLFW_KEY_ESCAPE))
 			break;
-
-		if (_window->isKeyPressed(GLFW_KEY_SPACE))
-		{
-			_camera->moveUp();
-		}
 
 		if (_window->isKeyPressed(GLFW_KEY_1))
 		{

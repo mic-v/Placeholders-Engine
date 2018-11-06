@@ -47,21 +47,6 @@ void Camera::update()
 	this->updateCameraView();
 }
 
-void Camera::setYDirection(float y)
-{
-	_pitch = y;
-}
-
-void Camera::moveUp()
-{
-	_position += vec3(0.0, 0.01f, 0.0f);
-}
-
-void Camera::moveDown()
-{
-	_position -= vec3(0.0, 0.01f, 0.0f);
-}
-
 mat4 Camera::getLookMatrix()
 {
 	return mat4::lookat(_position, _position + _front, _up);
