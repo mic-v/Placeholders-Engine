@@ -11,6 +11,7 @@
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
 #include "Engine/Camera.h"
+#include "Engine/FPSCamera.h"
 
 //#include "SOIL2.h"
 //

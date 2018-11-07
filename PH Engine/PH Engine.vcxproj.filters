@@ -27,6 +27,9 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{0a8190f0-1b32-4850-927e-3a31864dba23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Manager">
+      <UniqueIdentifier>{a1eca2c2-2bac-45ef-8efd-828d1d1dc404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -53,9 +56,6 @@
     <ClCompile Include="Engine\Mesh.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Camera2.cpp">
-      <Filter>Header Files\camera</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -64,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Header Files\atop</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Camera.cpp">
+      <Filter>Header Files\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FPSCamera.cpp">
+      <Filter>Header Files\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,9 +97,6 @@
     <ClInclude Include="Engine\FPSCamera.h">
       <Filter>Header Files\camera</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Camera2.h">
-      <Filter>Header Files\camera</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Shader.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
@@ -102,6 +105,24 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera.h">
+      <Filter>Header Files\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ResourceModule.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\RendererModule.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Level.h">
+      <Filter>Header Files\atop</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\AudioModule.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TextRenderer.h">
+      <Filter>Header Files\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

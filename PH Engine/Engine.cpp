@@ -15,58 +15,38 @@ Engine* Engine::_instance = nullptr;
 float toRadii(float degrees)
 {
 	return degrees * (PI / 180.0f);
-	
+
 }
 
-void Engine::cameraMovement() {
-	while (true)
+void Engine::cameraMovement()
+{
+
+	if (_window->isKeyPressed(GLFW_KEY_1))
 	{
-		if (_window->isKeyPressed(GLFW_KEY_ESCAPE))
-			break;
-
-		if (_window->isKeyPressed(GLFW_KEY_SPACE))
-		{
-			_camera->moveUp();
-		}
-
-		if (_window->isKeyPressed(GLFW_KEY_1))
-		{
-			_camera = &cameras[0];
-			_window->setCamera(*_camera);
-		}
-		else if (_window->isKeyPressed(GLFW_KEY_2))
-		{
-			_camera = &cameras[1];
-			_window->setCamera(*_camera);
-		}
-		else if (_window->isKeyPressed(GLFW_KEY_3))
-		{
-			_camera = &cameras[2];
-			_window->setCamera(*_camera);
-		}
-		else if (_window->isKeyPressed(GLFW_KEY_4))
-		{
-			_camera = &cameras[3];
-			_window->setCamera(*_camera);
-		}
-		else if (_window->isKeyPressed(GLFW_KEY_5))
-		{
-			_camera = &cameras[4];
-			_window->setCamera(*_camera);
-		}
-
-		_window->clear();
-		_window->update();
-		_camera->update();
-
-
-		cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
-		cameraTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
-
-		
-
-		render();
+		_camera = &cameras[0];
+		_window->setCamera(*_camera);
 	}
+	else if (_window->isKeyPressed(GLFW_KEY_2))
+	{
+		_camera = &cameras[1];
+		_window->setCamera(*_camera);
+	}
+	else if (_window->isKeyPressed(GLFW_KEY_3))
+	{
+		_camera = &cameras[2];
+		_window->setCamera(*_camera);
+	}
+	else if (_window->isKeyPressed(GLFW_KEY_4))
+	{
+		_camera = &cameras[3];
+		_window->setCamera(*_camera);
+	}
+	else if (_window->isKeyPressed(GLFW_KEY_5))
+	{
+		_camera = &cameras[4];
+		_window->setCamera(*_camera);
+	}
+
 }
 
 
@@ -92,28 +72,21 @@ Engine::~Engine()
 Engine & Engine::instance()
 {
 	// TODO: insert return statement here
-	if (_instance == nullptr)
-	{
-		_instance = new Engine();
-		return *_instance;
-	}
-	else
-	{
-		return *_instance;
-	}
+	static Engine instance;
+	return instance;
 }
 //
 void Engine::startUp()
 {
-	
+
 	_window = new Window("Plaho", 1280, 720);
-	cameras.push_back(Camera(vec3(0.0, 19.0f, 13.0f)));
-	cameras[0].setYDirection(-56.f);
+	cameras.push_back(FPSCamera(vec3(0.0, 19.0f, 13.0f)));
+	//cameras[0].setYDirection(-56.f);
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 20.0f)));
 	cameras.push_back(Camera(vec3(0.0, 10.0f, 10.0f)));
 	cameras.push_back(Camera(vec3(0.0, 5.0f, 5.0f)));
 	cameras.push_back(Camera(vec3(20.0, 0.0f, 30.0f)));
-	_camera = &cameras[0];
+	_camera = new FPSCamera(vec3(0.0, 2.0f,13.0f));
 
 	_window->setCamera(*_camera);
 
@@ -130,9 +103,9 @@ void Engine::startUp()
 		system("Pause");
 		exit(0);
 	}
-	
-	
-	
+
+
+
 }
 
 void Engine::shutDown()
@@ -142,20 +115,30 @@ void Engine::shutDown()
 
 void Engine::update()
 {
-	cameraMovement();
+	while (true)
+	{
+		if (_window->isKeyPressed(GLFW_KEY_ESCAPE))
+			break;
+
+		cameraMovement();
+		_window->clear();
+		_window->update();
+		_camera->update();
+		render();
+	}
 }
 
 void Engine::render()
 {
-	
-	
+
+
 	sh.use();
 	sh.sendUniformMat4("model", cameraTransform);
 	sh.sendUniformMat4("projection", cameraProjection);
 	sh.sendUniformMat4("view", _camera->getLookMatrix());
-	sh.sendUniformVec4("LightPosition", vec4(4.0f, 0, 0, 1.0f));
-	sh.sendUniformVec3("LightAmbient",  vec3(0, 0, 0.15f));
-	sh.sendUniformVec3("LightDiffuse",  vec3(0.7f, 0.5f, 0.2f));
+	sh.sendUniformVec4("LightPosition", vec4(4.0f, 10.0f, 0, 1.0f));
+	sh.sendUniformVec3("LightAmbient", vec3(0, 0, 0.15f));
+	sh.sendUniformVec3("LightDiffuse", vec3(0.7f, 0.5f, 0.2f));
 	sh.sendUniformVec3("LightSpecular", vec3(1.0f, 0.1f, 0.1f));
 	sh.sendUniformFloat("LightSpecularExponent", 1.0f);
 	sh.sendUniformFloat("Attenuation_Constant", 0.0f);
@@ -167,7 +150,7 @@ void Engine::render()
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
 
 	glBindVertexArray(0);
-	
+
 	test.Unbind();
 	sh.unuse();
 	_window->poll();

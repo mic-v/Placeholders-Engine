@@ -1,4 +1,4 @@
-#include "Camera2.h"
+#include "Camera.h"
 #include <iostream>
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
@@ -16,7 +16,6 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 		_pitch = 89.f;
 	if (_pitch < -89.f)
 		_pitch = -89.f;
-	std::cout << _pitch << std::endl;
 
 	//updateCameraView();
 }
@@ -24,11 +23,6 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
 {
 }
-
-//void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
-//{
-//	updateCameraView();
-//}
 
 void Camera::updateCameraView()
 {
