@@ -21,11 +21,11 @@
     <Filter Include="Header Files\atop">
       <UniqueIdentifier>{2d9b8264-f315-4579-90f7-83df2a344ae2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{c843fc78-90ef-4472-b05f-869d8f0dadb7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\camera">
       <UniqueIdentifier>{09965e1e-1926-4298-9655-4db262b0a16b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shaders">
+      <UniqueIdentifier>{0a8190f0-1b32-4850-927e-3a31864dba23}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,39 +94,45 @@
     <ClInclude Include="Engine\Camera2.h">
       <Filter>Header Files\camera</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Shader.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Header Files\atop</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\1.colors.fs">
+    <None Include="Contents\Shaders\1.colors.fs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\1.colors.vs">
+    <None Include="Contents\Shaders\1.colors.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\1.lamp.fs">
+    <None Include="Contents\Shaders\1.lamp.fs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\1.lamp.vs">
+    <None Include="Contents\Shaders\1.lamp.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\4.2.texture.fs">
+    <None Include="Contents\Shaders\4.2.texture.fs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\4.2.texture.vs">
+    <None Include="Contents\Shaders\4.2.texture.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\passthrough.fs">
+    <None Include="Contents\Shaders\rainbow.fs">
       <Filter>Header Files\Shaders</Filter>
     </None>
-    <None Include="Shaders\passthrough.vs">
+    <None Include="Contents\Shaders\rainbow.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Contents\Shaders\texture.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Contents\Shaders\texture.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>

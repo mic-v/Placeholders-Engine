@@ -6,6 +6,7 @@
 // Any major systems that need to interact with one another will occur here.
 
 #include "Engine/Window.h"
+#include "Texture.h"
 #include "Engine/Mesh.h"
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
@@ -26,6 +27,7 @@ public:
 	void shutDown();
 	void update();
 	void render();
+	void cameraMovement();
 	Window* _window;
 private:
 	Engine();
@@ -37,15 +39,13 @@ private:
 	Mesh object;
 	Shader sh;
 	Shader *sh2;
+	Texture test;
 	mat4 cameraTransform;
 	mat4 cameraProjection;
-	mat4 monkeyTransform;
+	mat4 objectTransform;
 	unsigned int VBO, VAO;
 	unsigned int diffuseMap, specularMap;
-	//vec3 position(0, 0, 3);
-	//Window
-	//unsigned int VBO = GL_NONE;
-	//unsigned int VAO = GL_NONE;
+	
 	unsigned int shaderProgram = GL_NONE;
 	unsigned int vertShader = GL_NONE;
 	unsigned int fragShader = GL_NONE;

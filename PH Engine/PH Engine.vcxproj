@@ -166,14 +166,16 @@
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\1.colors.fs" />
-    <None Include="Shaders\1.colors.vs" />
-    <None Include="Shaders\1.lamp.fs" />
-    <None Include="Shaders\1.lamp.vs" />
-    <None Include="Shaders\4.2.texture.fs" />
-    <None Include="Shaders\4.2.texture.vs" />
-    <None Include="Shaders\passthrough.fs" />
-    <None Include="Shaders\passthrough.vs" />
+    <None Include="Contents\Shaders\1.colors.fs" />
+    <None Include="Contents\Shaders\1.colors.vs" />
+    <None Include="Contents\Shaders\1.lamp.fs" />
+    <None Include="Contents\Shaders\1.lamp.vs" />
+    <None Include="Contents\Shaders\4.2.texture.fs" />
+    <None Include="Contents\Shaders\4.2.texture.vs" />
+    <None Include="Contents\Shaders\rainbow.fs" />
+    <None Include="Contents\Shaders\rainbow.vs" />
+    <None Include="Contents\Shaders\texture.fs" />
+    <None Include="Contents\Shaders\texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

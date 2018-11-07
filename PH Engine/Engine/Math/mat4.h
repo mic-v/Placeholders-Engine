@@ -25,6 +25,7 @@
 #pragma once
 #define PI 3.14159265358979323846
 #include "Vector3.h"
+#include "Vector4.h"
 
 class mat4
 {
@@ -50,6 +51,11 @@ public:
 	static mat4 perspective(float fov, float aspectR, float near, float far);
 	static mat4 rotation(float angle, vec3 a);
 	static mat4 lookat(vec3 start, vec3 end, vec3 up);
+
+	vec4 operator*(const vec4 vec){
+		///vec1 * 5
+		return vec4((m00 * vec.x + m01 * vec.y + m02 * vec.z + m03 * vec.z), (m10 * vec.x + m11 * vec.y + m12 * vec.z + m13 * vec.z), (m20 * vec.x + m21 * vec.y + m22 * vec.z + m23 * vec.z), vec.w);
+	}
 
 private:
 
