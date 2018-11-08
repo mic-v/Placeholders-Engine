@@ -138,25 +138,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\FPSCamera.cpp" />
+=======
+    <ClCompile Include="Engine\Camera2.cpp" />
+    <ClCompile Include="Engine\Light.cpp" />
+>>>>>>> master
     <ClCompile Include="Engine\Math\mat4.cpp" />
     <ClCompile Include="Engine\Math\Vector2.cpp" />
     <ClCompile Include="Engine\Math\Vector3.cpp" />
     <ClCompile Include="Engine\Math\vector4.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
     <ClCompile Include="Engine\Shader.cpp" />
+    <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\AudioModule.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\Level.h" />
+=======
+    <ClInclude Include="Engine\Light.h" />
+>>>>>>> master
     <ClInclude Include="Engine\Math\mat4.h" />
     <ClInclude Include="Engine\Math\math.h" />
     <ClInclude Include="Engine\Math\Vector2.h" />
@@ -166,10 +175,13 @@
     <ClInclude Include="Engine\RendererModule.h" />
     <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Engine\Shader.h" />
+<<<<<<< HEAD
     <ClInclude Include="Engine\TextRenderer.h" />
+=======
+    <ClInclude Include="Engine\Texture.h" />
+>>>>>>> master
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Shaders\1.colors.fs" />

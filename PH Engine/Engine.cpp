@@ -90,14 +90,17 @@ void Engine::startUp()
 
 	_window->setCamera(*_camera);
 
-	cameraTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
+	objectTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
 	cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
 	glEnable(GL_DEPTH_TEST);
 	sh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
-
+	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Map2.obj");
-
+	first = Light(&sh, vec4(4.0f, 0.0f, 0, 1.0f), vec3(0.0f, 0.0f, 0.15f), vec3(0.7f, 0.5f, 0.2f), vec3(1.0f, 0.1f, 0.1f));
+	second = Light(&sh2, vec4(-4.0f, 0.0f, 0, 1.0f), vec3(0.0f, 0.0f, 0.15f), vec3(0.7f, 0.5f, 0.2f), vec3(1.0f, 0.1f, 0.1f));
+	
+	
 	if (!test.LoadTexture("Contents/Textures/container2.png")) {
 		cout << "Texture failed to load" << endl;
 		system("Pause");
@@ -130,22 +133,25 @@ void Engine::update()
 
 void Engine::render()
 {
+	
 
 
+
+	
 	sh.use();
-	sh.sendUniformMat4("model", cameraTransform);
+	sh.sendUniformMat4("model", objectTransform);
 	sh.sendUniformMat4("projection", cameraProjection);
 	sh.sendUniformMat4("view", _camera->getLookMatrix());
-	sh.sendUniformVec4("LightPosition", vec4(4.0f, 10.0f, 0, 1.0f));
-	sh.sendUniformVec3("LightAmbient", vec3(0, 0, 0.15f));
-	sh.sendUniformVec3("LightDiffuse", vec3(0.7f, 0.5f, 0.2f));
-	sh.sendUniformVec3("LightSpecular", vec3(1.0f, 0.1f, 0.1f));
-	sh.sendUniformFloat("LightSpecularExponent", 1.0f);
-	sh.sendUniformFloat("Attenuation_Constant", 0.0f);
-	sh.sendUniformFloat("Attenuation_Linear", 0.1f);
-	sh.sendUniformFloat("Attenuation_Quadratic", 0.01f);
-	test.Bind(0);
 
+	first.LoadLight();
+	sh2.use();
+	sh2.sendUniformMat4("model", objectTransform);
+	sh2.sendUniformMat4("projection", cameraProjection);
+	sh2.sendUniformMat4("view", _camera->getLookMatrix());
+	second.LoadLight();
+	
+	test.Bind(0);
+	
 	glBindVertexArray(object.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
 
