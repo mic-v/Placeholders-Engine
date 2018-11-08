@@ -6,11 +6,12 @@
 // Any major systems that need to interact with one another will occur here.
 
 #include "Engine/Window.h"
-#include "Texture.h"
+#include "Engine/Texture.h"
 #include "Engine/Mesh.h"
 #include "Engine/Shader.h"
 #include "Engine/Math/math.h"
 #include "Engine/Camera.h"
+#include "Engine/Light.h"
 
 //#include "SOIL2.h"
 //
@@ -38,11 +39,14 @@ private:
 	std::vector<Camera> cameras;
 	Mesh object;
 	Shader sh;
-	Shader *sh2;
+	Shader sh2;
+	Light first;
+	Light second;
+	Light third;
 	Texture test;
-	mat4 cameraTransform;
-	mat4 cameraProjection;
 	mat4 objectTransform;
+	mat4 cameraProjection;
+	
 	unsigned int VBO, VAO;
 	unsigned int diffuseMap, specularMap;
 	

@@ -56,14 +56,17 @@
     <ClCompile Include="Engine\Camera2.cpp">
       <Filter>Header Files\camera</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Shader.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Header Files\atop</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light.cpp">
+      <Filter>Header Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Texture.cpp">
+      <Filter>Header Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,7 +103,10 @@
     <ClInclude Include="Engine.h">
       <Filter>Header Files\atop</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="Engine\Light.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Texture.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
