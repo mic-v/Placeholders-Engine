@@ -109,9 +109,6 @@
     <ClInclude Include="Engine\Camera.h">
       <Filter>Header Files\camera</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ResourceModule.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\RendererModule.h">
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
@@ -122,6 +119,9 @@
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\TextRenderer.h">
+      <Filter>Header Files\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ResourceManager.h">
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
   </ItemGroup>

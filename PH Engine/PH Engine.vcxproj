@@ -164,7 +164,7 @@
     <ClInclude Include="Engine\Math\vector4.h" />
     <ClInclude Include="Engine\Mesh.h" />
     <ClInclude Include="Engine\RendererModule.h" />
-    <ClInclude Include="Engine\ResourceModule.h" />
+    <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Engine\Shader.h" />
     <ClInclude Include="Engine\TextRenderer.h" />
     <ClInclude Include="Engine\Window.h" />
