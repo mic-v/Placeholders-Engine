@@ -7,43 +7,17 @@ This is the Asssignment 1 Cube Loader stuff. I've been trying to load the monkey
 Engine* Engine::_instance = nullptr;
 
 
-
-
-
-
-
-float toRadii(float degrees)
-{
-	return degrees * (PI / 180.0f);
-
-}
-
 void Engine::cameraMovement()
 {
 
 	if (_window->isKeyPressed(GLFW_KEY_1))
 	{
-		_camera = &cameras[0];
+		_camera = &camera1;
 		_window->setCamera(*_camera);
 	}
 	else if (_window->isKeyPressed(GLFW_KEY_2))
 	{
-		_camera = &cameras[1];
-		_window->setCamera(*_camera);
-	}
-	else if (_window->isKeyPressed(GLFW_KEY_3))
-	{
-		_camera = &cameras[2];
-		_window->setCamera(*_camera);
-	}
-	else if (_window->isKeyPressed(GLFW_KEY_4))
-	{
-		_camera = &cameras[3];
-		_window->setCamera(*_camera);
-	}
-	else if (_window->isKeyPressed(GLFW_KEY_5))
-	{
-		_camera = &cameras[4];
+		_camera = &camera2;
 		_window->setCamera(*_camera);
 	}
 
@@ -78,27 +52,33 @@ Engine & Engine::instance()
 //
 void Engine::startUp()
 {
-
+	isActive = true;
 	_window = new Window("Plaho", 1280, 720);
-	cameras.push_back(FPSCamera(vec3(0.0, 19.0f, 13.0f)));
-	//cameras[0].setYDirection(-56.f);
-	cameras.push_back(Camera(vec3(0.0, 5.0f, 20.0f)));
-	cameras.push_back(Camera(vec3(0.0, 10.0f, 10.0f)));
-	cameras.push_back(Camera(vec3(0.0, 5.0f, 5.0f)));
-	cameras.push_back(Camera(vec3(20.0, 0.0f, 30.0f)));
-	_camera = new FPSCamera(vec3(0.0, 2.0f,13.0f));
+	_camera = nullptr;
+	camera1 = FPSCamera(glm::vec3(0.0, 2.0f, 13.0f));
+	camera2 = Camera(glm::vec3(0.0, 2.0f, 13.0f));
+	camera2.setYDirection(-60.f);
+	_camera = &camera2;
 
 	_window->setCamera(*_camera);
 
-	objectTransform = mat4::translation(vec3(0.f, 0.f, 0.0f));
-	cameraProjection = mat4::perspective(toRadii(45.f), (float)1280 / (float)720, 0.1f, 100.f);
+	position = glm::vec3(0.0f, -6.0f, 0.0f);
+	objectTransform = glm::mat4(1.0f);
+	transform = glm::mat4(1.0f);
+	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
+	transform = glm::translate(transform, position);
+	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
+	
 	glEnable(GL_DEPTH_TEST);
 	sh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
+	sh3 = Shader("Contents/Shaders/passthrough.vs", "Contents/Shaders/passthrough.fs");
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Map2.obj");
-	first = Light(&sh, vec4(4.0f, 0.0f, 0, 1.0f), vec3(0.0f, 0.0f, 0.15f), vec3(0.7f, 0.5f, 0.2f), vec3(1.0f, 0.1f, 0.1f));
-	second = Light(&sh2, vec4(-4.0f, 0.0f, 0, 1.0f), vec3(0.0f, 0.0f, 0.15f), vec3(0.7f, 0.5f, 0.2f), vec3(1.0f, 0.1f, 0.1f));
+	//object2 = Mesh();
+	//object2.loadFromFile("Contents/Models/Cube.obj");
+	first = Light(&sh, glm::vec4(4.0f, 0.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
+	second = Light(&sh2, glm::vec4(4.0f, 0.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	
 	
 	if (!test.LoadTexture("Contents/Textures/container2.png")) {
@@ -116,44 +96,39 @@ void Engine::shutDown()
 	delete _window;
 }
 
-void Engine::update()
+void Engine::update(float dt)
 {
 	while (true)
 	{
 		if (_window->isKeyPressed(GLFW_KEY_ESCAPE))
+		{
 			break;
+		}
+
 
 		cameraMovement();
 		_window->clear();
 		_window->update();
 		_camera->update();
+
 		render();
 	}
+
 }
 
 void Engine::render()
 {
-	
 
-
-
-	
-	sh.use();
-	sh.sendUniformMat4("model", objectTransform);
-	sh.sendUniformMat4("projection", cameraProjection);
-	sh.sendUniformMat4("view", _camera->getLookMatrix());
-
-	first.LoadLight();
-	sh2.use();
-	sh2.sendUniformMat4("model", objectTransform);
-	sh2.sendUniformMat4("projection", cameraProjection);
-	sh2.sendUniformMat4("view", _camera->getLookMatrix());
+	sh3.use();
+	sh3.sendUniformMat4("model", objectTransform);
+	sh3.sendUniformMat4("projection", cameraProjection);
+	sh3.sendUniformMat4("view", _camera->getLookMatrix());
 	second.LoadLight();
-	
-	test.Bind(0);
-	
 	glBindVertexArray(object.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
+
+	test.Bind(0);
+	
 
 	glBindVertexArray(0);
 

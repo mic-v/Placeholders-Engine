@@ -50,7 +50,7 @@ struct MeshFace
 
 Mesh::Mesh()
 {
-	BUFFER_OFFSET(23);
+	//BUFFER_OFFSET(23);
 }
 
 Mesh::~Mesh()
@@ -70,9 +70,9 @@ bool Mesh::loadFromFile(const std::string & file)
 	char inputString[CHAR_BUFFER_SIZE];
 
 	//Unqieue data
-	std::vector<vec3> vertexData;
-	std::vector<vec2> textureData;
-	std::vector<vec3> normalData;
+	std::vector<glm::vec3> vertexData;
+	std::vector<glm::vec2> textureData;
+	std::vector<glm::vec3> normalData;
 	//index/face data
 	std::vector<MeshFace> faceData;
 	//OpenGL ready data
@@ -100,7 +100,7 @@ bool Mesh::loadFromFile(const std::string & file)
 		else if (std::strstr(inputString, "vn") != nullptr)
 		{
 			//this line is aocmment
-			vec3 temp;
+			glm::vec3 temp;
 			std::sscanf(inputString, "vn %f %f %f", &temp.x, &temp.y, &temp.z);
 			//std::cout << "vn " <<  temp.x << "," << temp.y << "," << temp.z << std::endl;
 			normalData.push_back(temp);
@@ -108,7 +108,7 @@ bool Mesh::loadFromFile(const std::string & file)
 		else if (std::strstr(inputString, "vt") != nullptr)
 		{
 			//this line is aocmment
-			vec2 temp;
+			glm::vec2 temp;
 			std::sscanf(inputString, "vt %f %f", &temp.x, &temp.y);
 			//std::cout << "vt " << temp.x << "," << temp.y << std::endl;
 			textureData.push_back(temp);
@@ -116,7 +116,7 @@ bool Mesh::loadFromFile(const std::string & file)
 		else if (std::strstr(inputString, "v") != nullptr)
 		{
 			//this line is aocmment
-			vec3 temp;
+			glm::vec3 temp;
 			//std::cout << "before " << temp.x << "," << temp.y << "," << temp.z << std::endl;
 			std::sscanf(inputString, "v %f %f %f", &temp.x, &temp.y, &temp.z);
 			//std::cout << "v " << temp.x << "," << temp.y << "," << temp.z << std::endl;
@@ -174,16 +174,16 @@ bool Mesh::loadFromFile(const std::string & file)
 	glEnableVertexAttribArray(2); // NORMALS
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Verticies);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedVertexData.size(), &unpackedVertexData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedVertexData.size(), &unpackedVertexData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedTextureData.size(), &unpackedTextureData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedTextureData.size(), &unpackedTextureData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedNormalData.size(), &unpackedNormalData[0], GL_STATIC_DRAW);
-	glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedNormalData.size(), &unpackedNormalData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);

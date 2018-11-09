@@ -5,6 +5,7 @@
 // This will be the main hub . This should really be called the core
 // Any major systems that need to interact with one another will occur here.
 
+
 #include "Engine/Window.h"
 #include "Engine/Texture.h"
 #include "Engine/Mesh.h"
@@ -13,6 +14,8 @@
 #include "Engine/Camera.h"
 #include "Engine/Light.h"
 #include "Engine/FPSCamera.h"
+#include "Engine/Entity.h"
+#include <vector>
 
 //#include "SOIL2.h"
 //
@@ -27,34 +30,37 @@ public:
 
 	void startUp();
 	void shutDown();
-	void update();
+	void update(float dt);
 	void render();
 	void cameraMovement();
 	Window* _window;
+	
+	
+	bool isActive;
 private:
 	Engine();
 
 	/***/
 	static Engine* _instance;
 	Camera *_camera;
-	std::vector<Camera> cameras;
+	
+	Camera camera2;
+	FPSCamera camera1;
 	Mesh object;
+	Mesh object2;
+	std::vector<Entity*> obj;
 	Shader sh;
 	Shader sh2;
+	Shader sh3;
 	Light first;
 	Light second;
 	Light third;
 	Texture test;
-	mat4 objectTransform;
-	mat4 cameraProjection;
+	glm::mat4 objectTransform;
+	glm::mat4 transform;
+	glm::mat4 cameraProjection;
+	glm::vec3 position;
 	
-	unsigned int VBO, VAO;
-	unsigned int diffuseMap, specularMap;
-	
-	unsigned int shaderProgram = GL_NONE;
-	unsigned int vertShader = GL_NONE;
-	unsigned int fragShader = GL_NONE;
-
 
 	// Don't know what to include yet
 };

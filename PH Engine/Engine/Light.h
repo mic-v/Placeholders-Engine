@@ -1,5 +1,6 @@
 #pragma once
 #include "Shader.h"
+#include "Math/math.h"
 
 //sh.sendUniformInt("uTex", 0);
 //sh.sendUniformVec4("LightPosition", vec4(4.0f, 70.0f, 0, 1.0f));
@@ -18,23 +19,23 @@
 class Light {
 public:
 	Light(){}
-	Light(Shader *temp, vec4 pos, vec3 ambient, vec3 diffuse, vec3 spec);
+	Light(Shader *temp, glm::vec4 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 spec);
 
 
 	void LoadLight();
 
 	void setuTex(int);
 	//Sets light's position
-	void setPosition(vec4);
+	void setPosition(glm::vec4);
 
 	//Sets Light Ambient
-	void setAmbient(vec3);
+	void setAmbient(glm::vec3);
 
 	//Sets Light Diffuse
-	void setDiffuse(vec3);
+	void setDiffuse(glm::vec3);
 
 	//Sets Light Specular
-	void setSpecular(vec3);
+	void setSpecular(glm::vec3);
 
 	//Sets Specular Exponent
 	void setExponent(float);
@@ -52,16 +53,16 @@ public:
 	int getuTex();
 
 	//Gets light's position
-	vec4 getPosition();
+	glm::vec4 getPosition();
 
 	//Gets Light Ambient
-	vec3 getAmbient();
+	glm::vec3 getAmbient();
 
 	//Gets Light Diffuse
-	vec3 getDiffuse();
+	glm::vec3 getDiffuse();
 
 	//Gets Light Specular
-	vec3 getSpecular();
+	glm::vec3 getSpecular();
 
 	//Gets Specular Exponent
 	float getExponent();
@@ -79,10 +80,10 @@ public:
 private:
 	Shader LightShader;
 	int uTex = 0;
-	vec4 Position;
-	vec3 Ambient;
-	vec3 Diffuse;
-	vec3 Specular;
+	glm::vec4 Position;
+	glm::vec3 Ambient;
+	glm::vec3 Diffuse;
+	glm::vec3 Specular;
 	float SpecularExponent;
 	float ConstantAttenuation;
 	float LinearAttenuation;

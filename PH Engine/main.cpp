@@ -52,17 +52,19 @@
 using namespace plaho;
 using namespace graphics;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void processInput(GLFWwindow *window);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-unsigned int loadTexture(const char *path);
-
-
-
 int main()
 {
 	Engine::instance().startUp();
-	Engine::instance().update();
+	//float deltaTime = 0.0f;
+	//float lastFrame = 0.0f;
+	//while (Engine::instance().isActive)
+	//{
+	//	float currentFrame = glfwGetTime();
+	//	deltaTime = currentFrame - lastFrame;
+	//	lastFrame = currentFrame;
+	//	Engine::instance().update(deltaTime);
+	//	Engine::instance().render();
+	//}
+	Engine::instance().update(50.0f);
 	Engine::instance().shutDown();
 }

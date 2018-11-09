@@ -26,10 +26,10 @@ public:
 	void sendUniformBool(const std::string &name, bool value) const;
 	void sendUniformInt(const std::string &name, int value) const;
 	void sendUniformFloat(const std::string &name, float value) const;
-	void sendUniformVec2(const std::string &name, vec2 vec) const;
-	void sendUniformVec3(const std::string & name, vec3 vec) const;
-	void sendUniformVec4(const std::string & name, vec4 vec) const;
-	void sendUniformMat4(const std::string & name, const mat4& mat) const;
+	void sendUniformVec2(const std::string &name, glm::vec2 &vec) const;
+	void sendUniformVec3(const std::string & name, glm::vec3 &vec) const;
+	void sendUniformVec4(const std::string & name, glm::vec4 &vec) const;
+	void sendUniformMat4(const std::string & name, const glm::mat4& mat) const;
 
 private:
 	GLuint ID;

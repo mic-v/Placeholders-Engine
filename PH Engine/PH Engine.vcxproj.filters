@@ -56,9 +56,6 @@
     <ClCompile Include="Engine\Mesh.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Shader.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
@@ -76,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Texture.cpp">
       <Filter>Header Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Entity.cpp">
+      <Filter>Header Files\atop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +133,9 @@
     <ClInclude Include="Engine\Texture.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Entity.h">
+      <Filter>Header Files\atop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Shaders\1.colors.fs">
@@ -163,6 +166,12 @@
       <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\texture.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Contents\Shaders\passthrough.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Contents\Shaders\passthrough.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>

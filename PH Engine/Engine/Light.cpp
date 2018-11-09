@@ -2,7 +2,7 @@
 
 
 //Shader you want to use, position of light, ambient color, diffuse color, specular color
-Light::Light(Shader *temp, vec4 _position, vec3 _ambient, vec3 _diffuse, vec3 _spec)
+Light::Light(Shader *temp, glm::vec4 _position, glm::vec3 _ambient, glm::vec3 _diffuse, glm::vec3 _spec)
 	/*LightShader(temp), Position(_position), Ambient(_ambient), Diffuse(_diffuse), Specular(_spec)*/
 {
 	LightShader = *temp;
@@ -42,16 +42,16 @@ void Light::LoadLight() {
 void Light::setuTex(int temp) {
 	uTex = temp;
 }
-void Light::setPosition(vec4 temp) {
+void Light::setPosition(glm::vec4 temp) {
 	Position = temp;
 }
-void Light::setAmbient(vec3 temp) {
+void Light::setAmbient(glm::vec3 temp) {
 	Ambient = temp;
 }
-void Light::setDiffuse(vec3 temp) {
+void Light::setDiffuse(glm::vec3 temp) {
 	Diffuse = temp;
 }
-void Light::setSpecular(vec3 temp) {
+void Light::setSpecular(glm::vec3 temp) {
 	Specular = temp;
 }
 void Light::setExponent(float temp) {
@@ -72,16 +72,16 @@ void Light::setQuadratic(float temp) {
 int Light::getuTex() {
 	return uTex;
 }
-vec4 Light::getPosition() {
+glm::vec4 Light::getPosition() {
 	return Position;
 }
-vec3 Light::getAmbient() {
+glm::vec3 Light::getAmbient() {
 	return Ambient;
 }
-vec3 Light::getDiffuse() {
+glm::vec3 Light::getDiffuse() {
 	return Diffuse;
 }
-vec3 Light::getSpecular() {
+glm::vec3 Light::getSpecular() {
 	return Specular;
 }
 float Light::getExponent() {

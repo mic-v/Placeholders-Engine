@@ -32,3 +32,10 @@ void FPSCamera::processMouseMovement(float xoffset, float yoffset, GLboolean con
 			_pitch = -89.0f;
 	}
 }
+
+void FPSCamera::update()
+{
+	this->updateCameraView();
+	std::cout << "yee" << std::endl;
+}
+

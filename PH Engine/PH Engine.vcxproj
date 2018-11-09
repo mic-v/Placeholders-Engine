@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\FPSCamera.cpp" />
@@ -156,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\AudioModule.h" />
     <ClInclude Include="Engine\Camera.h" />
+    <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
     <ClInclude Include="Engine\Level.h" />
     <ClInclude Include="Engine\Light.h" />
@@ -180,6 +182,8 @@
     <None Include="Contents\Shaders\1.lamp.vs" />
     <None Include="Contents\Shaders\4.2.texture.fs" />
     <None Include="Contents\Shaders\4.2.texture.vs" />
+    <None Include="Contents\Shaders\passthrough.fs" />
+    <None Include="Contents\Shaders\passthrough.vs" />
     <None Include="Contents\Shaders\rainbow.fs" />
     <None Include="Contents\Shaders\rainbow.vs" />
     <None Include="Contents\Shaders\texture.fs" />
