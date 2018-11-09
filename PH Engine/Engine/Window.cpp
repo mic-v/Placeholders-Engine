@@ -86,6 +86,7 @@ namespace plaho {
 			glfwSetKeyCallback(_window, key_callback);
 			glfwSetMouseButtonCallback(_window, mouse_callback);
 			glfwSetCursorPosCallback(_window, cursor_position_callback);
+			//glfwSetJoystickCallback(joystick_callback);
 
 			glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -258,6 +259,17 @@ namespace plaho {
 				win->_camera->processKeyboard(LEFT, win->deltaTime);
 			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 				win->_camera->processKeyboard(RIGHT, win->deltaTime);
+		}
+		void joystick_callback(int joy, int event)
+		{
+			if (event == GLFW_CONNECTED)
+			{
+				// The joystick was connected
+			}
+			else if (event == GLFW_DISCONNECTED)
+			{
+				// The joystick was disconnected
+			}
 		}
 	}
 
