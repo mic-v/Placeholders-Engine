@@ -45,26 +45,15 @@
 #include <iostream>
 #include "Engine.h"
 
-
-
 #include "Engine/Math/math.h"
 #include "Engine/Shader.h"
+#include <btBulletDynamicsCommon.h>
 using namespace plaho;
 using namespace graphics;
 
 int main()
 {
 	Engine::instance().startUp();
-	//float deltaTime = 0.0f;
-	//float lastFrame = 0.0f;
-	//while (Engine::instance().isActive)
-	//{
-	//	float currentFrame = glfwGetTime();
-	//	deltaTime = currentFrame - lastFrame;
-	//	lastFrame = currentFrame;
-	//	Engine::instance().update(deltaTime);
-	//	Engine::instance().render();
-	//}
-	Engine::instance().update(50.0f);
+	Engine::instance().runGame();
 	Engine::instance().shutDown();
 }

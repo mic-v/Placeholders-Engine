@@ -6,15 +6,18 @@
 	functions are static
 
 */
-
-class ResourceManager
+namespace plaho
 {
-public:
+	class ResourceManager
+	{
+	public:
 
 
 
-private:
+	private:
 
-	//
-	ResourceManager() {}
+		//
+		ResourceManager() {}
+	}
+
 }

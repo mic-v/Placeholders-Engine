@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include <iostream>
+
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
 	//float velocity = _dragSpeed * deltaTime;

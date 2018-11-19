@@ -13,14 +13,6 @@ namespace plaho {
 		void mouse_callback(GLFWwindow* window, int button, int action, int mods);
 		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 		void processInput(GLFWwindow * window);
-		/*
-			@Constructor for the window class
-			@param name The title for the window
-			@param width The width/x of the window
-			@param height The height/y of the window
-		
-		*/
-		//
 		Window::Window(const char* name, int width, int height)
 		{
 			_name = name;
@@ -120,19 +112,12 @@ namespace plaho {
 		*/
 		void Window::update()
 		{
-			float currentFrame = glfwGetTime();
-			deltaTime = currentFrame - lastFrame;
-			lastFrame = currentFrame;
-
 			processInput(_window);
-
-			//std::cout << _width << " " << _height << std::endl;
 		}
 
 		void Window::poll()
 		{
-			glfwSwapBuffers(_window);
-			glfwPollEvents();
+
 		}
 
 		void Window::setCamera(Camera & camera)
@@ -147,8 +132,6 @@ namespace plaho {
 		*/
 		void Window::clear() const
 		{
-			glClearColor(0.f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 
 		/*
@@ -244,21 +227,20 @@ namespace plaho {
 
 			win->_mx = xpos;
 			win->_my = ypos;
-
 			win->_camera->processMouseMovement(xoff, yoff);
 		}
 		void processInput(GLFWwindow * window)
 		{
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 
-			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-				win->_camera->processKeyboard(FORWARD, win->deltaTime);
-			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-				win->_camera->processKeyboard(BACKWARD, win->deltaTime);
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-				win->_camera->processKeyboard(LEFT, win->deltaTime);
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-				win->_camera->processKeyboard(RIGHT, win->deltaTime);
+			//if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			//	win->_camera->processKeyboard(FORWARD, win->deltaTime);
+			//if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			//	win->_camera->processKeyboard(BACKWARD, win->deltaTime);
+			//if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			//	win->_camera->processKeyboard(LEFT, win->deltaTime);
+			//if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			//	win->_camera->processKeyboard(RIGHT, win->deltaTime);
 		}
 		void joystick_callback(int joy, int event)
 		{

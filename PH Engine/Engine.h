@@ -5,6 +5,14 @@
 // This will be the main hub . This should really be called the core
 // Any major systems that need to interact with one another will occur here.
 
+#include <imgui.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
+//#include "imgui_impl_opengl3.h"
+
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include "Engine/Window.h"
 #include "Engine/Texture.h"
@@ -15,25 +23,25 @@
 #include "Engine/Light.h"
 #include "Engine/FPSCamera.h"
 #include "Engine/Entity.h"
+#include "Engine/InputModule.h"
 #include <vector>
 
 //#include "SOIL2.h"
 //
 using namespace plaho;
 using namespace graphics;
-
+using namespace module;
 class Engine
 {
 public:
 	~Engine();
 	static Engine& instance();
 
-	void startUp();
+	bool startUp();
 	void shutDown();
-	void update(float dt);
+	void runGame();
 	void render();
 	void cameraMovement();
-	Window* _window;
 	
 	
 	bool isActive;
@@ -42,8 +50,12 @@ private:
 
 	/***/
 	static Engine* _instance;
+	GLFWwindow* _window;
+
+
+
+
 	Camera *_camera;
-	
 	Camera camera2;
 	FPSCamera camera1;
 	Mesh object;

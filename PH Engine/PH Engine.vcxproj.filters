@@ -12,9 +12,6 @@
     <Filter Include="Header Files\graphics">
       <UniqueIdentifier>{ecf9c13f-caf3-46cd-8b4a-53c0ec789330}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\input">
-      <UniqueIdentifier>{8c154e7e-87af-4149-bbcc-fb58f6128f3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\math">
       <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
     </Filter>
@@ -29,6 +26,9 @@
     </Filter>
     <Filter Include="Header Files\Manager">
       <UniqueIdentifier>{a1eca2c2-2bac-45ef-8efd-828d1d1dc404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\imgui">
+      <UniqueIdentifier>{e9ce6ef7-f767-47da-af35-4afa66d870f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +76,27 @@
     </ClCompile>
     <ClCompile Include="Engine\Entity.cpp">
       <Filter>Header Files\atop</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\InputModule.cpp">
+      <Filter>Header Files\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui.cpp">
+      <Filter>Header Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_demo.cpp">
+      <Filter>Header Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp">
+      <Filter>Header Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
+      <Filter>Header Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\examples\imgui_impl_glfw.cpp">
+      <Filter>Header Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\imgui\examples\imgui_impl_opengl3.cpp">
+      <Filter>Header Files\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +156,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Entity.h">
       <Filter>Header Files\atop</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputModule.h">
+      <Filter>Header Files\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

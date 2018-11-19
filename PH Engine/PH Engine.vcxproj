@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\External\Bullet\lib;$(SolutionDir)\External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -87,11 +87,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -138,7 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\External\imgui\examples\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\External\imgui\examples\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\External\imgui\imgui.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
+    <ClCompile Include="Engine\InputModule.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\FPSCamera.cpp" />
@@ -159,6 +167,7 @@
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
+    <ClInclude Include="Engine\InputModule.h" />
     <ClInclude Include="Engine\Level.h" />
     <ClInclude Include="Engine\Light.h" />
     <ClInclude Include="Engine\Math\mat4.h" />
