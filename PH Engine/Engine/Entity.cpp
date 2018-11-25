@@ -3,7 +3,6 @@
 Entity::Entity(Shader shader, std::string& meshloc, glm::vec3 position)
 {
 	_shader = &shader;
-	//_mesh = &mesh;
 	_mesh = new Mesh();
 	_mesh->loadFromFile(meshloc);
 	_position = position;

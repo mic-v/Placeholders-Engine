@@ -28,7 +28,7 @@ namespace plaho
 			glfwSetMouseButtonCallback(glfwGetCurrentContext(), mouse_callback);
 			glfwSetCursorPosCallback(glfwGetCurrentContext(), cursor_position_callback);
 
-			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 			_lastX = 0; _lastY = 0;
 			_offsetX = 0; _offsetY = 0;

@@ -41,7 +41,7 @@ public:
 	void shutDown();
 	void runGame();
 	void render();
-	void cameraMovement();
+	void playerInput();
 	
 	
 	bool isActive;

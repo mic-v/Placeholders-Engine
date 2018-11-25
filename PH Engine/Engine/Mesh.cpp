@@ -149,6 +149,12 @@ bool Mesh::loadFromFile(const std::string & file)
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].y);
 			unpackedVertexData.push_back(vertexData[faceData[i].vertices[j] - 1].z);
 
+			//std::cout << textureData.size() << std::endl;
+			//std::cout << faceData.size() << std::endl;
+			//std::cout << i << std::endl;
+			//std::cout << j << std::endl;
+			//std::cout << textureData[faceData[i].textures[j] - 1].x << std::endl;
+
 			unpackedTextureData.push_back(textureData[faceData[i].textures[j] - 1].x);
 			unpackedTextureData.push_back(textureData[faceData[i].textures[j] - 1].y);
 
@@ -179,7 +185,7 @@ bool Mesh::loadFromFile(const std::string & file)
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedTextureData.size(), &unpackedTextureData[0], GL_DYNAMIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedNormalData.size(), &unpackedNormalData[0], GL_DYNAMIC_DRAW);
