@@ -38,20 +38,8 @@
     <ClCompile Include="Engine\Window.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Math\Vector2.cpp">
-      <Filter>Header Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\Vector3.cpp">
-      <Filter>Header Files\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\vector4.cpp">
-      <Filter>Header Files\math</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Math\mat4.cpp">
-      <Filter>Header Files\math</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Mesh.cpp">
       <Filter>Header Files\graphics</Filter>
@@ -103,19 +91,7 @@
     <ClInclude Include="Engine\Window.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Math\Vector2.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\Vector3.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\vector4.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\math.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Math\mat4.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Mesh.h">

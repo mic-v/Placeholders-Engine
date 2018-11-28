@@ -11,7 +11,7 @@ public:
 	Mesh();
 	~Mesh();
 
-	bool loadFromFile(const std::string &file);
+	bool loadFromFile(const char *file);
 
 	void unload();
 

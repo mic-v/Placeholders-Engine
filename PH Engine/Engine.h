@@ -34,7 +34,7 @@ using namespace module;
 class Engine
 {
 public:
-	~Engine();
+	~Engine() {}
 	static Engine& instance();
 
 	bool startUp();
@@ -46,14 +46,13 @@ public:
 	
 	bool isActive;
 private:
-	Engine();
+	Engine() {}
 
 	/***/
 	static Engine* _instance;
 	GLFWwindow* _window;
 
-
-
+	//Physics World
 
 	Camera *_camera;
 	Camera camera2;

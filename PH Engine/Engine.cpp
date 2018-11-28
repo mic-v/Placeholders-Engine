@@ -6,88 +6,8 @@
 #define SCREEN_HEIGHT 900
 
 Engine* Engine::_instance = nullptr;
-
 float currentAngle = 135.0f;
-void Engine::playerInput()
-{
-	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
-	if (present == 1)
-	{
-		int axesCount;
-		const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
 
-		int count;
-		const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
-
-		if (axes[2] != 0.0f && axes[3] != 0.0f)
-		{
-			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-			//glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
-			//transform = glm::translate(transform, temp);
-			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
-			if (axes[3] < 0.0f && axes[2] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
-			else if (axes[2] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
-			else if (axes[3] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 360.0f + 90.0f;
-			else if (axes[3] && axes[2] == 0.0f)
-				currentAngle = 0.0f + 90.0f;
-			else
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 90.0f;
-
-			transform = glm::rotate(transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-			//currentAngle = glm::atan(axes[3] / axes[2]);
-		}
-		else
-		{
-			//std::cout << "yeet" << std::endl;
-			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-/*			glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
-			transform = glm::translate(transform, temp)*/;
-			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
-
-			//if (axes[3] < 0.0f && axes[2] < 0.0f)
-			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f;
-			//else if (axes[2] < 0.0f)
-			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f;
-			//else if (axes[3] < 0.0f)
-			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 360.0f;
-			//else if (axes[3] && axes[2] == 0.0f)
-			//	currentAngle = 0.0f;
-			//else
-			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f);
-
-			transform = glm::rotate(transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-		}
-		std::cout << "x: " << axes[2] << " y: " << axes[3] << std::endl;
-		std::cout << currentAngle << std::endl;
-		//transform = glm::translate(transform, glm::vec3(0.0f, 0.f, -axes[1] * 0.03 ));
-		//float bangle = axes[3] / axes[2];
-		glm::vec2 anglevec(axes[2], axes[3]);
-		//std::cout << "x: " << axes[2] << "y: " << axes[3] << " angle : " << glm::atan(axes[3]/axes[2]) * (180.0f / 3.14159265) <<  std::endl;
-	}
-
-	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))
-	{
-		_camera = &camera1;
-	}
-	else if (InputModule::getInstance().isKeyPressed(GLFW_KEY_2))
-	{
-		_camera = &camera2;
-	}
-
-
-}
-
-
-Engine::Engine()
-{
-}
-
-Engine::~Engine()
-{
-}
 
 /*
 	This is the Singleton Pattern. Read more here:
@@ -163,12 +83,12 @@ bool Engine::startUp()
 
 	glEnable(GL_DEPTH_TEST);
 
-
-	// LOAD physics world
+	//PHYSICS
+	//bullet here
 
 	isActive = true;
 	//_camera = nullptr;
-	camera1 = FPSCamera(glm::vec3(0.0f, 5.0f, 13.0f));
+	camera1 = FPSCamera(glm::vec3(0.0f, 5.0f, 30.0f));
 	camera2 = Camera(glm::vec3(0.0, 11.0f, 5.0f));
 	camera2.setYDirection(-60.f);
 	_camera = &camera2;
@@ -190,6 +110,13 @@ bool Engine::startUp()
 	object.loadFromFile("Contents/Models/Map2.obj");
 	object2 = Mesh();
 	object2.loadFromFile("Contents/Models/untitled.obj");
+
+	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-4.0f, 0.1f, 0.0f)));
+	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-2.0f, 0.1f, 0.0f)));
+	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(0.0f, 0.1f, 0.0f)));
+	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(2.0f, 0.1f, 0.0f)));
+	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(4.0f, 0.1f, 0.0f)));
+
 	first = Light(&sh, glm::vec4(4.0f, 0.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	second = Light(&sh2, glm::vec4(0.0f, 5.0f, 0, 1.0f), glm::vec3(0.1f, 0.1f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	
@@ -209,6 +136,7 @@ void Engine::shutDown()
 	sh.unload();
 	object.unload();
 	test.Unload();
+
 
 	InputModule::getInstance().shutDown();
 	GLFWwindow *window = glfwGetCurrentContext();
@@ -287,8 +215,12 @@ void Engine::runGame()
 			lastTime += 1.0;
 		}
 		playerInput();
-		//_window->clear();
-		//_window->update();
+
+		for (int i = 0; i < obj.size(); i++)
+		{
+			obj[i]->update(ImGui::GetIO().Framerate);
+		}
+
 		_camera->update();
 		InputModule::getInstance().update(currentTime - lastTime);
 		render();
@@ -300,7 +232,6 @@ void Engine::runGame()
 
 void Engine::render()
 {
-
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", _camera->getLookMatrix());
@@ -308,12 +239,22 @@ void Engine::render()
 	
 	test.Bind(0);
 
+	//Battlefield
 	glBindVertexArray(object.VAO);
 	sh2.sendUniformMat4("model", objectTransform);
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
+
+	for (int i = 0; i < obj.size(); i++)
+	{
+		obj[i]->draw();
+	}
+	//Entity
 	glBindVertexArray(object2.VAO);
 	sh2.sendUniformMat4("model", transform);
 	glDrawArrays(GL_TRIANGLES, 0, object2.getNumVertices());
+	//glBindVertexArray(obj[0]->getMesh().VAO);
+	//obj[0]->getShader().sendUniformMat4("model", obj[0]->getMatrixPosition());
+	//glDrawArrays(GL_TRIANGLES, 0, obj[0]->getMesh().getNumVertices());
 
 	glBindVertexArray(0);
 
@@ -325,4 +266,82 @@ void Engine::render()
 
 	glfwSwapBuffers(glfwGetCurrentContext());
 	glfwPollEvents();
+}
+
+void Engine::playerInput()
+{
+	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
+	if (present == 1)
+	{
+		int axesCount;
+		const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
+
+		int count;
+		const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+
+		if (axes[2] != 0.0f && axes[3] != 0.0f)
+		{
+			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+			//glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
+			//transform = glm::translate(transform, temp);
+			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
+			if (axes[3] < 0.0f && axes[2] < 0.0f)
+				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
+			else if (axes[2] < 0.0f)
+				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
+			else if (axes[3] < 0.0f)
+				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 360.0f + 90.0f;
+			else if (axes[3] && axes[2] == 0.0f)
+				currentAngle = 0.0f + 90.0f;
+			else
+				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 90.0f;
+
+			transform = glm::rotate(transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+			//currentAngle = glm::atan(axes[3] / axes[2]);
+		}
+		else
+		{
+			//std::cout << "yeet" << std::endl;
+			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+/*			glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
+			transform = glm::translate(transform, temp)*/;
+			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
+
+			//if (axes[3] < 0.0f && axes[2] < 0.0f)
+			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f;
+			//else if (axes[2] < 0.0f)
+			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f;
+			//else if (axes[3] < 0.0f)
+			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 360.0f;
+			//else if (axes[3] && axes[2] == 0.0f)
+			//	currentAngle = 0.0f;
+			//else
+			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f);
+
+			transform = glm::rotate(transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+		}
+		std::cout << "x: " << axes[2] << " y: " << axes[3] << std::endl;
+		std::cout << currentAngle << std::endl;
+		//transform = glm::translate(transform, glm::vec3(0.0f, 0.f, -axes[1] * 0.03 ));
+		//float bangle = axes[3] / axes[2];
+		glm::vec2 anglevec(axes[2], axes[3]);
+
+		//std::cout << "x: " << axes[2] << "y: " << axes[3] << " angle : " << glm::atan(axes[3]/axes[2]) * (180.0f / 3.14159265) <<  std::endl;
+	}
+
+	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))
+	{
+		_camera = &camera1;
+	}
+	else if (InputModule::getInstance().isKeyPressed(GLFW_KEY_2))
+	{
+		_camera = &camera2;
+	}
+
+	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_D))
+	{
+		obj[0]->translate(glm::vec3(0.1f, 0.0f, 0.0f));
+	}
+
+
 }

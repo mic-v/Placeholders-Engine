@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\External\Bullet\lib;$(SolutionDir)\External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\bounce;$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\Bullet\lib;$(SolutionDir)External\GLFW\lib;$(SolutionDir)External\bounce;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -92,7 +92,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;bounce.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -152,10 +152,6 @@
     <ClCompile Include="Engine\Light.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\FPSCamera.cpp" />
-    <ClCompile Include="Engine\Math\mat4.cpp" />
-    <ClCompile Include="Engine\Math\Vector2.cpp" />
-    <ClCompile Include="Engine\Math\Vector3.cpp" />
-    <ClCompile Include="Engine\Math\vector4.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
     <ClCompile Include="Engine\Shader.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
@@ -172,11 +168,7 @@
     <ClInclude Include="Engine\InputModule.h" />
     <ClInclude Include="Engine\Level.h" />
     <ClInclude Include="Engine\Light.h" />
-    <ClInclude Include="Engine\Math\mat4.h" />
     <ClInclude Include="Engine\Math\math.h" />
-    <ClInclude Include="Engine\Math\Vector2.h" />
-    <ClInclude Include="Engine\Math\Vector3.h" />
-    <ClInclude Include="Engine\Math\vector4.h" />
     <ClInclude Include="Engine\Mesh.h" />
     <ClInclude Include="Engine\RendererModule.h" />
     <ClInclude Include="Engine\ResourceManager.h" />
