@@ -15,6 +15,22 @@
 //sh.sendUniformFloat("Attenuation_Linear", 0.1f);
 //sh.sendUniformFloat("Attenuation_Quadratic", 0.01f);
 
+struct PointLight {
+
+	glm::vec4 LightPosition;
+	glm::vec3 LightAmbient;
+	glm::vec3 LightDiffuse;
+	glm::vec3 LightSpecular;
+
+
+	float LightSpecularExponent;
+	float Attenuation_Constant;
+	float Attenuation_Linear;
+	float Attenuation_Quadratic;
+
+
+
+};
 
 class Light {
 public:
@@ -88,6 +104,8 @@ private:
 	float ConstantAttenuation;
 	float LinearAttenuation;
 	float QuadraticAttenuation;
-
-
+	
+	PointLight stuff;
+	
+	static int lightCount;
 };
