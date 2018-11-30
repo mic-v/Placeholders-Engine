@@ -45,7 +45,7 @@ public:
 	void runGame();
 	void render();
 	void playerInput();
-	
+	void runAnimation(std::vector<Mesh*> poselist);
 	
 	bool isActive;
 private:
@@ -65,6 +65,9 @@ private:
 
 	DebugDraw _draw;
 
+	bool animation1run = false;
+	int currentanimframe = 0;
+	float currentlerpparam = 0;
 	Camera *_camera;
 	Camera camera2;
 	FPSCamera camera1;
@@ -72,7 +75,18 @@ private:
 	Mesh object2;
 	Mesh basemap;
 	Mesh river;
+	Mesh attackframe1;
+	Mesh attackframe2;
+	Mesh attackframe3;
+	Mesh attackframe4;
+	Mesh attackframe5;
+	Mesh attackframe6;
+	Mesh attackframe7;
+	Mesh attackframe8;
+	Mesh attackframe9;
+	Mesh * Pose;
 	std::vector<Entity*> obj;
+	std::vector<Mesh*> animation1;
 	Shader sh;
 	Shader sh2;
 	Shader sh3;

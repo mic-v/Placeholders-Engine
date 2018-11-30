@@ -1,18 +1,31 @@
 #version 450
 
-uniform vec4 LightPosition;
+
 uniform mat4 view;
 //color
-uniform vec3 LightAmbient;
-uniform vec3 LightDiffuse;
-uniform vec3 LightSpecular;
+
 //scalars
-uniform float LightSpecularExponent;
-uniform float Attenuation_Constant;
-uniform float Attenuation_Linear;
-uniform float Attenuation_Quadratic;
 
 
+struct PointLight{
+
+	vec4 LightPosition;
+
+	vec3 LightAmbient;
+	vec3 LightDiffuse;
+	vec3 LightSpecular;
+
+
+	float LightSpecularExponent;
+	float Attenuation_Constant;
+	float Attenuation_Linear;
+	float Attenuation_Quadratic;
+
+
+
+};
+#define NR_POINT_LIGHTS 2
+uniform PointLight pointLights[NR_POINT_LIGHTS];
 
 //the slot in which ur texture is bound in, by default set to 0
 //goes from 0-32, 
@@ -27,12 +40,12 @@ in vec3 norm;
 in vec3 pos;
 out vec4 outColor;
 
-void main()
-{
-	outColor.rgb = LightAmbient; //= texture(uTex, texcoord);
-	//account for rasterizer interpolating
+
+
+void CalcPointLight(PointLight light){
+	
 	vec3 normal = normalize(norm);
-	vec3 lightVec = (view * LightPosition).xyz - pos;
+	vec3 lightVec = (view * light.LightPosition).xyz - pos;
 	float dist = length(lightVec);
 	vec3 lightDir = lightVec / dist;
 
@@ -42,17 +55,29 @@ void main()
 		//how much the light affects this surface
 
 		//calculate attenuation
-		float attenuation = 1.0 / (Attenuation_Constant + (Attenuation_Linear * dist)+ (Attenuation_Quadratic * dist * dist));
+		float attenuation = 1.0 / (light.Attenuation_Constant + (light.Attenuation_Linear * dist)+ (light.Attenuation_Quadratic * dist * dist));
 
 		//calculate diffuse 
-		outColor.rgb += LightDiffuse * NdotL * attenuation;
+		outColor.rgb += light.LightDiffuse * NdotL * attenuation;
 
 		//phong half vector 
 		float NdotHV = max(dot(normal, normalize(lightDir + normalize(-pos))), 0.0);
 
 		//calcluate specular contribution 
-		outColor.rgb += LightSpecular * pow(NdotHV, LightSpecularExponent) * attenuation;
+		outColor.rgb += light.LightSpecular * pow(NdotHV, light.LightSpecularExponent) * attenuation;
 
+	}
+	
+}
+
+void main()
+{
+	outColor.rgb = pointLights[0].LightAmbient;
+	 //= texture(uTex, texcoord);
+	//account for rasterizer interpolating
+	for(int i = 0; i < NR_POINT_LIGHTS; i++){
+		//outColor.rgb += pointLights[i].LightAmbient;
+		CalcPointLight(pointLights[i]);
 	}
 	vec4 textureColor = texture(uTex, texcoord);
 	outColor.rgb *= textureColor.rgb;
