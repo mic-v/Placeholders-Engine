@@ -186,5 +186,8 @@
     <None Include="Engine\Point.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
+    <None Include="Contents\Shaders\water.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

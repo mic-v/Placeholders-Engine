@@ -182,6 +182,7 @@ bool Engine::startUp()
 	sh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sh2 = Shader("Contents/Shaders/textureanim.vs", "Contents/Shaders/texture.fs");
 	sh3 = Shader("Engine/Point.vs", "Engine/Point.fs");
+	rs = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Derbis.obj");
 	object2.loadFromFile("Contents/Models/untitled.obj");
@@ -444,24 +445,25 @@ void Engine::render()
 	
 	test.Bind(0);
 
-<<<<<<<
 	////Battlefield
 	//glBindVertexArray(object.VAO);
 	//sh2.sendUniformMat4("model", objectTransform);
 	//glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
-=======
 	//Battlefield
 	glBindVertexArray(object.VAO);
 	sh2.sendUniformFloat("lerpParam", 0);
 	sh2.sendUniformMat4("model", objectTransform);
 	
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
->>>>>>>
 
-	//for (int i = 0; i < obj.size(); i++)
-	//{
-	//	obj[i]->draw();
-	//}
+	test.Unbind();
+
+	test2.Bind(0);
+	glBindVertexArray(basemap.VAO);
+	sh2.sendUniformMat4("model", objectTransform);
+	glDrawArrays(GL_TRIANGLES, 0, basemap.getNumVertices());
+	test2.Unbind();
+
 	//Entity
 	glBindVertexArray(Pose->VAO);
 	sh2.sendUniformMat4("model", transform);
@@ -472,10 +474,23 @@ void Engine::render()
 	//glDrawArrays(GL_TRIANGLES, 0, obj[0]->getMesh().getNumVertices());
 
 	sh2.unuse();
-	test.Unbind();
+
+	rs.use();
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	test3.Bind(20);
+	glBindVertexArray(river.VAO);
+	rs.sendUniformMat4("model", objectTransform);
+	rs.sendUniformInt("uTex", 20);
+	//rs.sendUniformInt("uTex", 20);
+	glDrawArrays(GL_TRIANGLES, 0, river.getNumVertices());
+	glDisable(GL_BLEND);
+	test3.Unbind();
+
+	rs.unuse();
+
 	glBindVertexArray(0);
 
-<<<<<<<
 	////glBindVertexArray(obj[0]->getMesh().VAO);
 	////obj[0]->getShader().sendUniformMat4("model", obj[0]->getMatrixPosition());
 	////glDrawArrays(GL_TRIANGLES, 0, obj[0]->getMesh().getNumVertices());
@@ -485,25 +500,14 @@ void Engine::render()
 	//sh2.unuse();
 
 	dynamicsWorld->debugDrawWorld();
-	sh3.use();
-	glm::mat4 Projection = cameraProjection;
-	glm::mat4 View = _camera->getLookMatrix();
 
-	sh3.sendUniformMat4("projection", Projection);
-	sh3.sendUniformMat4("view", View);
 
-	//_draw.doDraw();
 
-	sh3.unuse();
-
-=======
 	glBindVertexArray(0);
 	test.Unbind();
 	sh.unuse();
 
 
-
->>>>>>>
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

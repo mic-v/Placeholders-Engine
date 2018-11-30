@@ -193,6 +193,7 @@
     <None Include="Contents\Shaders\rainbow.vs" />
     <None Include="Contents\Shaders\texture.fs" />
     <None Include="Contents\Shaders\texture.vs" />
+    <None Include="Contents\Shaders\water.fs" />
     <None Include="Engine\Point.fs" />
     <None Include="Engine\Point.vs" />
   </ItemGroup>

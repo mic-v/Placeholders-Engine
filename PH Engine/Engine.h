@@ -90,6 +90,7 @@ private:
 	Shader sh;
 	Shader sh2;
 	Shader sh3;
+	Shader rs;
 	Light first;
 	Light second;
 	Light third;
