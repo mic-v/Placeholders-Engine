@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)External\bounce;$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)External\Bullet\lib;$(SolutionDir)External\GLFW\lib;$(SolutionDir)External\bounce;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\Bullet\lib;$(SolutionDir)External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -92,7 +92,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;bounce.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -147,6 +147,7 @@
     <ClCompile Include="..\External\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Engine\DebugDraw.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\InputModule.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Engine\AudioModule.h" />
     <ClInclude Include="Engine\Camera.h" />
+    <ClInclude Include="Engine\DebugDraw.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
     <ClInclude Include="Engine\InputModule.h" />
@@ -191,6 +193,8 @@
     <None Include="Contents\Shaders\rainbow.vs" />
     <None Include="Contents\Shaders\texture.fs" />
     <None Include="Contents\Shaders\texture.vs" />
+    <None Include="Engine\Point.fs" />
+    <None Include="Engine\Point.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
