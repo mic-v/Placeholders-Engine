@@ -104,18 +104,60 @@ bool Engine::startUp()
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 
 	sh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
-	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
+	sh2 = Shader("Contents/Shaders/textureanim.vs", "Contents/Shaders/texture.fs");
 	sh3 = Shader("Contents/Shaders/passthrough.vs", "Contents/Shaders/passthrough.fs");
-	object = Mesh();
 	object.loadFromFile("Contents/Models/Map2.obj");
-	object2 = Mesh();
-	object2.loadFromFile("Contents/Models/untitled.obj");
+	object2.loadFromFile("Contents/Models/Attack/frame1.obj");
+	object2.loadSecondFromFile("Contents/Models/Attack/frame2.obj");
+	//Animtest.loadFromFile("Contents/Models/Attack/frame1.obj");
+//	Animtest.loadSecondFromFile("Contents/Models/Attack/frame1.obj");
 
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-4.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-2.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(0.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(2.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(4.0f, 0.1f, 0.0f)));
+
+
+	attackframe1.loadFromFile("Contents/Models/Attack/frame1.obj");
+	attackframe1.loadSecondFromFile("Contents/Models/Attack/frame2.obj");
+
+	attackframe2.loadFromFile("Contents/Models/Attack/frame2.obj");
+	attackframe2.loadSecondFromFile("Contents/Models/Attack/frame3.obj");
+
+	attackframe3.loadFromFile("Contents/Models/Attack/frame3.obj");
+	attackframe3.loadSecondFromFile("Contents/Models/Attack/frame4.obj");
+
+	attackframe4.loadFromFile("Contents/Models/Attack/frame4.obj");
+	attackframe4.loadSecondFromFile("Contents/Models/Attack/frame5.obj");
+
+	attackframe5.loadFromFile("Contents/Models/Attack/frame5.obj");
+	attackframe5.loadSecondFromFile("Contents/Models/Attack/frame4.obj");
+
+	attackframe6.loadFromFile("Contents/Models/Attack/frame4.obj");
+	attackframe6.loadSecondFromFile("Contents/Models/Attack/frame3.obj");
+
+	attackframe7.loadFromFile("Contents/Models/Attack/frame3.obj");
+	attackframe7.loadSecondFromFile("Contents/Models/Attack/frame2.obj");
+
+	attackframe8.loadFromFile("Contents/Models/Attack/frame2.obj");
+	attackframe8.loadSecondFromFile("Contents/Models/Attack/frame1.obj");
+
+	attackframe9.loadFromFile("Contents/Models/Attack/frame1.obj");
+	attackframe9.loadSecondFromFile("Contents/Models/Attack/frame1.obj");
+
+	animation1.push_back(&attackframe1);
+	animation1.push_back(&attackframe2);
+	animation1.push_back(&attackframe3);
+	animation1.push_back(&attackframe4);
+	animation1.push_back(&attackframe5);
+	animation1.push_back(&attackframe6);
+	animation1.push_back(&attackframe7);
+	animation1.push_back(&attackframe8);
+	animation1.push_back(&attackframe9);
+
+	Pose = &attackframe1;
+
+	//obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-4.0f, 0.1f, 0.0f)));
+	//obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-2.0f, 0.1f, 0.0f)));
+	//obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(0.0f, 0.1f, 0.0f)));
+	//obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(2.0f, 0.1f, 0.0f)));
+	//obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(4.0f, 0.1f, 0.0f)));
 
 	first = Light(&sh2, glm::vec4(4.0f, 5.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	second = Light(&sh2, glm::vec4(0.0f, 5.0f, 0, 1.0f), glm::vec3(0.1f, 0.1f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
@@ -215,7 +257,21 @@ void Engine::runGame()
 			lastTime += 1.0;
 		}
 		playerInput();
+		if (animation1run) {
+			if (currentanimframe < animation1.size()) {
+				Pose = animation1[currentanimframe];
+				currentlerpparam += 0.2f;
 
+			}
+			else if (currentanimframe >= animation1.size()) {
+				animation1run = false;
+				currentanimframe = 0;
+			}
+			if (currentlerpparam >= 1.0f) {
+				currentanimframe++;
+				currentlerpparam = 0.0f;
+			}
+		}
 		for (int i = 0; i < obj.size(); i++)
 		{
 			obj[i]->update(ImGui::GetIO().Framerate);
@@ -243,25 +299,41 @@ void Engine::render()
 
 	//Battlefield
 	glBindVertexArray(object.VAO);
+	sh2.sendUniformFloat("lerpParam", 0);
 	sh2.sendUniformMat4("model", objectTransform);
+	
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
 
-	for (int i = 0; i < obj.size(); i++)
-	{
-		obj[i]->draw();
-	}
+	//for (int i = 0; i < obj.size(); i++)
+	//{
+	//	obj[i]->draw();
+	//}
 	//Entity
-	glBindVertexArray(object2.VAO);
+	glBindVertexArray(Pose->VAO);
 	sh2.sendUniformMat4("model", transform);
-	glDrawArrays(GL_TRIANGLES, 0, object2.getNumVertices());
+	sh2.sendUniformFloat("lerpParam", currentlerpparam);
+	glDrawArrays(GL_TRIANGLES, 0, Pose->getNumVertices());
 	//glBindVertexArray(obj[0]->getMesh().VAO);
 	//obj[0]->getShader().sendUniformMat4("model", obj[0]->getMatrixPosition());
 	//glDrawArrays(GL_TRIANGLES, 0, obj[0]->getMesh().getNumVertices());
 
-	glBindVertexArray(0);
 
+	glBindVertexArray(0);
 	test.Unbind();
 	sh2.unuse();
+	
+	sh.use();
+	test.Bind(0);
+	//glBindVertexArray(Animtest.VAO);
+	sh.sendUniformMat4("model", transform);
+	sh.sendUniformFloat("lerpParam", 1.0f);
+	//glDrawArrays(GL_TRIANGLES, 0, Animtest.getNumVertices());
+
+	glBindVertexArray(0);
+	test.Unbind();
+	sh.unuse();
+
+
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -342,8 +414,17 @@ void Engine::playerInput()
 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_D))
 	{
-		obj[0]->translate(glm::vec3(0.1f, 0.0f, 0.0f));
+		//obj[0]->translate(glm::vec3(0.1f, 0.0f, 0.0f));
+		//runAnimation(animation1);
+		animation1run = true;
 	}
 
 
+}
+
+void Engine::runAnimation(std::vector<Mesh*> poselist)
+{
+	
+	
+	
 }
