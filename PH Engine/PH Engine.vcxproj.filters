@@ -86,6 +86,9 @@
     <ClCompile Include="..\External\imgui\examples\imgui_impl_opengl3.cpp">
       <Filter>Header Files\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\DebugDraw.cpp">
+      <Filter>Header Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Window.h">
@@ -136,6 +139,9 @@
     <ClInclude Include="Engine\InputModule.h">
       <Filter>Header Files\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\DebugDraw.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Shaders\1.colors.fs">
@@ -172,6 +178,12 @@
       <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\passthrough.vs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Engine\Point.fs">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Engine\Point.vs">
       <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>

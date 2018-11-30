@@ -8,7 +8,11 @@
 Engine* Engine::_instance = nullptr;
 float currentAngle = 135.0f;
 
-
+float Engine::hp1 = 100.f;
+float Engine::hp2 = 100.f;
+int Engine::win1 = 0.f;
+int Engine::win2 = 0.f;
+float Engine::timer = 120.0f;
 /*
 	This is the Singleton Pattern. Read more here:
 	http://Engineprogrammingpatterns.com/singleton.html
@@ -55,6 +59,8 @@ bool Engine::startUp()
 	_window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, NAME, NULL, NULL);
 	glfwMakeContextCurrent(_window);
 
+
+
 	    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -83,8 +89,75 @@ bool Engine::startUp()
 
 	glEnable(GL_DEPTH_TEST);
 
+	_draw = DebugDraw();
 	//PHYSICS
 	//bullet here
+	collisionConfiguration = new btDefaultCollisionConfiguration();
+	dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	overlappingPairCache = new btDbvtBroadphase();
+	solver = new btSequentialImpulseConstraintSolver;
+	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+	
+	dynamicsWorld->setGravity(btVector3(0, -10, 0));
+	_draw.setDebugMode(btIDebugDraw::DBG_MAX_DEBUG_DRAW_MODE);
+	dynamicsWorld->setDebugDrawer(&_draw);
+
+	{
+		btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+
+		collisionShapes.push_back(groundShape);
+
+		btTransform groundTransform;
+		groundTransform.setIdentity();
+		groundTransform.setOrigin(btVector3(0, -56, 0));
+
+		btScalar mass(0.);
+
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+
+		btVector3 localInertia(0, 0, 0);
+		if (isDynamic)
+			groundShape->calculateLocalInertia(mass, localInertia);
+
+		//using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
+		btRigidBody* body = new btRigidBody(rbInfo);
+
+		//add the body to the dynamics world
+		dynamicsWorld->addRigidBody(body);
+	}
+
+	{
+		//create a dynamic rigidbody
+
+		//btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
+		btCollisionShape* colShape = new btSphereShape(btScalar(1.));
+		collisionShapes.push_back(colShape);
+
+		/// Create Dynamic Objects
+		btTransform startTransform;
+		startTransform.setIdentity();
+
+		btScalar mass(1.f);
+
+		//rigidbody is dynamic if and only if mass is non zero, otherwise static
+		bool isDynamic = (mass != 0.f);
+
+		btVector3 localInertia(0, 0, 0);
+		if (isDynamic)
+			colShape->calculateLocalInertia(mass, localInertia);
+
+		startTransform.setOrigin(btVector3(2, 10, 0));
+
+		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+		btRigidBody* body = new btRigidBody(rbInfo);
+
+		dynamicsWorld->addRigidBody(body);
+	}
 
 	isActive = true;
 	//_camera = nullptr;
@@ -100,28 +173,43 @@ bool Engine::startUp()
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	transform = glm::translate(transform, position);
 	transform = glm::rotate(transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-	transform = glm::scale(transform, glm::vec3(0.25f, 0.25f, 0.25f));
+	transform = glm::scale(transform, glm::vec3(0.15f, 0.15f, 0.15f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
+	_draw.projection = cameraProjection;
 
+	Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
+	_draw.line = ex;
 	sh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sh3 = Shader("Contents/Shaders/passthrough.vs", "Contents/Shaders/passthrough.fs");
 	object = Mesh();
-	object.loadFromFile("Contents/Models/Map2.obj");
+	object.loadFromFile("Contents/Models/Derbis.obj");
 	object2 = Mesh();
 	object2.loadFromFile("Contents/Models/untitled.obj");
 
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-4.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(-2.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(0.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(2.0f, 0.1f, 0.0f)));
-	obj.push_back(new Entity(&sh2, "Contents/Models/untitled.obj", glm::vec3(4.0f, 0.1f, 0.0f)));
+	basemap = Mesh();
+	basemap.loadFromFile("Contents/Models/mapBase.obj");
+
+	river = Mesh();
+	river.loadFromFile("Contents/Models/river.obj");
 
 	first = Light(&sh, glm::vec4(4.0f, 0.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	second = Light(&sh2, glm::vec4(0.0f, 5.0f, 0, 1.0f), glm::vec3(0.1f, 0.1f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(1.0f, 0.1f, 0.1f));
 	
-	
-	if (!test.LoadTexture("Contents/Textures/container2.png")) {
+
+	if (!test.LoadTexture("Contents/Textures/Debris_UV.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!test2.LoadTexture("Contents/Textures/mapBase_UV.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!test3.LoadTexture("Contents/Textures/river_UV.png")) {
 		cout << "Texture failed to load" << endl;
 		system("Pause");
 		exit(0);
@@ -137,6 +225,43 @@ void Engine::shutDown()
 	object.unload();
 	test.Unload();
 
+	//remove the rigidbodies from the dynamics world and delete them
+	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
+	{
+		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
+		btRigidBody* body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState())
+		{
+			delete body->getMotionState();
+		}
+		dynamicsWorld->removeCollisionObject(obj);
+		delete obj;
+	}
+
+	//delete collision shapes
+	for (int j = 0; j < collisionShapes.size(); j++)
+	{
+		btCollisionShape* shape = collisionShapes[j];
+		collisionShapes[j] = 0;
+		delete shape;
+	}
+
+	//delete dynamics world
+	delete dynamicsWorld;
+
+	//delete solver
+	delete solver;
+
+	//delete broadphase
+	delete overlappingPairCache;
+
+	//delete dispatcher
+	delete dispatcher;
+
+	delete collisionConfiguration;
+
+	//next line is optional: it will be cleared by the destructor when the array goes out of scope
+	collisionShapes.clear();
 
 	InputModule::getInstance().shutDown();
 	GLFWwindow *window = glfwGetCurrentContext();
@@ -151,9 +276,9 @@ void Engine::runGame()
 	double deltaTime = 0.0;
 	int frames = 0;
 
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec4 clear_color = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
 
 	while (!glfwWindowShouldClose(glfwGetCurrentContext()))
 	{
@@ -172,37 +297,35 @@ void Engine::runGame()
 
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
-		// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+
 		{
-			static float f = 0.0f;
-			static int counter = 0;
-
-			ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-			ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-			ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-			ImGui::Checkbox("Another Window", &show_another_window);
-
-			ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-			ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-			if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				counter++;
-			ImGui::SameLine();
-			ImGui::Text("counter = %d", counter);
-
-			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+			ImGui::Begin("Player 1");
+			ImGui::Text("Health = %f", hp1);
+			ImGui::Text("Wins = %d", win1);
+			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::SetWindowPos(ImVec2(SCREEN_WIDTH - 300, 75));
 			ImGui::End();
+
 		}
 
-		// 3. Show another simple window.
-		if (show_another_window)
 		{
-			ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-			ImGui::Text("Hello from another window!");
-			if (ImGui::Button("Close Me"))
-				show_another_window = false;
+			ImGui::Begin("Player 2");
+			ImGui::Text("Health = %f", hp2);
+			ImGui::Text("win = %d", win2);
+			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::SetWindowPos(ImVec2(100,75));
 			ImGui::End();
+
+		}
+
+		{
+			ImGui::Begin("Time");
+			/*ImGui::Text("T", timer);*/
+			ImGui::Value("", timer);
+			ImGui::SetWindowSize(ImVec2(75, 75));
+			ImGui::SetWindowPos(ImVec2(SCREEN_WIDTH / 2.0f - 30.0f, 75));
+			ImGui::End();
+
 		}
 
 		double currentTime = glfwGetTime();
@@ -221,6 +344,27 @@ void Engine::runGame()
 			obj[i]->update(ImGui::GetIO().Framerate);
 		}
 
+		for (int i = 0; i < 150; i++)
+		{
+			dynamicsWorld->stepSimulation(1.f / 60.f, 10);
+
+			//print positions of all objects
+			for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
+			{
+				btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+				btRigidBody* body = btRigidBody::upcast(obj);
+				btTransform trans;
+				if (body && body->getMotionState())
+				{
+					body->getMotionState()->getWorldTransform(trans);
+				}
+				else
+				{
+					trans = obj->getWorldTransform();
+				}
+			}
+		}
+
 		_camera->update();
 		InputModule::getInstance().update(currentTime - lastTime);
 		render();
@@ -232,11 +376,13 @@ void Engine::runGame()
 
 void Engine::render()
 {
+	_draw.projection = cameraProjection;
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", _camera->getLookMatrix());
 	second.LoadLight();
 	
+	//dynamicsWorld->debugDrawWorld();
 	test.Bind(0);
 
 	//Battlefield
@@ -244,22 +390,36 @@ void Engine::render()
 	sh2.sendUniformMat4("model", objectTransform);
 	glDrawArrays(GL_TRIANGLES, 0, object.getNumVertices());
 
+	test.Unbind();
+
+	test2.Bind(0);
+	glBindVertexArray(basemap.VAO);
+	sh2.sendUniformMat4("model", objectTransform);
+	glDrawArrays(GL_TRIANGLES, 0, basemap.getNumVertices());
+	test2.Unbind();
+
+	test3.Bind(0);
+	glBindVertexArray(river.VAO);
+	sh2.sendUniformMat4("model", objectTransform);
+	glDrawArrays(GL_TRIANGLES, 0, river.getNumVertices());
+	test3.Unbind();
+	//Entity
 	for (int i = 0; i < obj.size(); i++)
 	{
 		obj[i]->draw();
 	}
-	//Entity
 	glBindVertexArray(object2.VAO);
 	sh2.sendUniformMat4("model", transform);
 	glDrawArrays(GL_TRIANGLES, 0, object2.getNumVertices());
+
 	//glBindVertexArray(obj[0]->getMesh().VAO);
 	//obj[0]->getShader().sendUniformMat4("model", obj[0]->getMatrixPosition());
 	//glDrawArrays(GL_TRIANGLES, 0, obj[0]->getMesh().getNumVertices());
 
 	glBindVertexArray(0);
 
-	test.Unbind();
 	sh2.unuse();
+
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -270,6 +430,7 @@ void Engine::render()
 
 void Engine::playerInput()
 {
+	float speed = 0.15f;
 	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
 	if (present == 1)
 	{
@@ -284,7 +445,7 @@ void Engine::playerInput()
 			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 			//glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
 			//transform = glm::translate(transform, temp);
-			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
+			transform = glm::translate(transform, glm::vec3(axes[0] * speed, 0.f, -axes[1] * speed));
 			if (axes[3] < 0.0f && axes[2] < 0.0f)
 				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
 			else if (axes[2] < 0.0f)
@@ -305,7 +466,7 @@ void Engine::playerInput()
 			transform = glm::rotate(transform, glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 /*			glm::vec3 temp = glm::rotateY(glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f), glm::radians(180.0f));
 			transform = glm::translate(transform, temp)*/;
-			transform = glm::translate(transform, glm::vec3(axes[0] * 0.10f, 0.f, -axes[1] * 0.10f));
+			transform = glm::translate(transform, glm::vec3(axes[0] * speed, 0.f, -axes[1] * speed));
 
 			//if (axes[3] < 0.0f && axes[2] < 0.0f)
 			//	currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f;
@@ -325,8 +486,6 @@ void Engine::playerInput()
 		//transform = glm::translate(transform, glm::vec3(0.0f, 0.f, -axes[1] * 0.03 ));
 		//float bangle = axes[3] / axes[2];
 		glm::vec2 anglevec(axes[2], axes[3]);
-
-		//std::cout << "x: " << axes[2] << "y: " << axes[3] << " angle : " << glm::atan(axes[3]/axes[2]) * (180.0f / 3.14159265) <<  std::endl;
 	}
 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))

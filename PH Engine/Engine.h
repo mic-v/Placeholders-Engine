@@ -24,7 +24,10 @@
 #include "Engine/FPSCamera.h"
 #include "Engine/Entity.h"
 #include "Engine/InputModule.h"
+#include "Engine/DebugDraw.h"
 #include <vector>
+
+#include <btBulletDynamicsCommon.h>
 
 //#include "SOIL2.h"
 //
@@ -53,12 +56,22 @@ private:
 	GLFWwindow* _window;
 
 	//Physics World
+	btDefaultCollisionConfiguration* collisionConfiguration;
+	btCollisionDispatcher* dispatcher;
+	btBroadphaseInterface* overlappingPairCache;
+	btSequentialImpulseConstraintSolver* solver;
+	btDiscreteDynamicsWorld* dynamicsWorld;
+	btAlignedObjectArray<btCollisionShape*> collisionShapes;
+
+	DebugDraw _draw;
 
 	Camera *_camera;
 	Camera camera2;
 	FPSCamera camera1;
 	Mesh object;
 	Mesh object2;
+	Mesh basemap;
+	Mesh river;
 	std::vector<Entity*> obj;
 	Shader sh;
 	Shader sh2;
@@ -67,11 +80,18 @@ private:
 	Light second;
 	Light third;
 	Texture test;
+	Texture test2;
+	Texture test3;
 	glm::mat4 objectTransform;
 	glm::mat4 transform;
 	glm::mat4 cameraProjection;
 	glm::vec3 position;
 	
+	static float hp1;
+	static float hp2;
+	static float timer;
+	static int win1;
+	static int win2;
 
 	// Don't know what to include yet
 };
