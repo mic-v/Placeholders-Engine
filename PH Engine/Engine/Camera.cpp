@@ -3,22 +3,22 @@
 
 void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
-	//float velocity = _dragSpeed * deltaTime;
-	//if (direction == FORWARD)
-	//	_pitch += velocity;
-	//if (direction == BACKWARD)
-	//	_pitch -= velocity;
-	//if (direction == LEFT)
-	//	_yaw -= velocity;
-	//if (direction == RIGHT)
-	//	_yaw += velocity;
+	float velocity = _dragSpeed * deltaTime;
+	if (direction == FORWARD)
+		_pitch += velocity;
+	if (direction == BACKWARD)
+		_pitch -= velocity;
+	if (direction == LEFT)
+		_yaw -= velocity;
+	if (direction == RIGHT)
+		_yaw += velocity;
 
-	//if (_pitch > 89.f)
-	//	_pitch = 89.f;
-	//if (_pitch < -89.f)
-	//	_pitch = -89.f;
+	if (_pitch > 89.f)
+		_pitch = 89.f;
+	if (_pitch < -89.f)
+		_pitch = -89.f;
 
-	//updateCameraView();
+	updateCameraView();
 }
 
 void Camera::processMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)

@@ -21,9 +21,9 @@ Shader::Shader(const char * vertPath, const char * fragPath)
 	fragmentCode = fShaderStream.str();
 
 	const char* vShaderCode = vertexCode.c_str();
-	std::cout << vertexCode << std::endl;
+	//std::cout << vertexCode << std::endl;
 	const char * fShaderCode = fragmentCode.c_str();
-	std::cout << fragmentCode << std::endl;
+	//std::cout << fragmentCode << std::endl;
 	// 2. compile shaders
 	unsigned int vertex, fragment;
 	// vertex shader

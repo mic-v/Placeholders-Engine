@@ -89,6 +89,12 @@
     <ClCompile Include="Engine\DebugDraw.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Header Files\atop</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Window.h">
@@ -141,6 +147,12 @@
     </ClInclude>
     <ClInclude Include="Engine\DebugDraw.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files\atop</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\atop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

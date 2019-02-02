@@ -35,10 +35,10 @@ struct PointLight {
 class Light {
 public:
 	Light(){}
-	Light(Shader *temp, glm::vec4 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 spec);
+	Light(glm::vec4 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 spec);
 
 
-	void LoadLight();
+	void LoadLight(Shader *LightShader);
 
 	void setuTex(int);
 	//Sets light's position
@@ -106,6 +106,6 @@ private:
 	float QuadraticAttenuation;
 	
 	PointLight stuff;
-	
-	static int lightCount;
+	int thisLight;
+	static int totalLights;
 };

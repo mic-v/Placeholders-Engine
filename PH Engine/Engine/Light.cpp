@@ -1,12 +1,11 @@
 #include "Light.h"
 
-int Light::lightCount = 0;
+int Light::totalLights = 0;
 
 //Shader you want to use, position of light, ambient color, diffuse color, specular color
-Light::Light(Shader *temp, glm::vec4 _position, glm::vec3 _ambient, glm::vec3 _diffuse, glm::vec3 _spec)
+Light::Light(glm::vec4 _position, glm::vec3 _ambient, glm::vec3 _diffuse, glm::vec3 _spec)
 	/*LightShader(temp), Position(_position), Ambient(_ambient), Diffuse(_diffuse), Specular(_spec)*/
 {
-	LightShader = *temp;
 	Position = _position;
 	Ambient = _ambient;
 	Diffuse = _diffuse;
@@ -26,30 +25,32 @@ Light::Light(Shader *temp, glm::vec4 _position, glm::vec3 _ambient, glm::vec3 _d
 	stuff.Attenuation_Constant = ConstantAttenuation;
 	stuff.Attenuation_Linear = LinearAttenuation;
 	stuff.Attenuation_Quadratic = QuadraticAttenuation;
+	thisLight = totalLights;
+	totalLights++;
 }
 
 
 
 //SENDING INFO TO SHADERS
-void Light::LoadLight() {
+void Light::LoadLight(Shader *LightShader) {
 	
 	
-	LightShader.sendUniformInt("uTex", uTex);
-	GLuint location = LightShader.getUniformLocation("pointLights["+ std::to_string(lightCount) +"]");
+	LightShader->sendUniformInt("uTex", uTex);
+	GLuint location = LightShader->getUniformLocation("pointLights["+ std::to_string(thisLight) +"]");
 	//glUniform1i(location, stuff);
 
-	LightShader.sendUniformVec4("pointLights[" + std::to_string(lightCount) + "].LightPosition", Position);
+	LightShader->sendUniformVec4("pointLights[" + std::to_string(thisLight) + "].LightPosition", Position);
 	//rgb value of the light(doesnt scale so values can be low)
-	LightShader.sendUniformVec3("pointLights[" + std::to_string(lightCount) + "].LightAmbient", Ambient);
+	LightShader->sendUniformVec3("pointLights[" + std::to_string(thisLight) + "].LightAmbient", Ambient);
 	//rgb value of light reflection
-	LightShader.sendUniformVec3("pointLights[" + std::to_string(lightCount) + "].LightDiffuse", Diffuse);
+	LightShader->sendUniformVec3("pointLights[" + std::to_string(thisLight) + "].LightDiffuse", Diffuse);
 	//rgb value of LightShaderine, applied least liberally so values LightShaderould be higher
-	LightShader.sendUniformVec3("pointLights[" + std::to_string(lightCount) + "].LightSpecular", Specular);
-	LightShader.sendUniformFloat("pointLights[" + std::to_string(lightCount) + "].LightSpecularExponent", SpecularExponent);
-	LightShader.sendUniformFloat("pointLights[" + std::to_string(lightCount) + "].Attenuation_Constant", ConstantAttenuation);
-	LightShader.sendUniformFloat("pointLights[" + std::to_string(lightCount) + "].Attenuation_Linear", LinearAttenuation);
-	LightShader.sendUniformFloat("pointLights[" + std::to_string(lightCount) + "].Attenuation_Quadratic", QuadraticAttenuation);
-	lightCount++;
+	LightShader->sendUniformVec3("pointLights[" + std::to_string(thisLight) + "].LightSpecular", Specular);
+	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].LightSpecularExponent", SpecularExponent);
+	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].Attenuation_Constant", ConstantAttenuation);
+	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].Attenuation_Linear", LinearAttenuation);
+	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].Attenuation_Quadratic", QuadraticAttenuation);
+	
 }
 
 
@@ -60,6 +61,7 @@ void Light::setuTex(int temp) {
 }
 void Light::setPosition(glm::vec4 temp) {
 	Position = temp;
+	stuff.LightPosition = Position;
 }
 void Light::setAmbient(glm::vec3 temp) {
 	Ambient = temp;

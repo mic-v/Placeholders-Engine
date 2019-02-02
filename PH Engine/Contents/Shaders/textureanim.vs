@@ -21,8 +21,8 @@ out vec3 pos;
 void main()
 {
 
-	texcoord = uv;//mix(uv, uv2, lerpParam);
-	norm = mat3(view) * mat3(model) * normal;//mix(normal, normal2, lerpParam);
+	texcoord = mix(uv, uv2, lerpParam);
+	norm = mat3(view) * mat3(model) * mix(normal, normal2, lerpParam);
 	vec4 viewSpace = view * model * vec4(mix(vert, vert2, lerpParam), 1.0f);
 
 	

@@ -2,9 +2,15 @@
 
 out vec4 outColor;
 
-in vec3 tNormal;
+in vec3 textNormal;
+
+uniform sampler2D uTex;
 
 void main()
 {
-	outColor = vec4(tNormal, 1.0f);
+	vec4 newText = texture(uTex, textNormal);
+	
+	outColor.rgb = newText.rgb;
+	//SET TRANSPARENCY/ALPHA TO PICTURES TRANSPARENCY/ALPHA
+	outColor.a = texture.a;
 }
