@@ -12,21 +12,29 @@ void Player::BaseAttack(Player * otherplayer)
 		if (sqrt((x*x) + (z*z)) <= Range) {
 			baseAttackTime = glfwGetTime();
 			otherplayer->Health -= 5;
-			std::cout << "hit" << std::endl;
+		//	std::cout << "hit" << std::endl;
 		}
 	}
 	else {
-		std::cout << "not hit" << std::endl;
+	//	std::cout << "not hit" << std::endl;
 	}
 }
 
 void Player::skillshotAttack(Player * otherplayer, Object * skillshotMesh, float t, bool check)
 {
+	float x, y, z;
+
+	glm::extractEulerAngleXYZ(this->getTransform(), x, y, z);
+	
+	std::cout << x << " " << y << " "<< z << std::endl;
+
+	this->setRotationY(5.0f);
+
 	if (check == false) {
 		player = btVector3(this->getPositionV3().x, this->getPositionV3().y, this->getPositionV3().z);
 	}
 	double angleBetweenPlayers = glm::normalizeDot(this->getPositionV3(), otherplayer->getPositionV3());
-	std::cout << angleBetweenPlayers << std::endl;
+	//std::cout << angleBetweenPlayers << std::endl;
 	//btVector3 player = btVector3(this->getPositionV3().x, this->getPositionV3().y, this->getPositionV3().z);
 	//btVector3 skillshot = btVector3(this->getPositionV3().x, this->getPositionV3().y, this->getPositionV3().z);
 	skillshot = player;

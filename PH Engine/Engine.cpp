@@ -730,7 +730,6 @@ void Engine::playerInput(float t)
 			Player1Transform = glm::rotate(Player1Transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		
 		}
-		vector lol;
 		else
 		{
 			

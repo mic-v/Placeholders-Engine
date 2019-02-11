@@ -45,6 +45,36 @@ glm::vec4 Object::getPositionV4()
 
 	return glm::vec4(Transform[3].x, Transform[3].y, Transform[3].z, Transform[3].w);
 }
+glm::mat4 Object::getTransform()
+{
+	return Transform;
+}
+void Object::setRotationX(float angle)
+{
+
+
+
+	Transform *= glm::rotate(angle, glm::vec3(1, 0, 0));
+}
+void Object::setRotationY(float angle)
+{
+	//this->setPosition(rotateY(this->getPositionV3(), angle));
+
+
+	Transform*= glm::rotate(angle, glm::vec3(0, 1, 0));
+}
+
+void Object::setRotationZ(float angle)
+{
+
+
+
+	Transform *= glm::rotate(angle, glm::vec3(0, 0, 1));
+}
+void Object::setTransform(glm::mat4 temp)
+{
+	Transform = temp;
+}
 	/*std::cout << Transform[0].x << " " << Transform[1].x << " " << Transform[2].x << " " << Transform[3].x  << std::endl;
 	std::cout << Transform[0].y << " " << Transform[1].y << " " << Transform[2].y << " " << Transform[3].y << std::endl;
 	std::cout << Transform[0].z << " " << Transform[1].z << " " << Transform[2].z << " " << Transform[3].z << std::endl;
