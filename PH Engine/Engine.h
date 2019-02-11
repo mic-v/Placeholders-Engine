@@ -42,7 +42,7 @@ public:
 	void shutDown();
 	void runGame();
 	void render();
-	void playerInput();
+	void playerInput(float t);
 	void checkAnimation();
 	bool runAnimation(std::vector<Mesh*> poselist, float);
 	
@@ -69,6 +69,8 @@ private:
 	bool animation3run = false;
 	bool animation4run = false;
 	int currentanimframe = 0;
+	float skillshotT = 0.0f;
+	bool keyCheck = false;
 	float currentlerpparam = 0;
 	Camera *_camera;
 	Camera camera2;
@@ -77,6 +79,7 @@ private:
 	Mesh object2;
 	Mesh basemap;
 	Mesh river;
+	Mesh rockMesh;
 
 	Mesh attackframe1;
 	Mesh attackframe2;
@@ -147,6 +150,7 @@ private:
 	Object Trees;
 	Object BasePlate;
 	Object River;
+	Object rockObject;
 	Player Playerone;
 	Player Playertwo;
 	Shader sh2;
@@ -160,6 +164,8 @@ private:
 	glm::mat4 Player1Transform;
 	glm::mat4 cameraProjection;
 	glm::vec3 position;
+
+	bool skillshotPress = false;
 	
 	static float hp1;
 	static float hp2;

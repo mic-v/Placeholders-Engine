@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include <btBulletDynamicsCommon.h>
 
 
 class Player : public Object {
@@ -12,11 +13,14 @@ public:
 	}
 
 	void BaseAttack(Player *otherplayer);
+	void skillshotAttack(Player *otherplayer, Object *skillshotMesh, float t, bool check);
 	float getHealth();
 private:
 	float Health;
 	float Range;
-
+	float skillshotRange;
+	btVector3 player;
+	btVector3 skillshot;
 	float baseAttackTime = 0;
 
 

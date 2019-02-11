@@ -17,7 +17,7 @@ float Engine::timer = 120.0f;
 	This is the Singleton Pattern. Read more here:
 	http://Engineprogrammingpatterns.com/singleton.html
 	Essentially, make sures there is only one instance of a certain class
-	I wanted to practice it so I decided to use this pattern for Engine. You don't have to follow thi
+	I wanted to practice it so I decided to use this pattern for Engine. You don't have to follow this
 	for every class
 */
 Engine & Engine::instance()
@@ -190,6 +190,7 @@ bool Engine::startUp()
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Derbis.obj");
 	object2.loadFromFile("Contents/Models/untitled.obj");
+	rockMesh.loadFromFile("Contents/Models/rock.obj");
 
 	
 	basemap.loadFromFile("Contents/Models/mapBase.obj");
@@ -435,6 +436,7 @@ bool Engine::startUp()
 	}
 
 	Trees = Object(&object, &TreeTex, objectTransform);
+	rockObject = Object(&rockMesh, &BaseTex, objectTransform);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform);
 	Playerone = Player(Pose, &BaseTex, Player1Transform, 100, 1.0f);
 	Playertwo = Player(Pose, &BaseTex, Player1Transform, 120, 1.0f);
@@ -605,8 +607,11 @@ void Engine::runGame()
 			frames = 0;
 			lastTime += 1.0;
 		}
-		playerInput();
+		playerInput(skillshotT);
+		skillshotT += 0.01;
+
 		checkAnimation();
+
 		for (int i = 0; i < obj.size(); i++)
 		{
 			obj[i]->update(ImGui::GetIO().Framerate);
@@ -659,6 +664,7 @@ void Engine::render()
 	BasePlate.LoadObject(&sh2);
 	Playerone.LoadObject(&sh2);
 	Playertwo.LoadObject(&sh2);
+	rockObject.LoadObject(&sh2);
 	
 	sh2.unuse();
 
@@ -693,7 +699,7 @@ void Engine::render()
 	glfwPollEvents();
 }
 
-void Engine::playerInput()
+void Engine::playerInput(float t)
 {
 	float speed = 0.15f;
 	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
@@ -724,6 +730,7 @@ void Engine::playerInput()
 			Player1Transform = glm::rotate(Player1Transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
 		
 		}
+		vector lol;
 		else
 		{
 			
@@ -813,10 +820,18 @@ void Engine::playerInput()
 	{
 
 		Playertwo.BaseAttack(&Playerone);
-	}
-	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E))
+	} 
+	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E) || keyCheck == true)
 	{
 
 		Playerone.BaseAttack(&Playertwo);
+		if (t <= 1.0f) {
+			Playerone.skillshotAttack(&Playertwo, &rockObject, t, keyCheck);
+			keyCheck = true;
+		}
+		else {
+			skillshotT = 0.0f;
+			keyCheck = false;
+		}
 	}
 }
