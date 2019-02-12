@@ -17,6 +17,10 @@ public:
 	glm::vec4 getPositionV4();
 	glm::mat4 getTransform();
 	
+	float getOrientation();
+
+
+	void setOrientation(float angle);
 	void setRotationX(float angle);
 	void setRotationY(float angle);
 	void setRotationZ(float angle);
@@ -25,6 +29,7 @@ private:
 	Mesh *ObjectMesh;
 	Texture *ObjectTexture;
 	glm::mat4 Transform;
+	float orientation = 0;
 
 
 };

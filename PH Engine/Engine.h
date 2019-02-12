@@ -45,7 +45,7 @@ public:
 	void playerInput(float t);
 	void checkAnimation();
 	bool runAnimation(std::vector<Mesh*> poselist, float);
-	void controllerInput(int controller, float speed, Player *player);
+	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons);
 	
 	bool isActive;
 private:

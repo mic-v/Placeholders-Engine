@@ -5,6 +5,10 @@
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 900
 
+
+int controllertype = 3;
+
+
 Engine* Engine::_instance = nullptr;
 float currentAngle = 135.0f;
 
@@ -172,7 +176,7 @@ bool Engine::startUp()
 	Player1Transform = glm::mat4(1.0f);
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	Player1Transform = glm::translate(Player1Transform, position);
-	Player1Transform = glm::rotate(Player1Transform, glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.15f, 0.15f, 0.15f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
@@ -519,52 +523,51 @@ bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
 	return true;
 }
 
-void Engine::controllerInput(int controller, float speed, Player *player)
+float PI = 3.14159265358979323846f;
+
+void Engine::controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons)
 {
 	
-	//int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
 
 	if (controller == 1)
 	{
-		int axesCount;
-		const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
+		
 
-		int count;
-		const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-		if (axes[2] != 0.0f && axes[3] != 0.0f)
-		{
-			player->setTransform(glm::rotate(player->getTransform(), glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f)));
+		
 
-			player->setTransform(glm::translate(player->getTransform(), glm::vec3(axes[0] * speed, 0.f, -axes[1] * speed)));
-			if (axes[3] < 0.0f && axes[2] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
-			else if (axes[2] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 180.0f + 90.0f;
-			else if (axes[3] < 0.0f)
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) + 360.0f + 90.0f;
-			else if (axes[3] && axes[2] == 0.0f)
-				currentAngle = 0.0f + 90.0f;
-			else
-				currentAngle = glm::atan(axes[3] / axes[2]) * (180.0f / 3.14159265358979323846f) +  90.0f;
-
-			player->setTransform(glm::rotate(player->getTransform(), glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f)));
-
-		}
-		else
+		
+		if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
 		{
 
-			player->setTransform(glm::rotate(player->getTransform(), glm::radians(-currentAngle), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-			player->setTransform(glm::translate(player->getTransform(), glm::vec3(axes[0] * speed, 0.f, -axes[1] * speed)));
+			player->setOrientation(-player->getOrientation());
+
+			float tempangle;
+			if (controllertype == 4) {
+				tempangle = 36 * ((atan2(-axes[0], -axes[1]) * PI) / 2 + 5);
+			}
+			else if (controllertype == 3) {
+				tempangle = 36 * ((atan2(-axes[0], axes[1]) * PI) / 2 + 5);
+			}
+
+
+			glm::vec3 tempdir2 = glm::vec3(glm::sin(glm::radians(tempangle)) * speed, 0, glm::cos(glm::radians(tempangle)) * speed);
+
+
+			player->setTransform(glm::translate(player->getTransform(), glm::vec3(tempdir2.x, 0, tempdir2.z)));
 
 
 
-			player->setTransform(glm::rotate(player->getTransform(), glm::radians(currentAngle), glm::vec3(0.0f, 1.0f, 0.0f)));
+
+			player->setOrientation(tempangle);
 		}
+		
+		
 
-		glm::vec2 anglevec(axes[2], axes[3]);
+		
 	}
+
 }
 
 void Engine::checkAnimation() {
@@ -750,7 +753,25 @@ void Engine::render()
 void Engine::playerInput(float t)
 {
 	
-	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_1), 1.0f, &Playerone);
+
+	int axesCount;
+	const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
+	std::cout << axesCount << endl;
+	int count;
+	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+
+	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_1), 1.0f, &Playerone, axes, buttons);
+	
+
+
+	int axesCount2;
+	const float *axes2 = glfwGetJoystickAxes(GLFW_JOYSTICK_2, &axesCount2);
+	int count2;
+	const unsigned char* buttons2 = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &count2);
+
+	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_2), 1.0f, &Playertwo, axes2, buttons2);
+
+
 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))
 	{

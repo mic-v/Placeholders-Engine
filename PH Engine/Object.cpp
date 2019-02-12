@@ -49,6 +49,22 @@ glm::mat4 Object::getTransform()
 {
 	return Transform;
 }
+float Object::getOrientation()
+{
+	return orientation;
+}
+
+//This sets Y rotation by overriding the current angle to whatever is inputted. 
+void Object::setOrientation(float angle)
+{
+	orientation = angle;
+	if (orientation > 360) {
+		int div = orientation / 360;
+		orientation = orientation - (360 * div);
+	}
+
+	this->setTransform(glm::rotate(this->getTransform(), glm::radians(orientation), glm::vec3(0.0f, 1.0f, 0.0f)));
+}
 void Object::setRotationX(float angle)
 {
 
@@ -56,12 +72,12 @@ void Object::setRotationX(float angle)
 
 	Transform *= glm::rotate(angle, glm::vec3(1, 0, 0));
 }
+
+//This sets Y rotation by adding to it, not changing it completely.
 void Object::setRotationY(float angle)
 {
-	//this->setPosition(rotateY(this->getPositionV3(), angle));
-
-
-	Transform*= glm::rotate(angle, glm::vec3(0, 1, 0));
+	
+	this->setOrientation(orientation + angle);
 }
 
 void Object::setRotationZ(float angle)
