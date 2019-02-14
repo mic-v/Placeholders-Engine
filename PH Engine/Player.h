@@ -1,26 +1,33 @@
 #pragma once
 #include "Object.h"
-#include <btBulletDynamicsCommon.h>
 
+
+//forward declare
+class Ability;
+class Skillshot;
 
 class Player : public Object {
 
 public:
 	Player();
-	Player(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, int temphealth, float temprange) : Object(tempmesh, temptext, temptrans) {
-		Health = temphealth;
-		Range = temprange;
-	}
+	Player(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material *tempmat, int temphealth, float temprange);
+	float getRange();
+	void setHealth(float newhealth);
+	void setAttack(Ability* abil);
+	void setAbility(Skillshot* abil);
 
 	void BaseAttack(Player *otherplayer);
-	void skillshotAttack(Player *otherplayer, Object *skillshotMesh, float t, bool check);
+	void skillshotAttack(Player *otherplayer);
 	float getHealth();
+
+	void update();
 private:
 	float Health;
 	float Range;
 	float skillshotRange;
-	btVector3 player;
-	btVector3 skillshot;
+
+	Ability *Melee;
+	Skillshot *FirstAbility;
 	float baseAttackTime = 0;
 
 

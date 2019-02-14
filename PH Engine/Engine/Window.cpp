@@ -84,7 +84,7 @@ namespace plaho {
 
 			// glad: load all OpenGL function pointers
 			// ---------------------------------------
-			if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 			{
 				std::cout << "Failed to initialize GLAD" << std::endl;
 				return -1;

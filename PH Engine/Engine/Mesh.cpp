@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include "Math/math.h"
-//
+
 #define CHAR_BUFFER_SIZE 128
 #define BUFFER_OFFSET(i) ((char *)0 + (i))
 

@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include "math.h"
-#include "../../../External/glad/include/glad/glad.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 //
 class Mesh
 {

@@ -6,23 +6,26 @@ Object::Object()
 {
 }
 
-Object::Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans)
+Object::Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material* tempmat)
 {
 	ObjectMesh = tempmesh;
 	ObjectTexture = temptext;
+	ObjectMat = tempmat;
 	Transform = temptrans;
 
-	
+
 }
 
 void Object::LoadObject(Shader *tempshader)
 {
-	ObjectTexture->Bind(0);
-	glBindVertexArray(ObjectMesh->VAO);
-	tempshader->sendUniformMat4("model", Transform);
-	glDrawArrays(GL_TRIANGLES, 0, ObjectMesh->getNumVertices());
-	ObjectTexture->Unbind();
-	glBindVertexArray(0);
+	if (this->active) {
+		ObjectTexture->Bind(0);
+		glBindVertexArray(ObjectMesh->VAO);
+		tempshader->sendUniformMat4("model", Transform);
+		glDrawArrays(GL_TRIANGLES, 0, ObjectMesh->getNumVertices());
+		ObjectTexture->Unbind();
+		glBindVertexArray(0);
+	}
 }
 
 void Object::setPosition(glm::vec3 newpos)
@@ -52,6 +55,16 @@ glm::mat4 Object::getTransform()
 float Object::getOrientation()
 {
 	return orientation;
+}
+
+bool Object::getActive()
+{
+	return active;
+}
+
+void Object::setActive(bool temp)
+{
+	active = temp;
 }
 
 //This sets Y rotation by overriding the current angle to whatever is inputted. 

@@ -170,6 +170,11 @@ bool Engine::startUp()
 	camera2.setYDirection(-60.f);
 	_camera = &camera2;
 
+	Framebuffer::initFrameBuffers();
+	frameBuffer.addDepthTarget();
+	frameBuffer.addColorTarget(GL_RGB8);
+	frameBuffer.addColorTarget(GL_R11F_G11F_B10F);
+	frameBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	position = glm::vec3(-4.0f, 0.1f, 0.0f);
 	objectTransform = glm::mat4(1.0f);
@@ -190,11 +195,13 @@ bool Engine::startUp()
 	_draw.line = ex;
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
+	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Derbis.obj");
 	object2.loadFromFile("Contents/Models/untitled.obj");
 	rockMesh.loadFromFile("Contents/Models/rock.obj");
+	testMat.loadFile("Contents/Materials/Final Map.mtl");
 
 	
 	basemap.loadFromFile("Contents/Models/mapBase.obj");
@@ -202,8 +209,8 @@ bool Engine::startUp()
 	
 	river.loadFromFile("Contents/Models/river.obj");
 
-
-
+	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
+	LUT.loadTexture();
 	
 
 
@@ -439,13 +446,13 @@ bool Engine::startUp()
 		exit(0);
 	}
 
-	Trees = Object(&object, &TreeTex, objectTransform);
-	rockObject = Object(&rockMesh, &BaseTex, objectTransform);
-	BasePlate = Object(&basemap, &BaseTex, objectTransform);
-	Playerone = Player(Pose, &BaseTex, Player1Transform, 100, 1.0f);
-	Playertwo = Player(Pose, &BaseTex, Player1Transform, 120, 1.0f);
+	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
+	rockObject = Object(&rockMesh, &BaseTex, objectTransform, &testMat);
+	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
+	Playerone = Player(Pose, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
+	Playertwo = Player(Pose, &BaseTex, Player1Transform, &testMat, 120, 1.0f);
 
-	River = Object(&river, &test3, objectTransform);
+	River = Object(&river, &test3, objectTransform, &testMat);
 	glfwGetTime();
 	return true;
 }
@@ -597,6 +604,10 @@ void Engine::runGame()
 	double deltaTime = 0.0;
 	int frames = 0;
 
+	/*if (frameBuffer._IsInit == true && GLFWwindowsizefun()) {
+		frameBuffer.resize();
+	}*/
+
 	bool show_demo_window = false;
 	bool show_another_window = false;
 	ImVec4 clear_color = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
@@ -700,6 +711,10 @@ void Engine::runGame()
 
 void Engine::render()
 {
+	/*glClear(GL_DEPTH_BUFFER_BIT);
+	LUT.Bind3D(12);
+	frameBuffer.clear();
+	frameBuffer.bind();*/
 	glEnable(GL_DEPTH_TEST);
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
@@ -720,7 +735,7 @@ void Engine::render()
 	sh2.unuse();
 
 
-	//TRANSPARENT OBJS HERE
+	////TRANSPARENT OBJS HERE
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	sht.use();
@@ -736,7 +751,19 @@ void Engine::render()
 	sht.unuse();
 	glDisable(GL_BLEND);
 
+	/*frameBuffer.unbind();
+	LUTShader.use();
+	LUTShader.sendUniformMat4("projection", cameraProjection);
+	LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
+	LUTShader.sendUniformFloat("uAmount", 1.0f);
+	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
+	frameBuffer.bindColorAsTexture(0, 13);
+	glDisable(GL_DEPTH_TEST);
+	frameBuffer.drawFSQ();
+	frameBuffer.unbindTexture(13);
+	LUTShader.unuse();
 
+	LUT.unbind3D(12);*/
 
 	dynamicsWorld->debugDrawWorld();
 	glBindVertexArray(0);
@@ -850,8 +877,7 @@ void Engine::playerInput(float t)
 	} 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E) || keyCheck == true)
 	{
-
-		Playerone.BaseAttack(&Playertwo);
+		/*Playerone.BaseAttack(&Playertwo);
 		if (t <= 1.0f) {
 			Playerone.skillshotAttack(&Playertwo, &rockObject, t, keyCheck);
 			keyCheck = true;
@@ -859,6 +885,6 @@ void Engine::playerInput(float t)
 		else {
 			skillshotT = 0.0f;
 			keyCheck = false;
-		}
+		}*/
 	}
 }

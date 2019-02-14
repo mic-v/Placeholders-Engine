@@ -9,12 +9,13 @@
 #include <examples/imgui_impl_glfw.h>
 #include <examples/imgui_impl_opengl3.h>
 //#include "imgui_impl_opengl3.h"
-
-
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 
 
 #include "Engine/Window.h"
+#include "CUBE.h" 
 #include "Player.h"
 #include "Engine/Math/math.h"
 #include "Engine/Camera.h"
@@ -24,6 +25,8 @@
 #include "Engine/InputModule.h"
 #include "Engine/DebugDraw.h"
 #include <vector>
+#include "Material.h"
+#include "FrameBuffer.h"
 
 #include <btBulletDynamicsCommon.h>
 
@@ -156,15 +159,20 @@ private:
 	Player Playertwo;
 	Shader sh2;
 	Shader sht;
+	Shader LUTShader;
 	Light first;
 	Light second;
 	Texture TreeTex;
 	Texture BaseTex;
 	Texture test3;
+	Material testMat;
+	Framebuffer frameBuffer;
 	glm::mat4 objectTransform;
 	glm::mat4 Player1Transform;
 	glm::mat4 cameraProjection;
 	glm::vec3 position;
+
+	CUBELoader LUT;
 
 	bool skillshotPress = false;
 	

@@ -79,3 +79,13 @@ void Texture::Bind(unsigned int unit) {
 void Texture::Unbind() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+void Texture::Bind3D(int textureSlot) const {
+	glActiveTexture(GL_TEXTURE0 + textureSlot);
+	glBindTexture(this->_Target, this->_TexHandle);
+}
+void Texture::unbind3D(int textureSlot) const
+{
+	glActiveTexture(GL_TEXTURE0 + textureSlot);
+	glBindTexture(this->_Target, GL_NONE);
+	
+}
