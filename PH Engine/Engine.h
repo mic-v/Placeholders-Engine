@@ -27,7 +27,7 @@
 #include <vector>
 #include "Material.h"
 #include "FrameBuffer.h"
-
+#include "Ability.h"
 #include <btBulletDynamicsCommon.h>
 
 //#include "SOIL2.h"
@@ -48,7 +48,7 @@ public:
 	void playerInput(float t);
 	void checkAnimation();
 	bool runAnimation(std::vector<Mesh*> poselist, float);
-	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons);
+	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
 	
 	bool isActive;
 private:
@@ -155,8 +155,14 @@ private:
 	Object BasePlate;
 	Object River;
 	Object rockObject;
+	Object rockObject2;
 	Player Playerone;
 	Player Playertwo;
+
+	Ability tempability;
+	Ability tempability2;
+	Skillshot playoneskillshot;
+	Skillshot playtwoskillshot;
 	Shader sh2;
 	Shader sht;
 	Shader LUTShader;

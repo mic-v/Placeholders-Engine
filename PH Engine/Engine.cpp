@@ -6,7 +6,7 @@
 #define SCREEN_HEIGHT 900
 
 
-int controllertype = 3;
+int controllertype = 4;
 
 
 Engine* Engine::_instance = nullptr;
@@ -447,12 +447,31 @@ bool Engine::startUp()
 	}
 
 	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
-	rockObject = Object(&rockMesh, &BaseTex, objectTransform, &testMat);
+	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
+	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	Playerone = Player(Pose, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
-	Playertwo = Player(Pose, &BaseTex, Player1Transform, &testMat, 120, 1.0f);
+	Playertwo = Player(Pose, &BaseTex, glm::translate(Player1Transform, glm::vec3(45, 0, 0)), &testMat, 120, 1.0f);
 
 	River = Object(&river, &test3, objectTransform, &testMat);
+
+	tempability = Ability(&Playerone, 3.0f, 5.0f);
+	tempability2 = Ability(&Playertwo, 3.0f, 5.0f);
+	playoneskillshot = Skillshot(&Playerone, 3.0f, 15.0f, 0.005f, 10.0f, 0.5f, &rockObject);
+
+	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 15.0f, 0.005f, 10.0f, 0.5f, &rockObject2);
+
+	Playerone.setAttack(&tempability);
+	Playerone.setAbility(&playoneskillshot);
+
+	Playertwo.setAttack(&tempability2);
+	Playertwo.setAbility(&playtwoskillshot);
+
+	
+
+
+
+	rockObject.setActive(false);
 	glfwGetTime();
 	return true;
 }
@@ -532,7 +551,7 @@ bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
 
 float PI = 3.14159265358979323846f;
 
-void Engine::controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons)
+void Engine::controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer)
 {
 	
 
@@ -570,8 +589,32 @@ void Engine::controllerInput(int controller, float speed, Player *player, const 
 			player->setOrientation(tempangle);
 		}
 		
-		
+		//SQUARE
+		if (GLFW_PRESS == buttons[0]) {
+			//std::cout << "SQUARE" << std::endl;
+		}
+		//X
+		if (GLFW_PRESS == buttons[1]) {
+			player->skillshotAttack(otherplayer);
+			//std::cout << "X" << std::endl;
+		}
+		//O
+		if (GLFW_PRESS == buttons[2]) {
+			//std::cout << "O" << std::endl;
+		}
+		//TRIANGLE
+		if (GLFW_PRESS == buttons[3]) {
+			//std::cout << "tri" << std::endl;
+		}
 
+
+		if (GLFW_PRESS == buttons[4]) {
+			//std::cout << "bumper left" << std::endl;
+		}
+		if (GLFW_PRESS == buttons[5]) {
+			//std::cout << "bumper right" << std::endl;
+			player->BaseAttack(otherplayer);
+		}
 		
 	}
 
@@ -626,14 +669,15 @@ void Engine::runGame()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
+		double currentTime = glfwGetTime();
+		timer = currentTime;
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
 
 		{
 			ImGui::Begin("Player 1");
 			ImGui::Text("Health = %f", Playerone.getHealth());
-			ImGui::Text("Wins = %d", win1);
+			ImGui::Text("Ability 1 = %i", static_cast<int>(playoneskillshot.getTimeLeft()));
 			ImGui::SetWindowSize(ImVec2(200, 75));
 			ImGui::SetWindowPos(ImVec2(100, 75));
 			ImGui::End();
@@ -643,7 +687,7 @@ void Engine::runGame()
 		{
 			ImGui::Begin("Player 2");
 			ImGui::Text("Health = %f", Playertwo.getHealth());
-			ImGui::Text("win = %d", win2);
+			ImGui::Text("Ability 1 = %i", static_cast<int>(playtwoskillshot.getTimeLeft()));
 			ImGui::SetWindowSize(ImVec2(200, 75));
 			ImGui::SetWindowPos(ImVec2(1300,75));
 			ImGui::End();
@@ -651,16 +695,16 @@ void Engine::runGame()
 		}
 
 		{
-			ImGui::Begin("Time");
+			ImGui::Begin("");
+			ImGui::Text("Time: %i", static_cast<int>(timer));
 			
-			ImGui::Value("", timer);
-			ImGui::SetWindowSize(ImVec2(75, 75));
+			ImGui::SetWindowSize(ImVec2(100, 75));
 			ImGui::SetWindowPos(ImVec2(SCREEN_WIDTH / 2.0f - 30.0f, 75));
 			ImGui::End();
 
 		}
 
-		double currentTime = glfwGetTime();
+		
 		frames++;
 		
 		if (currentTime - lastTime >= 1.0f)
@@ -700,6 +744,10 @@ void Engine::runGame()
 			}
 		}
 		
+
+
+		Playerone.update();
+		Playertwo.update();
 		_camera->update();
 		InputModule::getInstance().update(currentTime - lastTime);
 		render();
@@ -731,6 +779,7 @@ void Engine::render()
 	Playerone.LoadObject(&sh2);
 	Playertwo.LoadObject(&sh2);
 	rockObject.LoadObject(&sh2);
+	rockObject2.LoadObject(&sh2);
 	
 	sh2.unuse();
 
@@ -783,11 +832,11 @@ void Engine::playerInput(float t)
 
 	int axesCount;
 	const float *axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &axesCount);
-	std::cout << axesCount << endl;
+	//std::cout << axesCount << endl;
 	int count;
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_1), 1.0f, &Playerone, axes, buttons);
+	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_1), 0.25f, &Playerone, axes, buttons, &Playertwo);
 	
 
 
@@ -796,7 +845,7 @@ void Engine::playerInput(float t)
 	int count2;
 	const unsigned char* buttons2 = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &count2);
 
-	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_2), 1.0f, &Playertwo, axes2, buttons2);
+	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_2), 0.25f, &Playertwo, axes2, buttons2, &Playerone);
 
 
 
@@ -875,16 +924,8 @@ void Engine::playerInput(float t)
 
 		Playertwo.BaseAttack(&Playerone);
 	} 
-	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E) || keyCheck == true)
+	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E))
 	{
-		/*Playerone.BaseAttack(&Playertwo);
-		if (t <= 1.0f) {
-			Playerone.skillshotAttack(&Playertwo, &rockObject, t, keyCheck);
-			keyCheck = true;
-		}
-		else {
-			skillshotT = 0.0f;
-			keyCheck = false;
-		}*/
+		Playerone.skillshotAttack(&Playertwo);
 	}
 }

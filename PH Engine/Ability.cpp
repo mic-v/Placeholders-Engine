@@ -2,7 +2,7 @@
 
 Ability::Ability()
 {
-	std::cout << "ABILITY CLASS NOT SETUP CORRECTLY, USING DEFAULT CONSTRUCTOR." << std::endl;
+	//std::cout << "ABILITY CLASS NOT SETUP CORRECTLY, USING DEFAULT CONSTRUCTOR." << std::endl;
 
 }
 
