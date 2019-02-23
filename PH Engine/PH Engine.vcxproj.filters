@@ -30,6 +30,9 @@
     <Filter Include="Header Files\imgui">
       <UniqueIdentifier>{e9ce6ef7-f767-47da-af35-4afa66d870f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Skeletal Animations">
+      <UniqueIdentifier>{8065b51d-adc7-4629-bff9-423e3fece763}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -116,6 +119,18 @@
     <ClCompile Include="IO.cpp">
       <Filter>Header Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationTest.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletalModelSerializer.cpp">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletalModel.cpp">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpConverter.cpp">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Window.h">
@@ -195,6 +210,18 @@
     </ClInclude>
     <ClInclude Include="IO.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletalModelSerializer.h">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="SkeletalModel.h">
+      <Filter>Header Files\Skeletal Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpConverter.h">
+      <Filter>Header Files\Skeletal Animations</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

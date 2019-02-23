@@ -48,12 +48,26 @@
 #include "Engine/Math/math.h"
 #include "Engine/Shader.h"
 #include <btBulletDynamicsCommon.h>
+
+//#include <ozz/base/io/archive.h>
+
 using namespace plaho;
 using namespace graphics;
 
-int main()
+int main(int argc, char const* argv[])
 {
+
+	//ozz::io::File file12("Contents/OZZ/skeleton.ozz", "rb");
+
+//	if (!file.opened()) {
+//		std::cout << "sheyt" << std::endl;
+//		return EXIT_FAILURE;
+//	}
+
+
+
 	Engine::instance().startUp();
 	Engine::instance().runGame();
 	Engine::instance().shutDown();
+
 }

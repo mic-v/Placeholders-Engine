@@ -88,12 +88,12 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp14</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\OZZ\include;$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\assimp\include;$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;ozz_animation_fbx_r.lib;ozz_animation_offline_r.lib;ozz_animation_r.lib;ozz_animation_tools_r.lib;ozz_base_r.lib;ozz_geometry_r.lib;ozz_options_r.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\OZZ\lib;$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\assimp\lib;$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,6 +148,8 @@
     <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Ability.cpp" />
+    <ClCompile Include="AnimationTest.cpp" />
+    <ClCompile Include="AssimpConverter.cpp" />
     <ClCompile Include="CUBE.cpp" />
     <ClCompile Include="Engine\DebugDraw.cpp" />
     <ClCompile Include="Engine\Entity.cpp" />
@@ -167,11 +169,14 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SkeletalModel.cpp" />
+    <ClCompile Include="SkeletalModelSerializer.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
+    <ClInclude Include="AssimpConverter.h" />
     <ClInclude Include="CUBE.h" />
     <ClInclude Include="Engine\AudioModule.h" />
     <ClInclude Include="Engine\Camera.h" />
@@ -195,7 +200,10 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SkeletalModel.h" />
+    <ClInclude Include="SkeletalModelSerializer.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Types.h" />
     <ClInclude Include="VertexBufferObject.h" />
   </ItemGroup>
   <ItemGroup>
