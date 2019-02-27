@@ -38,6 +38,7 @@ Engine & Engine::instance()
 	}
 	
 }
+
 //
 bool Engine::startUp()
 {
@@ -182,7 +183,7 @@ bool Engine::startUp()
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.15f, 0.15f, 0.15f));
+	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.01f, 0.01f, 0.01f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
 
@@ -197,17 +198,17 @@ bool Engine::startUp()
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
 	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
-	object = Mesh();
-	object.loadFromFile("Contents/Models/Derbis.obj");
-	object2.loadFromFile("Contents/Models/untitled.obj");
-	rockMesh.loadFromFile("Contents/Models/rock.obj");
-	testMat.loadFile("Contents/Materials/Final Map.mtl");
+	//object = Mesh();
+	//object.loadFromFile("Contents/Models/Derbis.obj");
+	//object2.loadFromFile("Contents/Models/untitled.obj");
+	//rockMesh.loadFromFile("Contents/Models/rock.obj");
+	//testMat.loadFile("Contents/Materials/Final Map.mtl");
 
-	
-	basemap.loadFromFile("Contents/Models/mapBase.obj");
+	//
+	//basemap.loadFromFile("Contents/Models/mapBase.obj");
 
-	
-	river.loadFromFile("Contents/Models/river.obj");
+	//
+	//river.loadFromFile("Contents/Models/river.obj");
 
 	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
 	LUT.loadTexture();
@@ -444,11 +445,28 @@ bool Engine::startUp()
 		exit(0);
 	}
 
+	Assimp::Importer tempimporter;
+	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/look1.fbx",
+		aiProcess_LimitBoneWeights |
+		aiProcess_Triangulate |
+		aiProcess_SortByPType);
+
+	std::cout << tempimporter.GetErrorString() << std::endl;
+	AssimpConverter::Convert(pscene, g_Animatedmodel);
+
+	const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
+	//testmesh.loadFromFile("Contents/Models/meshskin.obj");
+	//std::cout << testmesh.getNumVertices() << std::endl;
+	
+	//std::cout << g_Animatedmodel << std::endl;
+	
+
+
 	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
 	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
-	Playerone = Player(Pose, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
+	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
 	Playertwo = Player(Pose, &BaseTex, glm::translate(Player1Transform, glm::vec3(45, 0, 0)), &testMat, 120, 1.0f);
 
 	River = Object(&river, &test3, objectTransform, &testMat);
@@ -466,14 +484,35 @@ bool Engine::startUp()
 	Playertwo.setAbility(&playtwoskillshot);
 
 	
-
+	
+	//std::vector<glm::vec3, std::allocator<glm::vec3>> *temp;
 
 
 	rockObject.setActive(false);
 	glfwGetTime();
 	return true;
 }
+void Engine::RenderAnimation()
+{
 
+	for (unsigned int i = 0; i < g_Animatedmodel.GetNumMeshes(); ++i)
+	{
+		const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(i);
+		glBegin(GL_TRIANGLES);
+		for (unsigned int j = 0; j < AnimMesh.NumIndices; ++j)
+		{
+			unsigned int Index = AnimMesh.pIndices[j];
+			glm::vec3 n = AnimMesh.pNormals[Index];
+			glm::vec3 v = AnimMesh.pVertices[Index];
+			
+			//cout << Index << endl;
+			cout << "INDEX: " << Index << "X: " << v.x << " Y: " << v.y << " Z: " << v.z << endl;
+			//glColor4f(n.x, n.y, n.z, 1);
+			//glVertex3f(v.x, v.y, v.z);
+		}
+		glEnd();
+	}
+}
 void Engine::shutDown()
 {
 
@@ -618,6 +657,8 @@ void Engine::controllerInput(int controller, float speed, Player *player, const 
 
 }
 
+
+
 void Engine::checkAnimation() {
 	
 	
@@ -638,12 +679,16 @@ void Engine::checkAnimation() {
 	}
 }
 
-
+double currentFrame;
+double lastFrame;
+double deltaTime;
 void Engine::runGame()
 {
 	double lastTime = glfwGetTime();
-	double deltaTime = 0.0;
+	//double deltaTime = 1;
 	int frames = 0;
+
+	
 
 	/*if (frameBuffer._IsInit == true && GLFWwindowsizefun()) {
 		frameBuffer.resize();
@@ -655,10 +700,20 @@ void Engine::runGame()
 
 	while (!glfwWindowShouldClose(glfwGetCurrentContext()))
 	{
+		currentFrame = glfwGetTime();
+
+		if (lastFrame != NULL) {
+			deltaTime = currentFrame - lastFrame;
+		}
+		else {
+			deltaTime = 0;
+		}
+
+		lastFrame = currentFrame;
+		//cout <<"DT: " << deltaTime << endl;
 		// Start the Dear ImGui frame
 		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		if (InputModule::getInstance().isKeyPressed(GLFW_KEY_ESCAPE))
 		{
 			glfwSetWindowShouldClose(glfwGetCurrentContext(), true);
@@ -746,6 +801,9 @@ void Engine::runGame()
 
 		Playerone.update();
 		Playertwo.update();
+
+		g_Animatedmodel.Update(currentTime - lastTime);
+		//std::cout << currentTime - lastTime << std::endl;
 		_camera->update();
 		InputModule::getInstance().update(currentTime - lastTime);
 		render();
@@ -757,69 +815,75 @@ void Engine::runGame()
 
 void Engine::render()
 {
-	/*glClear(GL_DEPTH_BUFFER_BIT);
-	LUT.Bind3D(12);
-	frameBuffer.clear();
-	frameBuffer.bind();*/
+	glClear(GL_DEPTH_BUFFER_BIT);
+	const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
+	//std::cout << "X: "<<AnimMesh.pTransformedVertices[0].x<< "Y: " << AnimMesh.pTransformedVertices[0].y << "z: " << AnimMesh.pTransformedVertices[0].z << std::endl;
+	
+	testmesh.loadFromVector2("Contents/Models/meshskin.obj2", g_Animatedmodel.GetMesh(0));
+
+	//testmesh.loadFromVector2("Contents/Models/meshskin.obj", AnimMesh);
+	//LUT.Bind3D(12);
+	//frameBuffer.clear();
+	//frameBuffer.bind();*/
 	glEnable(GL_DEPTH_TEST);
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", _camera->getLookMatrix());
-
-	//Lights here
+	////Lights here
 	first.LoadLight(&sh2);
 	second.LoadLight(&sh2);
-	
-	
-	//Objects here
-	Trees.LoadObject(&sh2);
-	BasePlate.LoadObject(&sh2);
+	//
+	//
+	////Objects here
+	//Trees.LoadObject(&sh2);
+	//BasePlate.LoadObject(&sh2);
+	//Playerone.LoadObject(&sh2);
 	Playerone.LoadObject(&sh2);
-	Playertwo.LoadObject(&sh2);
-	rockObject.LoadObject(&sh2);
-	rockObject2.LoadObject(&sh2);
-	
+	//rockObject.LoadObject(&sh2);
+	//rockObject2.LoadObject(&sh2);
+	//
 	sh2.unuse();
 
 
-	////TRANSPARENT OBJS HERE
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	sht.use();
+	//////TRANSPARENT OBJS HERE
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//sht.use();
 
-	sht.sendUniformMat4("projection", cameraProjection);
-	sht.sendUniformMat4("view", _camera->getLookMatrix());
-	first.LoadLight(&sht);
-	second.LoadLight(&sht);
-	
-	
-	River.LoadObject(&sht);
+	//sht.sendUniformMat4("projection", cameraProjection);
+	//sht.sendUniformMat4("view", _camera->getLookMatrix());
+	//first.LoadLight(&sht);
+	//second.LoadLight(&sht);
+	//
+	//
+	//River.LoadObject(&sht);
 
-	sht.unuse();
-	glDisable(GL_BLEND);
+	//sht.unuse();
+	//glDisable(GL_BLEND);
 
-	/*frameBuffer.unbind();
-	LUTShader.use();
-	LUTShader.sendUniformMat4("projection", cameraProjection);
-	LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
-	LUTShader.sendUniformFloat("uAmount", 1.0f);
-	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
-	frameBuffer.bindColorAsTexture(0, 13);
-	glDisable(GL_DEPTH_TEST);
-	frameBuffer.drawFSQ();
-	frameBuffer.unbindTexture(13);
-	LUTShader.unuse();
+	///*frameBuffer.unbind();
+	//LUTShader.use();
+	//LUTShader.sendUniformMat4("projection", cameraProjection);
+	//LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
+	//LUTShader.sendUniformFloat("uAmount", 1.0f);
+	//LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
+	//frameBuffer.bindColorAsTexture(0, 13);
+	//glDisable(GL_DEPTH_TEST);
+	//frameBuffer.drawFSQ();
+	//frameBuffer.unbindTexture(13);
+	//LUTShader.unuse();
 
-	LUT.unbind3D(12);*/
+	//LUT.unbind3D(12);*/
 
-	dynamicsWorld->debugDrawWorld();
-	glBindVertexArray(0);
-	TreeTex.Unbind();
+	//dynamicsWorld->debugDrawWorld();
+	//glBindVertexArray(0);
+	//TreeTex.Unbind();
 
-
+	//RenderAnimation();
+	//sh2.unuse();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+	
 	glfwSwapBuffers(glfwGetCurrentContext());
 	glfwPollEvents();
 }

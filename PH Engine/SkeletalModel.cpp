@@ -1,5 +1,5 @@
 #include "SkeletalModel.h"
-
+#include <iostream>
 //////////////////////////////////////////////////////////////////////////
 // Based on: http://ogldev.atspace.co.uk/www/tutorial38/tutorial38.html //
 //////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ namespace SA
 	{
 		m_AnimationTime = fmodf(m_AnimationTime + a_Dt * m_Animation.TicksPerSecond, m_Animation.Duration);
 		//
-
+	//	std::cout << "second DT: " << a_Dt << std::endl;
 		ReadNodeHierarchy(m_AnimationTime, m_Animation, m_Skeleton, m_Skeleton.Bones[0], glm::mat4x4(1));
 		TransformVertices(m_Skeleton);
 	}
@@ -80,15 +80,15 @@ namespace SA
 			glm::vec3 Translation = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim, AnimationTime);
 			glm::quat RotationQ = NodeAnimation_FindInterpolatedRotation(*pNewNodeAnim, AnimationTime);
 
-// 			glm::vec3 Scaling2(1, 1, 1);
-// 			glm::mat4x4 ScalingM2 = glm::scale(Scaling2);
+ 			//glm::vec3 Scaling2(.1, .1, .1);
+ 			//glm::mat4x4 ScalingM2 = glm::scale(Scaling2);
 
 			glm::mat4x4 RotationM2 = glm::toMat4(RotationQ);
 
 			glm::mat4x4 TranslationM2 = glm::translate(Translation);
 
 			// Combine the above transformations
-			NodeTransformation = TranslationM2 * RotationM2;// * ScalingM2;
+			NodeTransformation = TranslationM2 * RotationM2;// *ScalingM2;
 		}
 
 		glm::mat4x4 GlobalTransformation = ParentTransform * NodeTransformation;
@@ -116,8 +116,8 @@ namespace SA
 		{
 			// Reset mesh vertices and normals
 			sAnimatedMesh& AnimMesh = m_Meshes[i];
-			memset(AnimMesh.pTransformedVertices, 0, AnimMesh.NumVertices*sizeof(glm::vec3));
-			memset(AnimMesh.pTransformedNormals, 0, AnimMesh.NumVertices*sizeof(glm::vec3));
+			memset(AnimMesh.pTransformedVertices, 0, AnimMesh.NumVertices* sizeof(glm::vec3));
+			memset(AnimMesh.pTransformedNormals, 0, AnimMesh.NumVertices* sizeof(glm::vec3));
 
 			//
 			for (unsigned int i = 0; i < a_Skeleton.Bones.size(); ++i)
@@ -134,6 +134,10 @@ namespace SA
 					glm::vec3 inVertex = AnimMesh.pVertices[Weight.VertexID];
 					glm::vec3& outVertex = AnimMesh.pTransformedVertices[Weight.VertexID];
 					outVertex += glm::vec3((Transformation * glm::vec4(inVertex, 1)) * Weight.Weight);
+					//std::cout << Weight.VertexID << " x: " << AnimMesh.pVertices[Weight.VertexID].x << " y: " << AnimMesh.pVertices[Weight.VertexID].y << " z: " << AnimMesh.pVertices[Weight.VertexID].z << std::endl;
+
+					//std::cout << Weight.VertexID<< " x: " << outVertex.x << " y: " << outVertex.y << " z: " << outVertex.z << std::endl;
+					//std::cout << Weight.VertexID << " x: " << AnimMesh.pTransformedVertices[Weight.VertexID].x << " y: " << AnimMesh.pTransformedVertices[Weight.VertexID].y << " z: " << AnimMesh.pTransformedVertices[Weight.VertexID].z << std::endl;
 					//
 					glm::vec3 inNormal = AnimMesh.pNormals[Weight.VertexID];
 					glm::vec3& outNormal = AnimMesh.pTransformedNormals[Weight.VertexID];

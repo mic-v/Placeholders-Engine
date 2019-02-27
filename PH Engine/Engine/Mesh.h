@@ -2,17 +2,20 @@
 
 #include <string>
 #include <vector>
-#include "math.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include "../Types.h"
 //
 class Mesh
 {
 public:
 	Mesh();
 	~Mesh();
-
 	bool loadFromFile(const char *file);
+	bool loadFromVector(const char *file, const SA::sAnimatedMesh& temp);
+	bool loadFromVector2(const char *file, const SA::sAnimatedMesh& temp);
 	bool loadSecondFromFile(const char *file);
 
 	void unload();

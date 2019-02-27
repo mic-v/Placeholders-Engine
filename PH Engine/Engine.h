@@ -29,7 +29,10 @@
 #include "FrameBuffer.h"
 #include "Ability.h"
 #include <btBulletDynamicsCommon.h>
-
+#include "AssimpConverter.h"
+#include "SkeletalModel.h"
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 //#include "SOIL2.h"
 //
 using namespace plaho;
@@ -50,6 +53,8 @@ public:
 	bool runAnimation(std::vector<Mesh*> poselist, float);
 	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
 	
+	void RenderAnimation();
+
 	bool isActive;
 private:
 	Engine() {}
@@ -158,6 +163,7 @@ private:
 	Object rockObject2;
 	Player Playerone;
 	Player Playertwo;
+	Mesh testmesh;
 
 	Ability tempability;
 	Ability tempability2;
@@ -177,6 +183,9 @@ private:
 	glm::mat4 Player1Transform;
 	glm::mat4 cameraProjection;
 	glm::vec3 position;
+	
+	
+	SA::SkeletalModel g_Animatedmodel;
 
 	CUBELoader LUT;
 
