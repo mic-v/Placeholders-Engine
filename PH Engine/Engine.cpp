@@ -183,6 +183,7 @@ bool Engine::startUp()
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	Player2Transform = glm::scale(Player1Transform, glm::vec3(0.2f, 0.2f, 0.2f));
 	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.01f, 0.01f, 0.01f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
@@ -192,23 +193,23 @@ bool Engine::startUp()
 
 
 	
-	Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
-	_draw.line = ex;
+	//Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
+	//_draw.line = ex;
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
 	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
-	//object = Mesh();
-	//object.loadFromFile("Contents/Models/Derbis.obj");
-	//object2.loadFromFile("Contents/Models/untitled.obj");
-	//rockMesh.loadFromFile("Contents/Models/rock.obj");
-	//testMat.loadFile("Contents/Materials/Final Map.mtl");
+	object = Mesh();
+	object.loadFromFile("Contents/Models/Derbis.obj");
+	object2.loadFromFile("Contents/Models/untitled.obj");
+	rockMesh.loadFromFile("Contents/Models/rock.obj");
+	testMat.loadFile("Contents/Materials/Final Map.mtl");
 
-	//
-	//basemap.loadFromFile("Contents/Models/mapBase.obj");
+	
+	basemap.loadFromFile("Contents/Models/mapBase.obj");
 
-	//
-	//river.loadFromFile("Contents/Models/river.obj");
+	
+	river.loadFromFile("Contents/Models/river.obj");
 
 	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
 	LUT.loadTexture();
@@ -467,7 +468,7 @@ bool Engine::startUp()
 	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
-	Playertwo = Player(Pose, &BaseTex, glm::translate(Player1Transform, glm::vec3(45, 0, 0)), &testMat, 120, 1.0f);
+	Playertwo = Player(Pose, &BaseTex, glm::translate(Player2Transform, glm::vec3(45, 0, 0)), &testMat, 120, 1.0f);
 
 	River = Object(&river, &test3, objectTransform, &testMat);
 
@@ -492,27 +493,7 @@ bool Engine::startUp()
 	glfwGetTime();
 	return true;
 }
-void Engine::RenderAnimation()
-{
 
-	for (unsigned int i = 0; i < g_Animatedmodel.GetNumMeshes(); ++i)
-	{
-		const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(i);
-		glBegin(GL_TRIANGLES);
-		for (unsigned int j = 0; j < AnimMesh.NumIndices; ++j)
-		{
-			unsigned int Index = AnimMesh.pIndices[j];
-			glm::vec3 n = AnimMesh.pNormals[Index];
-			glm::vec3 v = AnimMesh.pVertices[Index];
-			
-			//cout << Index << endl;
-			cout << "INDEX: " << Index << "X: " << v.x << " Y: " << v.y << " Z: " << v.z << endl;
-			//glColor4f(n.x, n.y, n.z, 1);
-			//glVertex3f(v.x, v.y, v.z);
-		}
-		glEnd();
-	}
-}
 void Engine::shutDown()
 {
 
@@ -771,10 +752,7 @@ void Engine::runGame()
 
 		checkAnimation();
 
-		for (int i = 0; i < obj.size(); i++)
-		{
-			obj[i]->update(ImGui::GetIO().Framerate);
-		}
+		
 
 		for (int i = 0; i < 150; i++)
 		{
@@ -805,7 +783,7 @@ void Engine::runGame()
 		g_Animatedmodel.Update(currentTime - lastTime);
 		//std::cout << currentTime - lastTime << std::endl;
 		_camera->update();
-		InputModule::getInstance().update(currentTime - lastTime);
+		InputModule::getInstance().update((currentTime - lastTime)/2);
 		render();
 
 		
@@ -816,7 +794,7 @@ void Engine::runGame()
 void Engine::render()
 {
 	glClear(GL_DEPTH_BUFFER_BIT);
-	const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
+	//const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
 	//std::cout << "X: "<<AnimMesh.pTransformedVertices[0].x<< "Y: " << AnimMesh.pTransformedVertices[0].y << "z: " << AnimMesh.pTransformedVertices[0].z << std::endl;
 	
 	testmesh.loadFromVector2("Contents/Models/meshskin.obj2", g_Animatedmodel.GetMesh(0));
@@ -835,49 +813,49 @@ void Engine::render()
 	//
 	//
 	////Objects here
-	//Trees.LoadObject(&sh2);
-	//BasePlate.LoadObject(&sh2);
-	//Playerone.LoadObject(&sh2);
+	Trees.LoadObject(&sh2);
+	BasePlate.LoadObject(&sh2);
 	Playerone.LoadObject(&sh2);
-	//rockObject.LoadObject(&sh2);
-	//rockObject2.LoadObject(&sh2);
+	Playertwo.LoadObject(&sh2);
+	rockObject.LoadObject(&sh2);
+	rockObject2.LoadObject(&sh2);
 	//
 	sh2.unuse();
 
 
-	//////TRANSPARENT OBJS HERE
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//sht.use();
+	////TRANSPARENT OBJS HERE
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	sht.use();
 
-	//sht.sendUniformMat4("projection", cameraProjection);
-	//sht.sendUniformMat4("view", _camera->getLookMatrix());
-	//first.LoadLight(&sht);
-	//second.LoadLight(&sht);
-	//
-	//
-	//River.LoadObject(&sht);
+	sht.sendUniformMat4("projection", cameraProjection);
+	sht.sendUniformMat4("view", _camera->getLookMatrix());
+	first.LoadLight(&sht);
+	second.LoadLight(&sht);
+	
+	
+	River.LoadObject(&sht);
 
-	//sht.unuse();
-	//glDisable(GL_BLEND);
+	sht.unuse();
+	glDisable(GL_BLEND);
 
-	///*frameBuffer.unbind();
-	//LUTShader.use();
-	//LUTShader.sendUniformMat4("projection", cameraProjection);
-	//LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
-	//LUTShader.sendUniformFloat("uAmount", 1.0f);
-	//LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
-	//frameBuffer.bindColorAsTexture(0, 13);
-	//glDisable(GL_DEPTH_TEST);
-	//frameBuffer.drawFSQ();
-	//frameBuffer.unbindTexture(13);
-	//LUTShader.unuse();
+	/*frameBuffer.unbind();
+	LUTShader.use();
+	LUTShader.sendUniformMat4("projection", cameraProjection);
+	LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
+	LUTShader.sendUniformFloat("uAmount", 1.0f);
+	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
+	frameBuffer.bindColorAsTexture(0, 13);
+	glDisable(GL_DEPTH_TEST);
+	frameBuffer.drawFSQ();
+	frameBuffer.unbindTexture(13);
+	LUTShader.unuse();
 
-	//LUT.unbind3D(12);*/
+	LUT.unbind3D(12);*/
 
-	//dynamicsWorld->debugDrawWorld();
-	//glBindVertexArray(0);
-	//TreeTex.Unbind();
+	dynamicsWorld->debugDrawWorld();
+	glBindVertexArray(0);
+	TreeTex.Unbind();
 
 	//RenderAnimation();
 	//sh2.unuse();

@@ -515,7 +515,7 @@ bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
 	for (unsigned int i = 0; i < temp.NumIndices; ++i)
 	{
 		unsigned int Index = temp.pIndices[i];
-		glm::vec3 n = temp.pNormals[Index];
+		glm::vec3 n = temp.pTransformedNormals[Index];
 		glm::vec3 v = temp.pTransformedVertices[Index];
 		glm::vec3 newn = glm::vec3(n.x, n.y, n.z);
 		glm::vec3 newv = glm::vec3(v.x, v.y, v.z);

@@ -1,274 +1,280 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="Projite">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\graphics">
-      <UniqueIdentifier>{ecf9c13f-caf3-46cd-8b4a-53c0ec789330}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\math">
-      <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\atop">
-      <UniqueIdentifier>{2d9b8264-f315-4579-90f7-83df2a344ae2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\camera">
-      <UniqueIdentifier>{09965e1e-1926-4298-9655-4db262b0a16b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Shaders">
+    <Filter Include="Projite\Shaders">
       <UniqueIdentifier>{0a8190f0-1b32-4850-927e-3a31864dba23}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Manager">
-      <UniqueIdentifier>{a1eca2c2-2bac-45ef-8efd-828d1d1dc404}</UniqueIdentifier>
+    <Filter Include="Projite\Gameplay">
+      <UniqueIdentifier>{f02fc3a6-cde1-4222-aa3e-fbd82761e253}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\imgui">
-      <UniqueIdentifier>{e9ce6ef7-f767-47da-af35-4afa66d870f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Skeletal Animations">
+    <Filter Include="Projite\Gameplay\Animations">
       <UniqueIdentifier>{8065b51d-adc7-4629-bff9-423e3fece763}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Projite\Gameplay\Header Files">
+      <UniqueIdentifier>{d3ec07c4-8d8a-47b2-b891-ab6ab57fc174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Gameplay\Source Files">
+      <UniqueIdentifier>{d42dd507-7ea3-4188-94a1-b0b6804b1425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Graphics">
+      <UniqueIdentifier>{ecf9c13f-caf3-46cd-8b4a-53c0ec789330}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Graphics\Camera">
+      <UniqueIdentifier>{519444c5-3ec3-49f8-b823-d243ab61009e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Graphics\Header Files">
+      <UniqueIdentifier>{6a9c9a84-ce3f-49e4-a414-a82d22de16c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Graphics\Source Files">
+      <UniqueIdentifier>{d8e90e51-528c-422f-ace7-3f8a971fa808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Engine">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Projite\Engine\imgui">
+      <UniqueIdentifier>{e9ce6ef7-f767-47da-af35-4afa66d870f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Engine\math">
+      <UniqueIdentifier>{be6bc2c1-3aab-4870-bf7e-6bd7a99ca26d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Engine\Manager">
+      <UniqueIdentifier>{a1eca2c2-2bac-45ef-8efd-828d1d1dc404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Engine\Header Files">
+      <UniqueIdentifier>{5c597430-0db5-435f-a67b-1b208aeb70b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Projite\Engine\Source Files">
+      <UniqueIdentifier>{fc3da379-b3f0-4b73-81ea-bdad5d304b0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Window.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Mesh.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Shader.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine.cpp">
-      <Filter>Header Files\atop</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Camera.cpp">
-      <Filter>Header Files\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\FPSCamera.cpp">
-      <Filter>Header Files\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Light.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Texture.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Entity.cpp">
-      <Filter>Header Files\atop</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\InputModule.cpp">
-      <Filter>Header Files\Manager</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui.cpp">
-      <Filter>Header Files\imgui</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui_demo.cpp">
-      <Filter>Header Files\imgui</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui_draw.cpp">
-      <Filter>Header Files\imgui</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp">
-      <Filter>Header Files\imgui</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\examples\imgui_impl_glfw.cpp">
-      <Filter>Header Files\imgui</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\External\imgui\examples\imgui_impl_opengl3.cpp">
-      <Filter>Header Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\DebugDraw.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Header Files\atop</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FrameBuffer.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexBufferObject.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="CUBE.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Ability.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Skybox.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="IO.cpp">
-      <Filter>Header Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationTest.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Projite\Engine\imgui</Filter>
     </ClCompile>
     <ClCompile Include="SkeletalModelSerializer.cpp">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
     </ClCompile>
     <ClCompile Include="SkeletalModel.cpp">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
     </ClCompile>
     <ClCompile Include="AssimpConverter.cpp">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Camera.cpp">
+      <Filter>Projite\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FPSCamera.cpp">
+      <Filter>Projite\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CUBE.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\DebugDraw.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameBuffer.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Light.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Mesh.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Shader.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Texture.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBufferObject.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Window.cpp">
+      <Filter>Projite\Graphics\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Projite\Gameplay\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ability.cpp">
+      <Filter>Projite\Gameplay\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Projite\Gameplay\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Projite\Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Projite\Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Projite\Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Window.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Math\math.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Mesh.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FPSCamera.h">
-      <Filter>Header Files\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Shader.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.h">
-      <Filter>Header Files\atop</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Light.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Camera.h">
-      <Filter>Header Files\camera</Filter>
+      <Filter>Projite\Engine\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\RendererModule.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Level.h">
-      <Filter>Header Files\atop</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\AudioModule.h">
-      <Filter>Header Files\Manager</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\TextRenderer.h">
-      <Filter>Header Files\Manager</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\ResourceManager.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Texture.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Entity.h">
-      <Filter>Header Files\atop</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\InputModule.h">
-      <Filter>Header Files\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\DebugDraw.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files\atop</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\atop</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameBuffer.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBufferObject.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="CUBE.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Ability.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Skybox.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="IO.h">
-      <Filter>Header Files\graphics</Filter>
+      <Filter>Projite\Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
     </ClInclude>
     <ClInclude Include="SkeletalModelSerializer.h">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
     </ClInclude>
     <ClInclude Include="SkeletalModel.h">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
     </ClInclude>
     <ClInclude Include="AssimpConverter.h">
-      <Filter>Header Files\Skeletal Animations</Filter>
+      <Filter>Projite\Gameplay\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Camera.h">
+      <Filter>Projite\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FPSCamera.h">
+      <Filter>Projite\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CUBE.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DebugDraw.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameBuffer.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Light.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Mesh.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Shader.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Texture.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferObject.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Window.h">
+      <Filter>Projite\Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ability.h">
+      <Filter>Projite\Gameplay\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Projite\Gameplay\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Projite\Gameplay\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Projite\Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Contents\Shaders\1.colors.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\1.colors.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\1.lamp.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\1.lamp.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\4.2.texture.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\4.2.texture.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\rainbow.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\rainbow.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\texture.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\texture.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\passthrough.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\passthrough.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Engine\Point.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Engine\Point.vs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
     <None Include="Contents\Shaders\water.fs">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Projite\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@
 #include "Engine/Camera.h"
 #include "Engine/Light.h"
 #include "Engine/FPSCamera.h"
-#include "Engine/Entity.h"
+
 #include "Engine/InputModule.h"
 #include "Engine/DebugDraw.h"
 #include <vector>
@@ -53,7 +53,7 @@ public:
 	bool runAnimation(std::vector<Mesh*> poselist, float);
 	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
 	
-	void RenderAnimation();
+	
 
 	bool isActive;
 private:
@@ -145,7 +145,7 @@ private:
 
 
 	Mesh * Pose;
-	std::vector<Entity*> obj;
+	
 	//attack1 animation
 	std::vector<Mesh*> animation1;
 	//idleanimation
@@ -181,6 +181,7 @@ private:
 	Framebuffer frameBuffer;
 	glm::mat4 objectTransform;
 	glm::mat4 Player1Transform;
+	glm::mat4 Player2Transform;
 	glm::mat4 cameraProjection;
 	glm::vec3 position;
 	

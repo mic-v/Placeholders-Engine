@@ -148,11 +148,9 @@
     <ClCompile Include="..\External\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Ability.cpp" />
-    <ClCompile Include="AnimationTest.cpp" />
     <ClCompile Include="AssimpConverter.cpp" />
     <ClCompile Include="CUBE.cpp" />
     <ClCompile Include="Engine\DebugDraw.cpp" />
-    <ClCompile Include="Engine\Entity.cpp" />
     <ClCompile Include="Engine\InputModule.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
@@ -181,10 +179,8 @@
     <ClInclude Include="Engine\AudioModule.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\DebugDraw.h" />
-    <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
     <ClInclude Include="Engine\InputModule.h" />
-    <ClInclude Include="Engine\Level.h" />
     <ClInclude Include="Engine\Light.h" />
     <ClInclude Include="Engine\Math\math.h" />
     <ClInclude Include="Engine\Mesh.h" />
