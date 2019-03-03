@@ -94,75 +94,75 @@ bool Engine::startUp()
 
 	
 
-	_draw = DebugDraw();
+	//_draw = DebugDraw();
 	//PHYSICS
 	//bullet here
-	collisionConfiguration = new btDefaultCollisionConfiguration();
-	dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	overlappingPairCache = new btDbvtBroadphase();
-	solver = new btSequentialImpulseConstraintSolver;
-	dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-	
-	dynamicsWorld->setGravity(btVector3(0, 0, 0));
-	_draw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	dynamicsWorld->setDebugDrawer(&_draw);
+	//collisionConfiguration = new btDefaultCollisionConfiguration();
+	//dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	//overlappingPairCache = new btDbvtBroadphase();
+	//solver = new btSequentialImpulseConstraintSolver;
+	//dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+	//
+	//dynamicsWorld->setGravity(btVector3(0, 0, 0));
+	//_draw.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	//dynamicsWorld->setDebugDrawer(&_draw);
 
-	{
-		btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
+	//{
+	//	btCollisionShape* groundShape = new btBoxShape(btVector3(btScalar(50.), btScalar(50.), btScalar(50.)));
 
-		collisionShapes.push_back(groundShape);
+	//	collisionShapes.push_back(groundShape);
 
-		btTransform groundTransform;
-		groundTransform.setIdentity();
-		groundTransform.setOrigin(btVector3(0, -56, 0));
+	//	btTransform groundTransform;
+	//	groundTransform.setIdentity();
+	//	groundTransform.setOrigin(btVector3(0, -56, 0));
 
-		btScalar mass(0.);
+	//	btScalar mass(0.);
 
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-		bool isDynamic = (mass != 0.f);
+	//	//rigidbody is dynamic if and only if mass is non zero, otherwise static
+	//	bool isDynamic = (mass != 0.f);
 
-		btVector3 localInertia(0, 0, 0);
-		if (isDynamic)
-			groundShape->calculateLocalInertia(mass, localInertia);
+	//	btVector3 localInertia(0, 0, 0);
+	//	if (isDynamic)
+	//		groundShape->calculateLocalInertia(mass, localInertia);
 
-		//using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
+	//	//using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+	//	btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+	//	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, groundShape, localInertia);
+	//	btRigidBody* body = new btRigidBody(rbInfo);
 
-		//add the body to the dynamics world
-		dynamicsWorld->addRigidBody(body);
-	}
+	//	//add the body to the dynamics world
+	//	dynamicsWorld->addRigidBody(body);
+	//}
 
-	{
-		//create a dynamic rigidbody
+	//{
+	//	//create a dynamic rigidbody
 
-		//btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
-		btCollisionShape* colShape = new btSphereShape(btScalar(1.));
-		collisionShapes.push_back(colShape);
+	//	//btCollisionShape* colShape = new btBoxShape(btVector3(1,1,1));
+	//	btCollisionShape* colShape = new btSphereShape(btScalar(1.));
+	//	collisionShapes.push_back(colShape);
 
-		/// Create Dynamic Objects
-		btTransform startTransform;
-		startTransform.setIdentity();
+	//	/// Create Dynamic Objects
+	//	btTransform startTransform;
+	//	startTransform.setIdentity();
 
-		btScalar mass(1.f);
+	//	btScalar mass(1.f);
 
-		//rigidbody is dynamic if and only if mass is non zero, otherwise static
-		bool isDynamic = (mass != 0.f);
+	//	//rigidbody is dynamic if and only if mass is non zero, otherwise static
+	//	bool isDynamic = (mass != 0.f);
 
-		btVector3 localInertia(0, 0, 0);
-		if (isDynamic)
-			colShape->calculateLocalInertia(mass, localInertia);
+	//	btVector3 localInertia(0, 0, 0);
+	//	if (isDynamic)
+	//		colShape->calculateLocalInertia(mass, localInertia);
 
-		startTransform.setOrigin(btVector3(2, 10, 0));
+	//	startTransform.setOrigin(btVector3(2, 10, 0));
 
-		//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
-		btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
-		btRigidBody* body = new btRigidBody(rbInfo);
+	//	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
+	//	btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
+	//	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, myMotionState, colShape, localInertia);
+	//	btRigidBody* body = new btRigidBody(rbInfo);
 
-		dynamicsWorld->addRigidBody(body);
-	}
+	//	dynamicsWorld->addRigidBody(body);
+	//}
 
 	isActive = true;
 	_camera = nullptr;
@@ -197,7 +197,7 @@ bool Engine::startUp()
 	//_draw.line = ex;
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
-	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
+	/*LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Derbis.obj");
@@ -212,7 +212,7 @@ bool Engine::startUp()
 	river.loadFromFile("Contents/Models/river.obj");
 
 	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
-	LUT.loadTexture();
+	LUT.loadTexture();*/
 	
 
 
@@ -220,209 +220,13 @@ bool Engine::startUp()
 
 
 
-	//THIS WILL ALL BE DEPRECATED WE ONLY USED IT FOR DEMO/EXPO PURPOSES
-	//ATTACK ANIMATION
-
-	//attackframe1.loadFromFile("Contents/Models/Attack/frame1.obj");
-	//attackframe1.loadSecondFromFile("Contents/Models/Attack/frame2.obj");
-	//
-	//attackframe2.loadFromFile("Contents/Models/Attack/frame2.obj");
-	//attackframe2.loadSecondFromFile("Contents/Models/Attack/frame3.obj");
-	//
-	//attackframe3.loadFromFile("Contents/Models/Attack/frame3.obj");
-	//attackframe3.loadSecondFromFile("Contents/Models/Attack/frame4.obj");
-	//
-	//attackframe4.loadFromFile("Contents/Models/Attack/frame4.obj");
-	//attackframe4.loadSecondFromFile("Contents/Models/Attack/frame5.obj");
-	//
-	//attackframe5.loadFromFile("Contents/Models/Attack/frame5.obj");
-	//attackframe5.loadSecondFromFile("Contents/Models/Attack/frame4.obj");
-	//
-	//attackframe6.loadFromFile("Contents/Models/Attack/frame4.obj");
-	//attackframe6.loadSecondFromFile("Contents/Models/Attack/frame3.obj");
-	//
-	//attackframe7.loadFromFile("Contents/Models/Attack/frame3.obj");
-	//attackframe7.loadSecondFromFile("Contents/Models/Attack/frame2.obj");
-	//
-	//attackframe8.loadFromFile("Contents/Models/Attack/frame2.obj");
-	//attackframe8.loadSecondFromFile("Contents/Models/Attack/frame1.obj");
-	//
-	//attackframe9.loadFromFile("Contents/Models/Attack/frame1.obj");
-	//attackframe9.loadSecondFromFile("Contents/Models/Attack/frame1.obj");
-
-	////ATTACK 2 ANIMATION
-	//attack2frame1.loadFromFile("Contents/Models/Attack2/frame1.obj");
-	//attack2frame1.loadSecondFromFile("Contents/Models/Attack2/frame2.obj");
-	//  
-	//attack2frame2.loadFromFile("Contents/Models/Attack2/frame2.obj");
-	//attack2frame2.loadSecondFromFile("Contents/Models/Attack2/frame3.obj");
-	//	  
-	//attack2frame3.loadFromFile("Contents/Models/Attack2/frame3.obj");
-	//attack2frame3.loadSecondFromFile("Contents/Models/Attack2/frame4.obj");
-	//	  
-	//attack2frame4.loadFromFile("Contents/Models/Attack2/frame4.obj");
-	//attack2frame4.loadSecondFromFile("Contents/Models/Attack2/frame5.obj");
-	//	  
-	//attack2frame5.loadFromFile("Contents/Models/Attack2/frame5.obj");
-	//attack2frame5.loadSecondFromFile("Contents/Models/Attack2/frame6.obj");
-	//	  
-	//attack2frame6.loadFromFile("Contents/Models/Attack2/frame6.obj");
-	//attack2frame6.loadSecondFromFile("Contents/Models/Attack2/frame5.obj");
-	//	  
-	//attack2frame7.loadFromFile("Contents/Models/Attack2/frame5.obj");
-	//attack2frame7.loadSecondFromFile("Contents/Models/Attack2/frame4.obj");
-	//	  
-	//attack2frame8.loadFromFile("Contents/Models/Attack2/frame4.obj");
-	//attack2frame8.loadSecondFromFile("Contents/Models/Attack2/frame3.obj");
-	//	  
-	//attack2frame9.loadFromFile("Contents/Models/Attack2/frame3.obj");
-	//attack2frame9.loadSecondFromFile("Contents/Models/Attack2/frame2.obj");
-	//
-	//attack2frame10.loadFromFile("Contents/Models/Attack2/frame2.obj");
-	//attack2frame10.loadSecondFromFile("Contents/Models/Attack2/frame1.obj");
-
-
-	//IDLE ANIMATION
-	
-	idleframe1.loadFromFile("Contents/Models/Idle/frame1.obj");
-	//idleframe1.loadSecondFromFile("Contents/Models/Idle/frame2.obj");
-	//
-	//idleframe2.loadFromFile("Contents/Models/Idle/frame2.obj");
-	//idleframe2.loadSecondFromFile("Contents/Models/Idle/frame3.obj");
-	//
-	//idleframe3.loadFromFile("Contents/Models/Idle/frame3.obj");
-	//idleframe3.loadSecondFromFile("Contents/Models/Idle/frame4.obj");
-	//
-	//idleframe4.loadFromFile("Contents/Models/Idle/frame4.obj");
-	//idleframe4.loadSecondFromFile("Contents/Models/Idle/frame3.obj");
-	//
-	//idleframe5.loadFromFile("Contents/Models/Idle/frame3.obj");
-	//idleframe5.loadSecondFromFile("Contents/Models/Idle/frame2.obj");
-	//
-	//idleframe6.loadFromFile("Contents/Models/Idle/frame2.obj");
-	//idleframe6.loadSecondFromFile("Contents/Models/Idle/frame1.obj");
-	//
-	//idleframe7.loadFromFile("Contents/Models/Idle/frame1.obj");
-	//idleframe7.loadSecondFromFile("Contents/Models/Idle/frame1.obj");
-
-
-
-	//runframe1.loadFromFile("Contents/Models/Run/frame1.obj");
-	//runframe1.loadSecondFromFile("Contents/Models/Run/frame2.obj");
-	//
-	//runframe2.loadFromFile("Contents/Models/Run/frame2.obj");
-	//runframe2.loadSecondFromFile("Contents/Models/Run/frame3.obj");
-	//
-	//runframe3.loadFromFile("Contents/Models/Run/frame3.obj");
-	//runframe3.loadSecondFromFile("Contents/Models/Run/frame4.obj");
-	//
-	//runframe4.loadFromFile("Contents/Models/Run/frame4.obj");
-	//runframe4.loadSecondFromFile("Contents/Models/Run/frame5.obj");
-	//
-	//runframe5.loadFromFile("Contents/Models/Run/frame5.obj");
-	//runframe5.loadSecondFromFile("Contents/Models/Run/frame6.obj");
-	//
-	//runframe6.loadFromFile("Contents/Models/Run/frame6.obj");
-	//runframe6.loadSecondFromFile("Contents/Models/Run/frame7.obj");
-	//
-	//runframe7.loadFromFile("Contents/Models/Run/frame7.obj");
-	//runframe7.loadSecondFromFile("Contents/Models/Run/frame8.obj");
-
-	//runframe8.loadFromFile("Contents/Models/Run/frame8.obj");
-	//runframe8.loadSecondFromFile("Contents/Models/Run/frame9.obj");
-
-	//runframe9.loadFromFile("Contents/Models/Run/frame9.obj");
-	//runframe9.loadSecondFromFile("Contents/Models/Run/frame10.obj");
-
-	//runframe10.loadFromFile("Contents/Models/Run/frame10.obj");
-	//runframe10.loadSecondFromFile("Contents/Models/Run/frame9.obj");
-
-	//runframe11.loadFromFile("Contents/Models/Run/frame9.obj");
-	//runframe11.loadSecondFromFile("Contents/Models/Run/frame8.obj");
-
-	//runframe12.loadFromFile("Contents/Models/Run/frame8.obj");
-	//runframe12.loadSecondFromFile("Contents/Models/Run/frame7.obj");
-
-	//runframe13.loadFromFile("Contents/Models/Run/frame7.obj");
-	//runframe13.loadSecondFromFile("Contents/Models/Run/frame6.obj");
-
-	//runframe14.loadFromFile("Contents/Models/Run/frame6.obj");
-	//runframe14.loadSecondFromFile("Contents/Models/Run/frame5.obj");
-
-	//runframe15.loadFromFile("Contents/Models/Run/frame5.obj");
-	//runframe15.loadSecondFromFile("Contents/Models/Run/frame4.obj");
-
-	//runframe16.loadFromFile("Contents/Models/Run/frame4.obj");
-	//runframe16.loadSecondFromFile("Contents/Models/Run/frame3.obj");
-
-	//runframe17.loadFromFile("Contents/Models/Run/frame3.obj");
-	//runframe17.loadSecondFromFile("Contents/Models/Run/frame2.obj");
-
-	//runframe18.loadFromFile("Contents/Models/Run/frame2.obj");
-	//runframe18.loadSecondFromFile("Contents/Models/Run/frame1.obj");
-
 
 	
+	//idleframe1.loadFromFile("Contents/Models/Idle/frame1.obj");
 
 
 
-	////Spear attack animation bount to F
-	//animation1.push_back(&attackframe1);
-	//animation1.push_back(&attackframe2);
-	//animation1.push_back(&attackframe3);
-	//animation1.push_back(&attackframe4);
-	//animation1.push_back(&attackframe5);
-	//animation1.push_back(&attackframe6);
-	//animation1.push_back(&attackframe7);
-	//animation1.push_back(&attackframe8);
-	//animation1.push_back(&attackframe9);
-
-	////Plays automatically
-	//animationidle.push_back(&idleframe1);
-	//animationidle.push_back(&idleframe2);
-	//animationidle.push_back(&idleframe3);
-	//animationidle.push_back(&idleframe4);
-	//animationidle.push_back(&idleframe5);
-	//animationidle.push_back(&idleframe6);
-	//animationidle.push_back(&idleframe7);
-
-	////forwards animation bound to W
-	//animation2.push_back(&runframe1);
-	//animation2.push_back(&runframe2);
-	//animation2.push_back(&runframe3);
-	//animation2.push_back(&runframe4);
-	//animation2.push_back(&runframe5);
-	//animation2.push_back(&runframe6);
-	//animation2.push_back(&runframe7);
-	//animation2.push_back(&runframe8);
-	//animation2.push_back(&runframe9);
-
-	////backwards animation bound to S
-	//animation3.push_back(&runframe10);
-	//animation3.push_back(&runframe11);
-	//animation3.push_back(&runframe12);
-	//animation3.push_back(&runframe13);
-	//animation3.push_back(&runframe14);
-	//animation3.push_back(&runframe15);
-	//animation3.push_back(&runframe16);
-	//animation3.push_back(&runframe17);
-	//animation3.push_back(&runframe18);
-
-	////Attack to animation bound to G
-	//animation4.push_back(&attack2frame1);
-	//animation4.push_back(&attack2frame2);
-	//animation4.push_back(&attack2frame3);
-	//animation4.push_back(&attack2frame4);
-	//animation4.push_back(&attack2frame5);
-	//animation4.push_back(&attack2frame6);
-	//animation4.push_back(&attack2frame7);
-	//animation4.push_back(&attack2frame8);
-	//animation4.push_back(&attack2frame9);
-	//animation4.push_back(&attack2frame10);
-
-
-
-	Pose = &idleframe1;
+	//Pose = &idleframe1;
 
 	first = Light(glm::vec4(4.0f, 5.0f, 0, 1.0f), glm::vec3(0.0f, 0.0f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(0.7f, 0.5f, 0.2f));
 	second = Light(glm::vec4(0.0f, 5.0f, 0, 1.0f), glm::vec3(0.1f, 0.1f, 0.15f), glm::vec3(0.7f, 0.5f, 0.2f), glm::vec3(0.7f, 0.5f, 0.2f));
@@ -460,8 +264,11 @@ bool Engine::startUp()
 	//std::cout << testmesh.getNumVertices() << std::endl;
 	
 	//std::cout << g_Animatedmodel << std::endl;
+	//g_Animatedmodel.Update(0.1);
+	g_Animatedmodel.loadHierarchy();
 	
-
+	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
+	
 
 	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
 	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
@@ -501,25 +308,25 @@ void Engine::shutDown()
 	TreeTex.Unload();
 
 	//remove the rigidbodies from the dynamics world and delete them
-	for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
-	{
-		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
-			delete body->getMotionState();
-		}
-		dynamicsWorld->removeCollisionObject(obj);
-		delete obj;
-	}
+	//for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--)
+	//{
+	//	btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
+	//	btRigidBody* body = btRigidBody::upcast(obj);
+	//	if (body && body->getMotionState())
+	//	{
+	//		delete body->getMotionState();
+	//	}
+	//	dynamicsWorld->removeCollisionObject(obj);
+	//	delete obj;
+	//}
 
-	//delete collision shapes
-	for (int j = 0; j < collisionShapes.size(); j++)
-	{
-		btCollisionShape* shape = collisionShapes[j];
-		collisionShapes[j] = 0;
-		delete shape;
-	}
+	////delete collision shapes
+	//for (int j = 0; j < collisionShapes.size(); j++)
+	//{
+	//	btCollisionShape* shape = collisionShapes[j];
+	//	collisionShapes[j] = 0;
+	//	delete shape;
+	//}
 
 	//delete dynamics world
 	delete dynamicsWorld;
@@ -748,42 +555,40 @@ void Engine::runGame()
 			lastTime += 1.0;
 		}
 		playerInput(skillshotT);
-		skillshotT += 0.01;
-
-		checkAnimation();
 
 		
 
-		for (int i = 0; i < 150; i++)
-		{
-			dynamicsWorld->stepSimulation(1.f / 60.f, 10);
+		//for (int i = 0; i < 150; i++)
+		//{
+		//	dynamicsWorld->stepSimulation(1.f / 60.f, 10);
 
-			//print positions of all objects
-			for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
-			{
-				btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-				btRigidBody* body = btRigidBody::upcast(obj);
-				btTransform trans;
-				if (body && body->getMotionState())
-				{
-					body->getMotionState()->getWorldTransform(trans);
-				}
-				else
-				{
-					trans = obj->getWorldTransform();
-				}
-			}
-		}
-		
+		//	//print positions of all objects
+		//	for (int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--)
+		//	{
+		//		btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+		//		btRigidBody* body = btRigidBody::upcast(obj);
+		//		btTransform trans;
+		//		if (body && body->getMotionState())
+		//		{
+		//			body->getMotionState()->getWorldTransform(trans);
+		//		}
+		//		else
+		//		{
+		//			trans = obj->getWorldTransform();
+		//		}
+		//	}
+		//}
+		//
 
 
 		Playerone.update();
 		Playertwo.update();
 
-		g_Animatedmodel.Update(currentTime - lastTime);
+		g_Animatedmodel.Update(deltaTime);
+
 		//std::cout << currentTime - lastTime << std::endl;
 		_camera->update();
-		InputModule::getInstance().update((currentTime - lastTime)/2);
+		InputModule::getInstance().update((currentTime - lastTime));
 		render();
 
 		
@@ -793,12 +598,13 @@ void Engine::runGame()
 
 void Engine::render()
 {
+	//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT);
 	//const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
 	//std::cout << "X: "<<AnimMesh.pTransformedVertices[0].x<< "Y: " << AnimMesh.pTransformedVertices[0].y << "z: " << AnimMesh.pTransformedVertices[0].z << std::endl;
 	
-	testmesh.loadFromVector2("Contents/Models/meshskin.obj2", g_Animatedmodel.GetMesh(0));
-
+	//testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel.GetMesh(0));
+	
 	//testmesh.loadFromVector2("Contents/Models/meshskin.obj", AnimMesh);
 	//LUT.Bind3D(12);
 	//frameBuffer.clear();
@@ -807,38 +613,39 @@ void Engine::render()
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", _camera->getLookMatrix());
+	g_Animatedmodel.sendToShader(&sh2);
 	////Lights here
 	first.LoadLight(&sh2);
 	second.LoadLight(&sh2);
 	//
 	//
-	////Objects here
-	Trees.LoadObject(&sh2);
-	BasePlate.LoadObject(&sh2);
+	////Objects here//
+	//Trees.LoadObject(&sh2);
+	//BasePlate.LoadObject(&sh2);
 	Playerone.LoadObject(&sh2);
-	Playertwo.LoadObject(&sh2);
-	rockObject.LoadObject(&sh2);
-	rockObject2.LoadObject(&sh2);
+	//Playertwo.LoadObject(&sh2);
+	//rockObject.LoadObject(&sh2);
+	//rockObject2.LoadObject(&sh2);
 	//
 	sh2.unuse();
 
-
+	//---------------------------------------------------------
 	////TRANSPARENT OBJS HERE
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	sht.use();
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//sht.use();
 
-	sht.sendUniformMat4("projection", cameraProjection);
-	sht.sendUniformMat4("view", _camera->getLookMatrix());
-	first.LoadLight(&sht);
-	second.LoadLight(&sht);
-	
-	
-	River.LoadObject(&sht);
+	//sht.sendUniformMat4("projection", cameraProjection);
+	//sht.sendUniformMat4("view", _camera->getLookMatrix());
+	//first.LoadLight(&sht);
+	//second.LoadLight(&sht);
+	//
+	//
+	//River.LoadObject(&sht);
 
-	sht.unuse();
-	glDisable(GL_BLEND);
-
+	//sht.unuse();
+	//glDisable(GL_BLEND);
+	//---------------------------------------------------------
 	/*frameBuffer.unbind();
 	LUTShader.use();
 	LUTShader.sendUniformMat4("projection", cameraProjection);
@@ -853,7 +660,7 @@ void Engine::render()
 
 	LUT.unbind3D(12);*/
 
-	dynamicsWorld->debugDrawWorld();
+	//dynamicsWorld->debugDrawWorld();
 	glBindVertexArray(0);
 	TreeTex.Unbind();
 

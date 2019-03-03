@@ -495,10 +495,117 @@ bool Mesh::loadFromVector(const char *file, const SA::sAnimatedMesh& temp)
 	return true;
 }
 
-
-bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
+bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& animodel)
 {
+
+	//glDeleteBuffers(1, &VBO_Verticies);
+	//glDeleteBuffers(1, &VBO_UVS);
+	//glDeleteBuffers(1, &VBO_Normals);
+	//glDeleteVertexArrays(1, &VAO);
+
+	char inputString[CHAR_BUFFER_SIZE];
+
+	std::vector<glm::vec3> vertexData;
+	std::vector<glm::vec3> normalData;
+	std::vector<glm::vec4> vertexBoneData;
+	std::vector<glm::vec4> BoneWeightData;
+
+	 const SA::sAnimatedMesh& temp = animodel.GetMesh(0);
+	for (unsigned int i = 0; i < temp.NumIndices; ++i)
+	{
+		unsigned int Index = temp.pIndices[i];
+		glm::vec3 n = temp.pNormals[Index];
+		glm::vec3 v = temp.pVertices[Index];
+		glm::vec4 vertbones = animodel.vertbonedata[Index];
+		glm::vec4 boneweights = animodel.weightdata[Index];
+
+
+		glm::vec3 newn = glm::vec3(n.x, n.y, n.z);
+		glm::vec3 newv = glm::vec3(v.x, v.y, v.z);
+		//std::cout << "xv: "<< vertbones.x << "yv: " << vertbones.y <<"zv: " << vertbones.z << std::endl;
+		//std::cout << "xv: " << newv.x << "yv: " << newv.y << "zv: " << newv.z << std::endl;
+		//std::cout << "xb: " << boneweights.x << "yb: " << boneweights.y << "zb: " << boneweights.z << std::endl;
+		normalData.push_back(newn);
+		vertexData.push_back(newv);
+		vertexBoneData.push_back(vertbones);
+		BoneWeightData.push_back(boneweights);
+		//temp.
+	}
+	std::cout << "n: " << vertexBoneData.size() << std::endl;
+	std::cout << "v vec: " << BoneWeightData.size() << std::endl;
+	std::cout << "v: " << vertexData.size() << std::endl;
+	//std::cout << "numofverts: " << temp.NumVertices << std::endl;
+	//std::cout << "numofind: " << temp.NumIndices << std::endl;
+	//glm::vec3 *parray = &(temp.pNormals[0]);
+
+	_numFaces = vertexData.size();
+	_numVertices = vertexData.size() * 3;
+	_numVertBones = vertexBoneData.size();
+	_numBoneWeights = BoneWeightData.size();
+
+
+	//send data to opengl
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO_Verticies);
+
+	glGenBuffers(1, &VBO_Normals);
+	glGenBuffers(1, &VBO_VERTEXBONEDATA);
+	glGenBuffers(1, &VBO_BONEWEIGHTDATA);
+	glBindVertexArray(VAO);
+
+	glEnableVertexAttribArray(0); //Vertex
+	glEnableVertexAttribArray(2); // NORMALS
+	glEnableVertexAttribArray(3); //BONES AFFECTING VERT
+	glEnableVertexAttribArray(4); //WEIGHT OF BONES
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Verticies);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size() * 3, &vertexData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedTextureData.size(), &unpackedTextureData[0], GL_DYNAMIC_DRAW);
+	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normalData.size() * 3, &normalData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
 	
+	//FOR MESH SKINNING
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_VERTEXBONEDATA);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexBoneData.size() * 4, &vertexBoneData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_BONEWEIGHTDATA);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * BoneWeightData.size() * 4, &BoneWeightData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+
+
+
+	return true;
+}
+
+//glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
+//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normalData.size() * 3, &normalData[0], GL_DYNAMIC_DRAW);
+//glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+//
+//
+////FOR MESH SKINNING
+//glBindBuffer(GL_ARRAY_BUFFER, VBO_VERTEXBONEDATA);
+//glBufferData(GL_ARRAY_BUFFER, sizeof(int) * vertexBoneData.size() * 4, &vertexBoneData[0], GL_DYNAMIC_DRAW);
+//glVertexAttribPointer(3, 4, GL_INT, GL_FALSE, sizeof(int) * 4, BUFFER_OFFSET(0));
+//
+//glBindBuffer(GL_ARRAY_BUFFER, VBO_BONEWEIGHTDATA);
+//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * BoneWeightData.size() * 4, &BoneWeightData[0], GL_DYNAMIC_DRAW);
+//glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 4, BUFFER_OFFSET(0));
+
+bool Mesh::loadFromAnimatedModel2(const char *file, const  SA::SkeletalModel& animatedmodel)
+{
+
 	glDeleteBuffers(1, &VBO_Verticies);
 	glDeleteBuffers(1, &VBO_UVS);
 	glDeleteBuffers(1, &VBO_Normals);
@@ -510,8 +617,7 @@ bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
 
 	std::vector<glm::vec3> normalData;
 
-	
-
+	const SA::sAnimatedMesh& temp = animatedmodel.GetMesh(0);
 	for (unsigned int i = 0; i < temp.NumIndices; ++i)
 	{
 		unsigned int Index = temp.pIndices[i];
@@ -525,15 +631,16 @@ bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
 		vertexData.push_back(newv);
 		//temp.
 	}
-	std::cout <<"n: " <<normalData.size() << std::endl;
-	std::cout << "v: "<<vertexData.size() << std::endl;
+	std::cout << "n: " << normalData.size() << std::endl;
+	std::cout << "v vec: " << temp.NumVertices << std::endl;
+	std::cout << "v: " << vertexData.size() << std::endl;
 	//std::cout << "numofverts: " << temp.NumVertices << std::endl;
 	//std::cout << "numofind: " << temp.NumIndices << std::endl;
 	//glm::vec3 *parray = &(temp.pNormals[0]);
 
 	_numFaces = vertexData.size();
 	_numVertices = vertexData.size() * 3;
-	
+
 
 	//send data to opengl
 	glGenVertexArrays(1, &VAO);
@@ -544,7 +651,7 @@ bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
 	glBindVertexArray(VAO);
 
 	glEnableVertexAttribArray(0); //Vertex
-	
+
 	glEnableVertexAttribArray(2); // NORMALS
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Verticies);
@@ -563,10 +670,11 @@ bool Mesh::loadFromVector2(const char *file, const SA::sAnimatedMesh& temp)
 	glBindVertexArray(0);
 
 
-	
+
 
 	return true;
 }
+
 
 
 void Mesh::unload()

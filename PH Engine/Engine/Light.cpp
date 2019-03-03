@@ -51,6 +51,7 @@ void Light::LoadLight(Shader *LightShader) {
 	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].Attenuation_Linear", LinearAttenuation);
 	LightShader->sendUniformFloat("pointLights[" + std::to_string(thisLight) + "].Attenuation_Quadratic", QuadraticAttenuation);
 	
+	
 }
 
 

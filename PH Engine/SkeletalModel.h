@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Types.h"
-
+#include <../../Engine/Shader.h>
 namespace SA
 {
 	class SkeletalModel
@@ -11,7 +11,8 @@ namespace SA
 		~SkeletalModel();
 
 		void                            Update(float a_Dt);
-
+		void							sendToShader(Shader *temp);
+		void                            loadHierarchy();
 		unsigned int                    GetNumMeshes() const { return m_Meshes.size(); }
 		const sAnimatedMesh&            GetMesh(unsigned int i) const { return m_Meshes[i]; }
 		void                            AddMesh(const sAnimatedMesh& a_Mesh) { m_Meshes.push_back(a_Mesh); }
@@ -26,7 +27,8 @@ namespace SA
 		const sAnimation&               GetAnimation() const { return m_Animation; }
 
 		void                            Clear();
-
+		std::vector<glm::vec4> vertbonedata;
+		std::vector<glm::vec4> weightdata;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
@@ -37,7 +39,7 @@ namespace SA
 
 	private:
 		void                            ReadNodeHierarchy(float AnimationTime, sAnimation& a_Animation, sSkeleton& a_Skeleton, sBone& a_Bone, const glm::mat4x4& ParentTransform);
-		void                            TransformVertices(const sSkeleton& a_Skeleton);
+		void							Initialize(const sSkeleton& a_Skeleton);
 	};
 }
 
