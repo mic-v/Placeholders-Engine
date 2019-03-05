@@ -46,12 +46,13 @@ public:
 
 	bool startUp();
 	void shutDown();
+	void loadAssimp(std::string filename, SA::SkeletalModel* tempskele);
 	void runGame();
 	void render();
 	void playerInput(float t);
 	void checkAnimation();
 	bool runAnimation(std::vector<Mesh*> poselist, float);
-	void controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
+	void controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
 	
 	
 
@@ -169,6 +170,7 @@ private:
 	Ability tempability2;
 	Skillshot playoneskillshot;
 	Skillshot playtwoskillshot;
+	Shader animsh;
 	Shader sh2;
 	Shader sht;
 	Shader LUTShader;
@@ -187,6 +189,12 @@ private:
 	
 	
 	SA::SkeletalModel g_Animatedmodel;
+	SA::SkeletalModel g_RunModel;
+	SA::SkeletalModel g_RollModel;
+
+	SA::sAnimation idle;
+	SA::sAnimation run;
+	SA::sAnimation roll;
 
 	CUBELoader LUT;
 

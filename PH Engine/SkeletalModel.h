@@ -25,7 +25,9 @@ namespace SA
 
 		sAnimation&                     GetAnimation() { return m_Animation; }
 		const sAnimation&               GetAnimation() const { return m_Animation; }
-
+		sAnimation&                     GetAnimation2() { return m_Animation2; }
+		void							setAnimation2(sAnimation* temp);
+		void							startBlend(float Dt);
 		void                            Clear();
 		std::vector<glm::vec4> vertbonedata;
 		std::vector<glm::vec4> weightdata;
@@ -33,12 +35,16 @@ namespace SA
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
 		sAnimation                      m_Animation;
+		sAnimation                      m_Animation2;
 		glm::mat4x4                     m_GlobalInverseTransform;
-
+		glm::mat4x4                     m_GlobalInverseTransform2;
+		float							m_SlerpTime;
 		float                           m_AnimationTime;
+		float                           m_AnimationTime2;
+		bool							m_isBlending = false;
 
 	private:
-		void                            ReadNodeHierarchy(float AnimationTime, sAnimation& a_Animation, sSkeleton& a_Skeleton, sBone& a_Bone, const glm::mat4x4& ParentTransform);
+		void                            ReadNodeHierarchy(float AnimationTime, float AnimationTime2, sAnimation& a_Animation, sSkeleton& a_Skeleton, sBone& a_Bone, const glm::mat4x4& ParentTransform);
 		void							Initialize(const sSkeleton& a_Skeleton);
 	};
 }

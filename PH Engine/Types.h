@@ -71,5 +71,9 @@ namespace SA
 
 		float TicksPerSecond;
 		float Duration;
+	public:
+
+		std::string Name;
+		glm::mat4x4 GlobalInverseTransform;
 	};
 }

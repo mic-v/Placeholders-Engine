@@ -177,14 +177,14 @@ bool Engine::startUp()
 	frameBuffer.addColorTarget(GL_R11F_G11F_B10F);
 	frameBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	position = glm::vec3(-4.0f, 0.1f, 0.0f);
+	position = glm::vec3(-4.0f, 0.4f, 0.0f);
 	objectTransform = glm::mat4(1.0f);
 	Player1Transform = glm::mat4(1.0f);
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	Player2Transform = glm::scale(Player1Transform, glm::vec3(0.2f, 0.2f, 0.2f));
-	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.01f, 0.01f, 0.01f));
+	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.004f, 0.004f, 0.004f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
 
@@ -195,9 +195,10 @@ bool Engine::startUp()
 	
 	//Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
 	//_draw.line = ex;
-	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
+	animsh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
+	sh2 = Shader("Contents/Shaders/skybox.vs", "Contents/Shaders/texture.fs");
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
-	/*LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
+	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
 	object = Mesh();
 	object.loadFromFile("Contents/Models/Derbis.obj");
@@ -212,7 +213,7 @@ bool Engine::startUp()
 	river.loadFromFile("Contents/Models/river.obj");
 
 	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
-	LUT.loadTexture();*/
+	LUT.loadTexture();
 	
 
 
@@ -222,7 +223,7 @@ bool Engine::startUp()
 
 
 	
-	//idleframe1.loadFromFile("Contents/Models/Idle/frame1.obj");
+	idleframe1.loadFromFile("Contents/Models/Idle/frame1.obj");
 
 
 
@@ -250,32 +251,32 @@ bool Engine::startUp()
 		exit(0);
 	}
 
-	Assimp::Importer tempimporter;
-	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/look1.fbx",
-		aiProcess_LimitBoneWeights |
-		aiProcess_Triangulate |
-		aiProcess_SortByPType);
 
-	std::cout << tempimporter.GetErrorString() << std::endl;
-	AssimpConverter::Convert(pscene, g_Animatedmodel);
+	loadAssimp("Idle4.fbx", &g_Animatedmodel);
+	g_Animatedmodel.GetAnimation().Name = "Idle";
 
-	const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
-	//testmesh.loadFromFile("Contents/Models/meshskin.obj");
-	//std::cout << testmesh.getNumVertices() << std::endl;
+	loadAssimp("Running.fbx", &g_RunModel);
+	g_RunModel.GetAnimation().Name = "Running";
+
+	loadAssimp("Roll.fbx", &g_RollModel);
+	g_RollModel.GetAnimation().Name = "Roll";
+
+	idle = g_Animatedmodel.GetAnimation();
+	run = g_RunModel.GetAnimation();
+	roll = g_RollModel.GetAnimation();
 	
-	//std::cout << g_Animatedmodel << std::endl;
-	//g_Animatedmodel.Update(0.1);
+
+
 	g_Animatedmodel.loadHierarchy();
 	
 	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
 	
-
 	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
 	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
-	Playertwo = Player(Pose, &BaseTex, glm::translate(Player2Transform, glm::vec3(45, 0, 0)), &testMat, 120, 1.0f);
+	Playertwo = Player(&idleframe1, &BaseTex, glm::translate(Player2Transform, glm::vec3(45, 2, 0)), &testMat, 120, 1.0f);
 
 	River = Object(&river, &test3, objectTransform, &testMat);
 
@@ -297,6 +298,7 @@ bool Engine::startUp()
 
 
 	rockObject.setActive(false);
+	rockObject2.setActive(false);
 	glfwGetTime();
 	return true;
 }
@@ -352,6 +354,18 @@ void Engine::shutDown()
 	glfwTerminate();
 }
 
+void Engine::loadAssimp(std::string filename, SA::SkeletalModel * tempskele)
+{
+	Assimp::Importer tempimporter;
+	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/" + filename,
+		aiProcess_LimitBoneWeights |
+		aiProcess_Triangulate |
+		aiProcess_SortByPType);
+
+	std::cout << tempimporter.GetErrorString() << std::endl;
+	AssimpConverter::Convert(pscene, *tempskele);
+}
+
 
 
 bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
@@ -376,10 +390,11 @@ bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
 
 float PI = 3.14159265358979323846f;
 
-void Engine::controllerInput(int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer)
+void Engine::controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer)
 {
 	
-
+	
+	
 	if (controller == 1)
 	{
 		
@@ -390,8 +405,8 @@ void Engine::controllerInput(int controller, float speed, Player *player, const 
 		
 		if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
 		{
-
-
+			g_Animatedmodel.setAnimation2(&run);
+			
 			player->setOrientation(-player->getOrientation());
 
 			float tempangle;
@@ -413,6 +428,10 @@ void Engine::controllerInput(int controller, float speed, Player *player, const 
 
 			player->setOrientation(tempangle);
 		}
+		else {
+			g_Animatedmodel.setAnimation2(&idle);
+		}
+		
 		
 		//SQUARE
 		if (GLFW_PRESS == buttons[0]) {
@@ -420,9 +439,11 @@ void Engine::controllerInput(int controller, float speed, Player *player, const 
 		}
 		//X
 		if (GLFW_PRESS == buttons[1]) {
-			player->skillshotAttack(otherplayer);
+			g_Animatedmodel.setAnimation2(&roll);
+			//player->skillshotAttack(otherplayer);
 			//std::cout << "X" << std::endl;
 		}
+
 		//O
 		if (GLFW_PRESS == buttons[2]) {
 			//std::cout << "O" << std::endl;
@@ -554,7 +575,8 @@ void Engine::runGame()
 			frames = 0;
 			lastTime += 1.0;
 		}
-		playerInput(skillshotT);
+		g_Animatedmodel.Update(deltaTime);
+		playerInput(deltaTime);
 
 		
 
@@ -584,11 +606,11 @@ void Engine::runGame()
 		Playerone.update();
 		Playertwo.update();
 
-		g_Animatedmodel.Update(deltaTime);
-
+	
+		
 		//std::cout << currentTime - lastTime << std::endl;
 		_camera->update();
-		InputModule::getInstance().update((currentTime - lastTime));
+		InputModule::getInstance().update(deltaTime);
 		render();
 
 		
@@ -598,53 +620,63 @@ void Engine::runGame()
 
 void Engine::render()
 {
-	//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
 	glClear(GL_DEPTH_BUFFER_BIT);
-	//const SA::sAnimatedMesh& AnimMesh = g_Animatedmodel.GetMesh(0);
-	//std::cout << "X: "<<AnimMesh.pTransformedVertices[0].x<< "Y: " << AnimMesh.pTransformedVertices[0].y << "z: " << AnimMesh.pTransformedVertices[0].z << std::endl;
 	
-	//testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel.GetMesh(0));
-	
-	//testmesh.loadFromVector2("Contents/Models/meshskin.obj", AnimMesh);
 	//LUT.Bind3D(12);
 	//frameBuffer.clear();
 	//frameBuffer.bind();*/
 	glEnable(GL_DEPTH_TEST);
+	animsh.use();
+	animsh.sendUniformMat4("projection", cameraProjection);
+	animsh.sendUniformMat4("view", _camera->getLookMatrix());
+	g_Animatedmodel.sendToShader(&animsh);
+	////Lights here
+	first.LoadLight(&animsh);
+	second.LoadLight(&animsh);
+	//
+	//
+	////Objects here//
+
+	Playerone.LoadObject(&animsh);
+
+	//
+	animsh.unuse();
+
+
 	sh2.use();
 	sh2.sendUniformMat4("projection", cameraProjection);
 	sh2.sendUniformMat4("view", _camera->getLookMatrix());
-	g_Animatedmodel.sendToShader(&sh2);
 	////Lights here
 	first.LoadLight(&sh2);
 	second.LoadLight(&sh2);
 	//
 	//
 	////Objects here//
-	//Trees.LoadObject(&sh2);
-	//BasePlate.LoadObject(&sh2);
-	Playerone.LoadObject(&sh2);
-	//Playertwo.LoadObject(&sh2);
-	//rockObject.LoadObject(&sh2);
-	//rockObject2.LoadObject(&sh2);
+	Trees.LoadObject(&sh2);
+	BasePlate.LoadObject(&sh2);
+	Playertwo.LoadObject(&sh2);
+	rockObject.LoadObject(&sh2);
+	rockObject2.LoadObject(&sh2);
 	//
 	sh2.unuse();
 
 	//---------------------------------------------------------
 	////TRANSPARENT OBJS HERE
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//sht.use();
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	sht.use();
 
-	//sht.sendUniformMat4("projection", cameraProjection);
-	//sht.sendUniformMat4("view", _camera->getLookMatrix());
-	//first.LoadLight(&sht);
-	//second.LoadLight(&sht);
+	sht.sendUniformMat4("projection", cameraProjection);
+	sht.sendUniformMat4("view", _camera->getLookMatrix());
+	first.LoadLight(&sht);
+	second.LoadLight(&sht);
 	//
 	//
-	//River.LoadObject(&sht);
+	River.LoadObject(&sht);
 
-	//sht.unuse();
-	//glDisable(GL_BLEND);
+	sht.unuse();
+	glDisable(GL_BLEND);
 	//---------------------------------------------------------
 	/*frameBuffer.unbind();
 	LUTShader.use();
@@ -683,7 +715,7 @@ void Engine::playerInput(float t)
 	int count;
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_1), 0.25f, &Playerone, axes, buttons, &Playertwo);
+	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 2.5f, &Playerone, axes, buttons, &Playertwo);
 	
 
 
@@ -692,7 +724,7 @@ void Engine::playerInput(float t)
 	int count2;
 	const unsigned char* buttons2 = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &count2);
 
-	controllerInput(glfwJoystickPresent(GLFW_JOYSTICK_2), 0.25f, &Playertwo, axes2, buttons2, &Playerone);
+	controllerInput(t,glfwJoystickPresent(GLFW_JOYSTICK_2), 0.25f, &Playertwo, axes2, buttons2, &Playerone);
 
 
 

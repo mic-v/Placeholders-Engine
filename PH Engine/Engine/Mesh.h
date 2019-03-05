@@ -15,10 +15,8 @@ public:
 	Mesh();
 	~Mesh();
 	bool loadFromFile(const char *file);
-	bool loadFromVector(const char *file, const SA::sAnimatedMesh& temp);
 	bool loadFromAnimatedModel(const char *file, const SA::SkeletalModel& temp);
-	bool loadFromAnimatedModel2(const char *file, const SA::SkeletalModel& temp);
-	bool loadSecondFromFile(const char *file);
+
 
 	void unload();
 
