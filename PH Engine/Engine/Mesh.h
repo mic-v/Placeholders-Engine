@@ -8,6 +8,9 @@
 #include <glm/ext.hpp>
 #include "../Types.h"
 #include "../SkeletalModel.h"
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 //
 class Mesh
 {
@@ -16,6 +19,7 @@ public:
 	~Mesh();
 	bool loadFromFile(const char *file);
 	bool loadFromAnimatedModel(const char *file, const SA::SkeletalModel& temp);
+	bool loadFromFBX(std::string);
 
 
 	void unload();
@@ -26,6 +30,8 @@ public:
 	unsigned int VBO_Verticies = 0;
 	unsigned int VBO_UVS = 0;	
 	unsigned int VBO_Normals = 0;
+	unsigned int VBO_Tangents = 0;
+	unsigned int VBO_BiTangents = 0;
 	unsigned int VBO_VERTEXBONEDATA = 0;
 	unsigned int VBO_BONEWEIGHTDATA = 0;
 

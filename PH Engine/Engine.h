@@ -9,6 +9,7 @@
 #include <examples/imgui_impl_glfw.h>
 #include <examples/imgui_impl_opengl3.h>
 //#include "imgui_impl_opengl3.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -46,7 +47,7 @@ public:
 
 	bool startUp();
 	void shutDown();
-	void loadAssimp(std::string filename, SA::SkeletalModel* tempskele);
+	void loadAssimpAnim(std::string filename, SA::SkeletalModel* tempskele);
 	void runGame();
 	void render();
 	void playerInput(float t);
@@ -85,78 +86,18 @@ private:
 	Camera *_camera;
 	Camera camera2;
 	FPSCamera camera1;
-	Mesh object;
+	Mesh Debris;
 	Mesh object2;
 	Mesh basemap;
 	Mesh river;
 	Mesh rockMesh;
 
-	Mesh attackframe1;
-	Mesh attackframe2;
-	Mesh attackframe3;
-	Mesh attackframe4;
-	Mesh attackframe5;
-	Mesh attackframe6;
-	Mesh attackframe7;
-	Mesh attackframe8;
-	Mesh attackframe9;
-
 	Mesh idleframe1;
-	Mesh idleframe2;
-	Mesh idleframe3;
-	Mesh idleframe4;
-	Mesh idleframe5;
-	Mesh idleframe6;
-	Mesh idleframe7;
-
-	Mesh attack2frame1;
-	Mesh attack2frame2;
-	Mesh attack2frame3;
-	Mesh attack2frame4;
-	Mesh attack2frame5;
-	Mesh attack2frame6;
-	Mesh attack2frame7;
-	Mesh attack2frame8;
-	Mesh attack2frame9;
-	Mesh attack2frame10;
-	Mesh attack2frame11;
-
-	//run forward
-	Mesh runframe1;
-	Mesh runframe2;
-	Mesh runframe3;
-	Mesh runframe4;
-	Mesh runframe5;
-	Mesh runframe6;
-	Mesh runframe7;
-	Mesh runframe8;
-	Mesh runframe9;
-	Mesh runframe10;
-
-	//run back
-	Mesh runframe11;
-	Mesh runframe12;
-	Mesh runframe13;
-	Mesh runframe14;
-	Mesh runframe15;
-	Mesh runframe16;
-	Mesh runframe17;
-	Mesh runframe18;
 	
-
 
 	Mesh * Pose;
 	
-	//attack1 animation
-	std::vector<Mesh*> animation1;
-	//idleanimation
-	std::vector<Mesh*> animationidle;
-	//runforward animation
-	std::vector<Mesh*> animation2;
-	//run backward animation
-	std::vector<Mesh*> animation3;
-	//attack2 animation
-	std::vector<Mesh*> animation4;
+	
 	Object Trees;
 	Object BasePlate;
 	Object River;
@@ -165,6 +106,7 @@ private:
 	Player Playerone;
 	Player Playertwo;
 	Mesh testmesh;
+	Mesh testmesh2;
 
 	Ability tempability;
 	Ability tempability2;
@@ -189,6 +131,7 @@ private:
 	
 	
 	SA::SkeletalModel g_Animatedmodel;
+	SA::SkeletalModel g_MeshTest;
 	SA::SkeletalModel g_RunModel;
 	SA::SkeletalModel g_RollModel;
 

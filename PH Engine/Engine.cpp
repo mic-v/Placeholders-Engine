@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include <glm/gtc/constants.hpp>
 
+
 #define NAME "Projite"
 #define SCREEN_WIDTH 1600
 #define SCREEN_HEIGHT 900
@@ -184,7 +185,7 @@ bool Engine::startUp()
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	Player2Transform = glm::scale(Player1Transform, glm::vec3(0.2f, 0.2f, 0.2f));
-	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.004f, 0.004f, 0.004f));
+	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.01f, 0.01f, 0.01f));
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
 
@@ -195,23 +196,24 @@ bool Engine::startUp()
 	
 	//Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
 	//_draw.line = ex;
-	animsh = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
-	sh2 = Shader("Contents/Shaders/skybox.vs", "Contents/Shaders/texture.fs");
-	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/water.fs");
+	animsh = Shader("Contents/Shaders/textureskinned.vs", "Contents/Shaders/texture.fs");
+	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/texture.fs");
+	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/trans.fs");
 	LUTShader.load("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	
-	object = Mesh();
-	object.loadFromFile("Contents/Models/Derbis.obj");
-	object2.loadFromFile("Contents/Models/untitled.obj");
-	rockMesh.loadFromFile("Contents/Models/rock.obj");
-	testMat.loadFile("Contents/Materials/Final Map.mtl");
+	Debris = Mesh();
+	Debris.loadFromFile("Contents/Models/Derbis.obj");
+
+	object2.loadFromFBX("ClemT.fbx");
+	
+	rockMesh.loadFromFBX("Sphere.fbx");
+	//testMat.loadFile("Contents/Materials/Final Map.mtl");
 
 	
-	basemap.loadFromFile("Contents/Models/mapBase.obj");
-
+	basemap.loadFromFBX("baseMap.fbx");
 	
-	river.loadFromFile("Contents/Models/river.obj");
 
+	river.loadFromFBX("River.fbx");
 	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
 	LUT.loadTexture();
 	
@@ -223,8 +225,7 @@ bool Engine::startUp()
 
 
 	
-	idleframe1.loadFromFile("Contents/Models/Idle/frame1.obj");
-
+	idleframe1.loadFromFBX("Clem.fbx");
 
 
 	//Pose = &idleframe1;
@@ -252,26 +253,28 @@ bool Engine::startUp()
 	}
 
 
-	loadAssimp("Idle4.fbx", &g_Animatedmodel);
+	loadAssimpAnim("Idle4.fbx", &g_Animatedmodel);
 	g_Animatedmodel.GetAnimation().Name = "Idle";
 
-	loadAssimp("Running.fbx", &g_RunModel);
+	loadAssimpAnim("Running2.fbx", &g_RunModel);
 	g_RunModel.GetAnimation().Name = "Running";
 
-	loadAssimp("Roll.fbx", &g_RollModel);
+	loadAssimpAnim("Roll.fbx", &g_RollModel);
 	g_RollModel.GetAnimation().Name = "Roll";
 
 	idle = g_Animatedmodel.GetAnimation();
 	run = g_RunModel.GetAnimation();
 	roll = g_RollModel.GetAnimation();
 	
-
+	
 
 	g_Animatedmodel.loadHierarchy();
 	
 	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
 	
-	Trees = Object(&object, &TreeTex, objectTransform, &testMat);
+	
+	
+	Trees = Object(&Debris, &TreeTex, objectTransform, &testMat);
 	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
@@ -306,7 +309,7 @@ bool Engine::startUp()
 void Engine::shutDown()
 {
 
-	object.unload();
+	Debris.unload();
 	TreeTex.Unload();
 
 	//remove the rigidbodies from the dynamics world and delete them
@@ -354,17 +357,26 @@ void Engine::shutDown()
 	glfwTerminate();
 }
 
-void Engine::loadAssimp(std::string filename, SA::SkeletalModel * tempskele)
+
+//second function that loads animations and converts into tempskele, then one that 
+//just loads models with uvs and tangents by passing in mesh class
+void Engine::loadAssimpAnim(std::string filename, SA::SkeletalModel * tempskele)
 {
 	Assimp::Importer tempimporter;
 	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/" + filename,
 		aiProcess_LimitBoneWeights |
 		aiProcess_Triangulate |
+		aiProcess_CalcTangentSpace|
 		aiProcess_SortByPType);
-
+	if (pscene->mMeshes[0]->HasTextureCoords(0)) {
+		cout << "does have" << endl;
+	}
+	//cout << pscene->mMeshes[0]->mTangents << endl;
 	std::cout << tempimporter.GetErrorString() << std::endl;
 	AssimpConverter::Convert(pscene, *tempskele);
 }
+
+
 
 
 
@@ -471,21 +483,7 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 void Engine::checkAnimation() {
 	
 	
-	if (animation1run) {
-		animation1run = runAnimation(animation1, 0.2f);
-	}
-	else if (animation2run) {
-		animation2run = runAnimation(animation2, 0.2f);
-	}
-	else if (animation3run) {
-		animation3run = runAnimation(animation3, 0.2f);
-	}
-	else if (animation4run) {
-		animation4run = runAnimation(animation4, 0.1f);
-	}
-	else {
-		runAnimation(animationidle, 0.05f);
-	}
+
 }
 
 double currentFrame;
@@ -519,8 +517,7 @@ void Engine::runGame()
 		}
 
 		lastFrame = currentFrame;
-		//cout <<"DT: " << deltaTime << endl;
-		// Start the Dear ImGui frame
+
 		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		if (InputModule::getInstance().isKeyPressed(GLFW_KEY_ESCAPE))
@@ -715,7 +712,7 @@ void Engine::playerInput(float t)
 	int count;
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 2.5f, &Playerone, axes, buttons, &Playertwo);
+	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 5.0f, &Playerone, axes, buttons, &Playertwo);
 	
 
 

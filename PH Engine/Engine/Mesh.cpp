@@ -230,6 +230,7 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	std::vector<glm::vec3> normalData;
 	std::vector<glm::vec4> vertexBoneData;
 	std::vector<glm::vec4> BoneWeightData;
+	
 
 	 const SA::sAnimatedMesh& temp = animodel.GetMesh(0);
 	for (unsigned int i = 0; i < temp.NumIndices; ++i)
@@ -310,6 +311,119 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	return true;
 }
 
+bool Mesh::loadFromFBX(std::string filename)
+{
+
+	//glDeleteBuffers(1, &VBO_Verticies);
+	//glDeleteBuffers(1, &VBO_UVS);
+	//glDeleteBuffers(1, &VBO_Normals);
+	//glDeleteVertexArrays(1, &VAO);
+
+	char inputString[CHAR_BUFFER_SIZE];
+
+	std::vector<glm::vec3> vertexData;
+	std::vector<glm::vec2> textureData;
+	std::vector<glm::vec3> normalData;
+	std::vector<glm::vec3> tangentData;
+	std::vector<glm::vec3> bitangentData;
+
+	float *vertexArray;
+	float *normalArray;
+	float *uvArray;
+	
+	Assimp::Importer tempimporter;
+	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/Models/" + filename,
+		aiProcess_Triangulate |
+		aiProcess_CalcTangentSpace |
+		aiProcess_SortByPType);
+
+	std::cout << tempimporter.GetErrorString() << std::endl;
+	
+	
+
+	_numVertices = pscene->mMeshes[0]->mNumFaces * 3;
+	_numFaces = pscene->mMeshes[0]->mNumFaces;
+
+
+	for (int k = 0; k < pscene->mNumMeshes; k++) {
+
+		for (unsigned int i = 0; i < pscene->mMeshes[k]->mNumFaces; i++)
+		{
+			const aiFace& face = pscene->mMeshes[k]->mFaces[i];
+
+			for (int j = 0;j < 3;j++)
+			{
+				aiVector3D uv = pscene->mMeshes[k]->mTextureCoords[0][face.mIndices[j]];
+				textureData.push_back(glm::vec2(uv.x, uv.y));
+
+				aiVector3D normal = pscene->mMeshes[k]->mNormals[face.mIndices[j]];
+				normalData.push_back(glm::vec3(normal.x, normal.y, normal.z));
+
+				aiVector3D pos = pscene->mMeshes[k]->mVertices[face.mIndices[j]];
+				vertexData.push_back(glm::vec3(pos.x, pos.y, pos.z));
+
+				aiVector3D tan = pscene->mMeshes[k]->mTangents[face.mIndices[j]];
+				tangentData.push_back(glm::vec3(tan.x, tan.y, tan.z));
+
+				aiVector3D bitan = pscene->mMeshes[k]->mBitangents[face.mIndices[j]];
+				bitangentData.push_back(glm::vec3(bitan.x, bitan.y, bitan.z));
+			}
+
+		}
+	}
+	
+	
+	
+
+
+	//send data to opengl
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO_Verticies);
+	glGenBuffers(1, &VBO_UVS);
+	glGenBuffers(1, &VBO_Normals);
+	glGenBuffers(1, &VBO_Tangents);
+	glGenBuffers(1, &VBO_BiTangents);
+
+	glBindVertexArray(VAO);
+
+	glEnableVertexAttribArray(0); //Vertex
+	glEnableVertexAttribArray(1); // UVS
+	glEnableVertexAttribArray(2); // NORMALS
+	glEnableVertexAttribArray(3); //Tangents
+	glEnableVertexAttribArray(4); //Bitangents
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Verticies);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size() * 3, &vertexData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textureData.size() * 2, &textureData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normalData.size() * 3, &normalData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_Tangents);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * tangentData.size() * 3, &tangentData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_BiTangents);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * bitangentData.size() * 3, &bitangentData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
+
+
+	
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+
+
+
+	return true;
+}
 
 
 
