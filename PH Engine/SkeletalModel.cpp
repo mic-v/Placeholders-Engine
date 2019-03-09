@@ -28,7 +28,7 @@ namespace SA
 
 	void SkeletalModel::setAnimation2(sAnimation * temp)
 	{
-		if (!m_isBlending && temp->Name != m_Animation.Name) {
+		if (!m_isBlending && temp->ID != m_Animation.ID) {
 			m_Animation2 = *temp;
 			m_GlobalInverseTransform2 = temp->GlobalInverseTransform;
 			m_isBlending = true;
@@ -40,14 +40,21 @@ namespace SA
 	void SkeletalModel::startBlend(float Dt)
 	{
 
-		if (m_isBlending && m_Animation2.Name != m_Animation.Name) {
+		if (m_isBlending && m_Animation2.ID != m_Animation.ID) {
 			if (m_SlerpTime < 1.0f) {
-				m_SlerpTime += 0.1f * Dt;
+				m_SlerpTime += 3.5 * Dt;
 			}
-			else {
+			else if(m_Animation2.Loopable){
 				m_isBlending = false;
 				m_SlerpTime = 0.0f;
 				m_Animation = m_Animation2;
+				m_AnimationTime = m_AnimationTime2;
+				m_AnimationTime2 = 0.0f;
+			}
+			else if (m_Animation2.Played) {
+				m_SlerpTime = 0.0f;
+				std::swap(m_Animation, m_Animation2);
+				m_Animation2 = m_Transition;
 				m_AnimationTime = m_AnimationTime2;
 				m_AnimationTime2 = 0.0f;
 			}
@@ -57,12 +64,15 @@ namespace SA
 		}
 	}
 
+	
+
 	void SkeletalModel::Clear()
 	{
 		for (unsigned int i = 0; i < m_Meshes.size(); ++i)
 		{
 			delete[] m_Meshes[i].pVertices;
 			delete[] m_Meshes[i].pNormals;
+			delete[] m_Meshes[i].pUVs;
 			delete[] m_Meshes[i].pTransformedVertices;
 			delete[] m_Meshes[i].pTransformedNormals;
 			delete[] m_Meshes[i].pIndices;
@@ -84,27 +94,47 @@ namespace SA
 		m_AnimationTime = 0.0f;
 	}
 
+	void SkeletalModel::playAnimations(float Dt)
+	{
+		if (m_isBlending) {
+			if (m_Animation2.Loopable) {
+				m_AnimationTime2 = fmodf(m_AnimationTime2 + Dt * m_Animation2.TicksPerSecond, m_Animation2.Duration);
+			}
+			else {
+				float temptime2 = m_AnimationTime2 + Dt * m_Animation2.TicksPerSecond;
+				if (temptime2 - m_Animation2.Duration > 0) {
+					m_AnimationTime2 = temptime2 - m_Animation2.Duration;
+					m_Animation2.Played = true;
+				}
+				else {
+					m_AnimationTime2 = temptime2;
+				}
+			}
+		}
 
+		if (!m_Animation.Played) {
+			float temptime1 = m_AnimationTime + Dt * m_Animation.TicksPerSecond;
+			if (temptime1 - m_Animation.Duration > 0) {
+				m_AnimationTime = temptime1 - m_Animation.Duration;
+			}
+			else {
+				m_AnimationTime = temptime1;
+			}
+
+		}
+	}
 
 
 
 	void SkeletalModel::Update(float a_Dt)
 	{
-		startBlend(0.5);
-		if(m_isBlending){
-			m_AnimationTime2 = fmodf(m_AnimationTime2 + a_Dt * m_Animation2.TicksPerSecond, m_Animation2.Duration);
-		}
-		else {
-			m_AnimationTime2 = 0.0f;
-		}
+		startBlend(a_Dt);
 		
-		m_AnimationTime = fmodf(m_AnimationTime + a_Dt * m_Animation.TicksPerSecond, m_Animation.Duration);
-		
-		//
-	//	std::cout << "second DT: " << a_Dt << std::endl;
+		playAnimations(a_Dt);
+
 		
 		ReadNodeHierarchy(m_AnimationTime, m_AnimationTime2, m_Animation, m_Skeleton, m_Skeleton.Bones[0], m_Skeleton.Bones[0].NodeTransform);
-		//TransformVertices(m_Skeleton);
+
 	}
 
 

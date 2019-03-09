@@ -93,13 +93,16 @@ namespace AssimpConverter
 			sAnimatedMesh AnimMesh;
 			AnimMesh.NumVertices = pMesh->mNumVertices;
 			AnimMesh.pVertices = new glm::vec3[AnimMesh.NumVertices];
+			AnimMesh.pUVs = new glm::vec3[AnimMesh.NumVertices];
 			AnimMesh.pTransformedVertices = new glm::vec3[AnimMesh.NumVertices];
 			AnimMesh.pNormals = new glm::vec3[AnimMesh.NumVertices];
 			AnimMesh.pTransformedNormals = new glm::vec3[AnimMesh.NumVertices];
 			AnimMesh.NumIndices = pMesh->mNumFaces * 3;
 			AnimMesh.pIndices = new unsigned int[AnimMesh.NumIndices];
+			
 
 			memcpy(AnimMesh.pVertices, pMesh->mVertices, AnimMesh.NumVertices*sizeof(aiVector3D));
+			memcpy(AnimMesh.pUVs, pMesh->mTextureCoords[0], AnimMesh.NumVertices * sizeof(aiVector3D));
 			memcpy(AnimMesh.pNormals, pMesh->mNormals, AnimMesh.NumVertices*sizeof(aiVector3D));
 			for (unsigned int i = 0; i < pMesh->mNumBones; ++i)
 			{

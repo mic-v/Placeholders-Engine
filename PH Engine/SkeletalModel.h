@@ -28,12 +28,15 @@ namespace SA
 		sAnimation&                     GetAnimation2() { return m_Animation2; }
 		void							setAnimation2(sAnimation* temp);
 		void							startBlend(float Dt);
+		void							playAnimations(float Dt);
 		void                            Clear();
 		std::vector<glm::vec4> vertbonedata;
 		std::vector<glm::vec4> weightdata;
+		sAnimation                      m_Transition;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
+		
 		sAnimation                      m_Animation;
 		sAnimation                      m_Animation2;
 		glm::mat4x4                     m_GlobalInverseTransform;

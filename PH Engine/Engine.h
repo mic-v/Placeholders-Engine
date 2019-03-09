@@ -134,10 +134,12 @@ private:
 	SA::SkeletalModel g_MeshTest;
 	SA::SkeletalModel g_RunModel;
 	SA::SkeletalModel g_RollModel;
+	SA::SkeletalModel g_PunchModel;
 
 	SA::sAnimation idle;
 	SA::sAnimation run;
 	SA::sAnimation roll;
+	SA::sAnimation punch;
 
 	CUBELoader LUT;
 

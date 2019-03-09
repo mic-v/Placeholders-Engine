@@ -37,6 +37,7 @@ namespace SA
 
 		glm::vec3* pVertices;
 		glm::vec3* pNormals;
+		glm::vec3* pUVs;
 
 		glm::vec3* pTransformedVertices;
 		glm::vec3* pTransformedNormals;
@@ -72,8 +73,9 @@ namespace SA
 		float TicksPerSecond;
 		float Duration;
 	public:
-
-		std::string Name;
+		bool Loopable = true;
+		bool Played = false;
+		unsigned int ID;
 		glm::mat4x4 GlobalInverseTransform;
 	};
 }

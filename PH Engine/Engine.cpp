@@ -253,23 +253,38 @@ bool Engine::startUp()
 	}
 
 
+	//IDLE ANIMATION AND SKELETON 
 	loadAssimpAnim("Idle4.fbx", &g_Animatedmodel);
-	g_Animatedmodel.GetAnimation().Name = "Idle";
-
-	loadAssimpAnim("Running2.fbx", &g_RunModel);
-	g_RunModel.GetAnimation().Name = "Running";
-
-	loadAssimpAnim("Roll.fbx", &g_RollModel);
-	g_RollModel.GetAnimation().Name = "Roll";
-
+	g_Animatedmodel.GetAnimation().ID = 0;
+	g_Animatedmodel.GetAnimation().Loopable = true;
 	idle = g_Animatedmodel.GetAnimation();
-	run = g_RunModel.GetAnimation();
-	roll = g_RollModel.GetAnimation();
+	g_Animatedmodel.m_Transition = idle;
 	
+	
+	//RUN ANIMATION
+	loadAssimpAnim("Running2.fbx", &g_RunModel);
+	g_RunModel.GetAnimation().ID = 1;
+	run = g_RunModel.GetAnimation();
+	run.Loopable = true;
+	
+
+	//ROLL ANIMATION
+	loadAssimpAnim("Roll2.fbx", &g_RollModel);
+	g_RollModel.GetAnimation().ID = 2;
+	roll = g_RollModel.GetAnimation();
+	roll.Loopable = false;
+
+
+	loadAssimpAnim("Punch.fbx", &g_PunchModel);
+	g_PunchModel.GetAnimation().ID = 3;
+	punch = g_PunchModel.GetAnimation();
+	punch.Loopable = false;
 	
 
 	g_Animatedmodel.loadHierarchy();
 	
+
+
 	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
 	
 	
@@ -363,7 +378,7 @@ void Engine::shutDown()
 void Engine::loadAssimpAnim(std::string filename, SA::SkeletalModel * tempskele)
 {
 	Assimp::Importer tempimporter;
-	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/" + filename,
+	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/Animations/" + filename,
 		aiProcess_LimitBoneWeights |
 		aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace|
@@ -371,7 +386,6 @@ void Engine::loadAssimpAnim(std::string filename, SA::SkeletalModel * tempskele)
 	if (pscene->mMeshes[0]->HasTextureCoords(0)) {
 		cout << "does have" << endl;
 	}
-	//cout << pscene->mMeshes[0]->mTangents << endl;
 	std::cout << tempimporter.GetErrorString() << std::endl;
 	AssimpConverter::Convert(pscene, *tempskele);
 }
@@ -472,6 +486,7 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 		if (GLFW_PRESS == buttons[5]) {
 			//std::cout << "bumper right" << std::endl;
 			player->BaseAttack(otherplayer);
+			g_Animatedmodel.setAnimation2(&punch);
 		}
 		
 	}
@@ -716,13 +731,13 @@ void Engine::playerInput(float t)
 	
 
 
-	int axesCount2;
+	/*int axesCount2;
 	const float *axes2 = glfwGetJoystickAxes(GLFW_JOYSTICK_2, &axesCount2);
 	int count2;
 	const unsigned char* buttons2 = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &count2);
 
 	controllerInput(t,glfwJoystickPresent(GLFW_JOYSTICK_2), 0.25f, &Playertwo, axes2, buttons2, &Playerone);
-
+*/
 
 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))

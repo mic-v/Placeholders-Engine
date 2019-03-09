@@ -227,6 +227,7 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	char inputString[CHAR_BUFFER_SIZE];
 
 	std::vector<glm::vec3> vertexData;
+	std::vector<glm::vec2> textureData;
 	std::vector<glm::vec3> normalData;
 	std::vector<glm::vec4> vertexBoneData;
 	std::vector<glm::vec4> BoneWeightData;
@@ -238,16 +239,19 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 		unsigned int Index = temp.pIndices[i];
 		glm::vec3 n = temp.pNormals[Index];
 		glm::vec3 v = temp.pVertices[Index];
+		glm::vec3 uv = temp.pUVs[Index];
 		glm::vec4 vertbones = animodel.vertbonedata[Index];
 		glm::vec4 boneweights = animodel.weightdata[Index];
 
 
 		glm::vec3 newn = glm::vec3(n.x, n.y, n.z);
+		glm::vec2 newuv = glm::vec2(uv.x, uv.y);
 		glm::vec3 newv = glm::vec3(v.x, v.y, v.z);
 		//std::cout << "xv: "<< vertbones.x << "yv: " << vertbones.y <<"zv: " << vertbones.z << std::endl;
 		//std::cout << "xv: " << newv.x << "yv: " << newv.y << "zv: " << newv.z << std::endl;
 		//std::cout << "xb: " << boneweights.x << "yb: " << boneweights.y << "zb: " << boneweights.z << std::endl;
 		normalData.push_back(newn);
+		textureData.push_back(newuv);
 		vertexData.push_back(newv);
 		vertexBoneData.push_back(vertbones);
 		BoneWeightData.push_back(boneweights);
@@ -269,13 +273,14 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	//send data to opengl
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO_Verticies);
-
+	glGenBuffers(1, &VBO_UVS);
 	glGenBuffers(1, &VBO_Normals);
 	glGenBuffers(1, &VBO_VERTEXBONEDATA);
 	glGenBuffers(1, &VBO_BONEWEIGHTDATA);
 	glBindVertexArray(VAO);
 
 	glEnableVertexAttribArray(0); //Vertex
+	glEnableVertexAttribArray(1); //UVs
 	glEnableVertexAttribArray(2); // NORMALS
 	glEnableVertexAttribArray(3); //BONES AFFECTING VERT
 	glEnableVertexAttribArray(4); //WEIGHT OF BONES
@@ -284,9 +289,9 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexData.size() * 3, &vertexData[0], GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * unpackedTextureData.size(), &unpackedTextureData[0], GL_DYNAMIC_DRAW);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
+	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textureData.size(), &textureData[0], GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normalData.size() * 3, &normalData[0], GL_DYNAMIC_DRAW);
