@@ -50,6 +50,7 @@ namespace SA
 				m_Animation = m_Animation2;
 				m_AnimationTime = m_AnimationTime2;
 				m_AnimationTime2 = 0.0f;
+				m_isPlayingStatic = false;
 			}
 			else if (m_Animation2.Played) {
 				m_SlerpTime = 0.0f;
@@ -102,8 +103,9 @@ namespace SA
 			}
 			else {
 				float temptime2 = m_AnimationTime2 + Dt * m_Animation2.TicksPerSecond;
+				m_isPlayingStatic = true;
 				if (temptime2 - m_Animation2.Duration > 0) {
-					m_AnimationTime2 = temptime2 - m_Animation2.Duration;
+					m_AnimationTime2 = temptime2 - (temptime2/m_Animation2.Duration) * m_Animation2.Duration;
 					m_Animation2.Played = true;
 				}
 				else {
@@ -115,7 +117,7 @@ namespace SA
 		if (!m_Animation.Played) {
 			float temptime1 = m_AnimationTime + Dt * m_Animation.TicksPerSecond;
 			if (temptime1 - m_Animation.Duration > 0) {
-				m_AnimationTime = temptime1 - m_Animation.Duration;
+				m_AnimationTime = temptime1 - (temptime1/m_Animation.Duration) * m_Animation.Duration;
 			}
 			else {
 				m_AnimationTime = temptime1;

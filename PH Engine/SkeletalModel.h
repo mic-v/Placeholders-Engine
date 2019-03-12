@@ -33,6 +33,7 @@ namespace SA
 		std::vector<glm::vec4> vertbonedata;
 		std::vector<glm::vec4> weightdata;
 		sAnimation                      m_Transition;
+		bool							m_isPlayingStatic = false;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
@@ -45,6 +46,7 @@ namespace SA
 		float                           m_AnimationTime;
 		float                           m_AnimationTime2;
 		bool							m_isBlending = false;
+	
 
 	private:
 		void                            ReadNodeHierarchy(float AnimationTime, float AnimationTime2, sAnimation& a_Animation, sSkeleton& a_Skeleton, sBone& a_Bone, const glm::mat4x4& ParentTransform);

@@ -206,7 +206,7 @@ bool Engine::startUp()
 
 	object2.loadFromFBX("ClemT.fbx");
 	
-	rockMesh.loadFromFBX("Sphere.fbx");
+	rockMesh.loadFromFBX("Spear.fbx");
 	//testMat.loadFile("Contents/Materials/Final Map.mtl");
 
 	
@@ -214,8 +214,8 @@ bool Engine::startUp()
 	
 
 	river.loadFromFBX("River.fbx");
-	LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
-	LUT.loadTexture();
+	//LUT.loadLUT("Contents/CUBE/Zeke.CUBE");
+	//LUT.loadTexture();
 	
 
 
@@ -252,7 +252,6 @@ bool Engine::startUp()
 		exit(0);
 	}
 
-
 	//IDLE ANIMATION AND SKELETON 
 	loadAssimpAnim("Idle4.fbx", &g_Animatedmodel);
 	g_Animatedmodel.GetAnimation().ID = 0;
@@ -274,7 +273,7 @@ bool Engine::startUp()
 	roll = g_RollModel.GetAnimation();
 	roll.Loopable = false;
 
-
+	//PUNCH ANIMATION
 	loadAssimpAnim("Punch.fbx", &g_PunchModel);
 	g_PunchModel.GetAnimation().ID = 3;
 	punch = g_PunchModel.GetAnimation();
@@ -286,12 +285,12 @@ bool Engine::startUp()
 
 
 	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
-	
-	
+
+	glm::mat4 tempspear = glm::rotate(360.0f, glm::vec3(0, 1, 0)) * glm::scale(objectTransform, glm::vec3(0.2f));
 	
 	Trees = Object(&Debris, &TreeTex, objectTransform, &testMat);
-	rockObject = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
-	rockObject2 = Object(&rockMesh, &BaseTex, glm::scale(objectTransform, glm::vec3(0.5f)), &testMat);
+	rockObject = Object(&rockMesh, &BaseTex, tempspear, &testMat);
+	rockObject2 = Object(&rockMesh, &BaseTex, tempspear, &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
 	Playertwo = Player(&idleframe1, &BaseTex, glm::translate(Player2Transform, glm::vec3(45, 2, 0)), &testMat, 120, 1.0f);
@@ -300,9 +299,9 @@ bool Engine::startUp()
 
 	tempability = Ability(&Playerone, 3.0f, 5.0f);
 	tempability2 = Ability(&Playertwo, 3.0f, 5.0f);
-	playoneskillshot = Skillshot(&Playerone, 3.0f, 15.0f, 0.005f, 10.0f, 0.5f, &rockObject);
+	playoneskillshot = Skillshot(&Playerone, 3.0f, 15.0f, 1.6f, 4.0f, 0.5f, &rockObject);
 
-	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 15.0f, 0.005f, 10.0f, 0.5f, &rockObject2);
+	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 15.0f, 1.6f, 10.0f, 0.5f, &rockObject2);
 
 	Playerone.setAttack(&tempability);
 	Playerone.setAbility(&playoneskillshot);
@@ -416,79 +415,101 @@ bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
 
 float PI = 3.14159265358979323846f;
 
-void Engine::controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer)
+void Engine::controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer, SA::SkeletalModel * playersmod)
 {
 	
 	
 	
 	if (controller == 1)
 	{
-		
+		//1 is up/down = is left/right
+		//std::cout << "0: "<<axes[0] << " 1: " << axes[1] << std::endl;
+		//std::cout << "2: " << axes[2] << " 5: " << axes[5] << std::endl;
 
 
-		
+		if (!playersmod->m_isPlayingStatic) {
+			if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
+			{
+				playersmod->setAnimation2(&run);
 
-		
-		if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
-		{
-			g_Animatedmodel.setAnimation2(&run);
-			
-			player->setOrientation(-player->getOrientation());
+				player->setOrientation(-player->getOrientation());
 
-			float tempangle;
-			if (controllertype == 4) {
-				tempangle = 36 * ((atan2(-axes[0], -axes[1]) * PI) / 2 + 5);
+				float tempangle;
+				if (controllertype == 4) {
+					tempangle = 36 * ((atan2(-axes[0], -axes[1]) * PI) / 2 + 5);
+				}
+				else if (controllertype == 3) {
+					tempangle = 36 * ((atan2(-axes[0], axes[1]) * PI) / 2 + 5);
+				}
+
+
+				glm::vec3 tempdir2 = glm::vec3(glm::sin(glm::radians(tempangle)) * speed, 0, glm::cos(glm::radians(tempangle)) * speed);
+
+
+				player->setTransform(glm::translate(player->getTransform(), glm::vec3(tempdir2.x, 0, tempdir2.z)));
+
+
+
+
+				player->setOrientation(tempangle);
 			}
-			else if (controllertype == 3) {
-				tempangle = 36 * ((atan2(-axes[0], axes[1]) * PI) / 2 + 5);
+			else {
+				playersmod->setAnimation2(&idle);
 			}
 
 
-			glm::vec3 tempdir2 = glm::vec3(glm::sin(glm::radians(tempangle)) * speed, 0, glm::cos(glm::radians(tempangle)) * speed);
+
+			float aim = player->getOrientation();
+			if ((axes[2] <= -0.3f || axes[2] >= 0.3f) || (axes[5] <= -0.3f || axes[5] >= 0.3f))
+			{
 
 
-			player->setTransform(glm::translate(player->getTransform(), glm::vec3(tempdir2.x, 0, tempdir2.z)));
+				//player->setOrientation(-player->getOrientation());
+
+				float tempangle;
+				if (controllertype == 4) {
+					tempangle = 36 * ((atan2(-axes[2], -axes[5]) * PI) / 2 + 5);
+				}
+				else if (controllertype == 3) {
+					tempangle = 36 * ((atan2(-axes[2], axes[5]) * PI) / 2 + 5);
+				}
 
 
 
+				aim = tempangle;
+			}
+			//SQUARE
+			if (GLFW_PRESS == buttons[0]) {
+				//std::cout << "SQUARE" << std::endl;
+				player->skillshotAttack(otherplayer, aim);
+			}
+			//X
+			if (GLFW_PRESS == buttons[1]) {
+				playersmod->setAnimation2(&roll);
+				player->startRoll(2);
+				//std::cout << "X" << std::endl;
+			}
 
-			player->setOrientation(tempangle);
+			//O
+			if (GLFW_PRESS == buttons[2]) {
+				//std::cout << "O" << std::endl;
+			}
+			//TRIANGLE
+			if (GLFW_PRESS == buttons[3]) {
+				//std::cout << "tri" << std::endl;
+			}
+
+
+			if (GLFW_PRESS == buttons[4]) {
+				//std::cout << "bumper left" << std::endl;
+			}
+			if (GLFW_PRESS == buttons[5]) {
+				//std::cout << "bumper right" << std::endl;
+				player->BaseAttack(otherplayer);
+				playersmod->setAnimation2(&punch);
+			}
+
 		}
-		else {
-			g_Animatedmodel.setAnimation2(&idle);
-		}
-		
-		
-		//SQUARE
-		if (GLFW_PRESS == buttons[0]) {
-			//std::cout << "SQUARE" << std::endl;
-		}
-		//X
-		if (GLFW_PRESS == buttons[1]) {
-			g_Animatedmodel.setAnimation2(&roll);
-			//player->skillshotAttack(otherplayer);
-			//std::cout << "X" << std::endl;
-		}
-
-		//O
-		if (GLFW_PRESS == buttons[2]) {
-			//std::cout << "O" << std::endl;
-		}
-		//TRIANGLE
-		if (GLFW_PRESS == buttons[3]) {
-			//std::cout << "tri" << std::endl;
-		}
-
-
-		if (GLFW_PRESS == buttons[4]) {
-			//std::cout << "bumper left" << std::endl;
-		}
-		if (GLFW_PRESS == buttons[5]) {
-			//std::cout << "bumper right" << std::endl;
-			player->BaseAttack(otherplayer);
-			g_Animatedmodel.setAnimation2(&punch);
-		}
-		
 	}
 
 }
@@ -615,8 +636,8 @@ void Engine::runGame()
 		//
 
 
-		Playerone.update();
-		Playertwo.update();
+		Playerone.update(deltaTime);
+		Playertwo.update(deltaTime);
 
 	
 		
@@ -727,7 +748,7 @@ void Engine::playerInput(float t)
 	int count;
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 5.0f, &Playerone, axes, buttons, &Playertwo);
+	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 5.0f, &Playerone, axes, buttons, &Playertwo, &g_Animatedmodel);
 	
 
 
@@ -817,6 +838,6 @@ void Engine::playerInput(float t)
 	} 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E))
 	{
-		Playerone.skillshotAttack(&Playertwo);
+		//Playerone.skillshotAttack(&Playertwo);
 	}
 }

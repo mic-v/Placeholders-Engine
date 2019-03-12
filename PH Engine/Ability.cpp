@@ -91,7 +91,7 @@ Skillshot::Skillshot(Player * wielder, float cooldown, float damage, float projs
 	projectileObject = projobj;
 }
 
-void Skillshot::Attack(Player * target)
+void Skillshot::Attack(Player * target, float direction)
 {
 	if (timeLeft <= 0.0f) {
 
@@ -100,9 +100,11 @@ void Skillshot::Attack(Player * target)
 		this->lerping = true;
 		projectileObject->setActive(true);
 
-		float theta = glm::radians(Wielder->getOrientation());
-		projTarget = glm::vec3(sin(theta) * projectileDist, 0, cos(theta) * projectileDist);
-		projectileObject->setPosition(Wielder->getPositionV3() + glm::vec3(sin(theta) * 1, 0, cos(theta) * 1));
+		float theta = glm::radians(direction);
+		projTarget = glm::vec3(Wielder->getPositionV3().x + sin(theta) * projectileDist, Wielder->getPositionV3().y, Wielder->getPositionV3().z + cos(theta) * projectileDist);
+		projStart = Wielder->getPositionV3() + glm::vec3(sin(theta), 0, cos(theta));
+		projectileObject->setPosition(projStart);
+
 
 	}
 
@@ -110,7 +112,10 @@ void Skillshot::Attack(Player * target)
 
 
 }
-void Skillshot::update()
+glm::vec3 lerp(glm::vec3 start, glm::vec3 end, float t) {
+	return (start + t * (end - start));
+}
+void Skillshot::update(float Dt)
 {
 
 	timeLeft = timeStore - glfwGetTime();
@@ -118,16 +123,16 @@ void Skillshot::update()
 		timeLeft = 0.0f;
 	}
 
-	if (lerping == true) {
+	if (lerping) {
 		if (this->lerpParam < 1.000000f) {
 
 			
-			this->lerpParam += projectileSpeed;
+			this->lerpParam += projectileSpeed * Dt;
 
 			
 
-			projectileObject->setPosition(glm::lerp(projectileObject->getPositionV3(), projTarget, lerpParam));
-			if (this->lerpParam >= 0.4f) {
+			projectileObject->setPosition(lerp(projStart, projTarget, lerpParam));
+			if (this->lerpParam >= 1.0f) {
 
 				lerping = false;
 			
@@ -149,8 +154,7 @@ void Skillshot::update()
 		
 	}
 	
-
-	if (!lerping){
+	if(!lerping){
 		lerpParam = 0.0f;
 		projectileObject->setActive(false);
 		hit = false;

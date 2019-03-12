@@ -17,15 +17,19 @@ public:
 	void setAbility(Skillshot* abil);
 
 	void BaseAttack(Player *otherplayer);
-	void skillshotAttack(Player *otherplayer);
+	void skillshotAttack(Player *otherplayer, float directionangle);
 	float getHealth();
 
-	void update();
+	void update(float Dt);
+	void startRoll(float tempdistance);
+	void lerpForRoll(float Dt);
 private:
 	float Health;
-	float Range;
-	float skillshotRange;
-
+	float MeleeRange;
+	glm::vec3 rollTarget;
+	glm::vec3 rollStart;
+	float rollLerp = 0;
+	bool p_isRolling = false;
 	Ability *Melee;
 	Skillshot *FirstAbility;
 	float baseAttackTime = 0;

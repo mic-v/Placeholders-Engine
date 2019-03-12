@@ -78,6 +78,7 @@ void Object::setOrientation(float angle)
 
 	this->setTransform(glm::rotate(this->getTransform(), glm::radians(orientation), glm::vec3(0.0f, 1.0f, 0.0f)));
 }
+
 void Object::setRotationX(float angle)
 {
 

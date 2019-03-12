@@ -44,9 +44,9 @@ public:
 
 	Skillshot(Player* wielder, float cooldown, float damage, float projspeed, float projdist, float projradius, Object* projobj);
 
-	void Attack(Player* target);
+	void Attack(Player* target, float direction);
 
-	void update();
+	void update(float Dt);
 
 private:
 
@@ -56,6 +56,7 @@ private:
 	float lerpParam = 0;
 	float projectileSpeed;
 	glm::vec3 projTarget = glm::vec3(0);
+	glm::vec3 projStart = glm::vec3(0);
 	//how far the projecile goes, will be dynamic
 	float projectileDist;
 	float projectileRadius;

@@ -53,7 +53,7 @@ public:
 	void playerInput(float t);
 	void checkAnimation();
 	bool runAnimation(std::vector<Mesh*> poselist, float);
-	void controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer);
+	void controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player * otherplayer, SA::SkeletalModel * playersmod);
 	
 	
 
