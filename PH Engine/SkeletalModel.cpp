@@ -232,6 +232,9 @@ namespace SA
 
 
 			//EACH OF THESE CORRESPONDS WITH THE CORRECT ID OF THE VERTICES
+			std::cout << "mesh size: "<<m_Meshes.size() << std::endl;
+			std::cout << "num of ind: " << m_Meshes[i].NumIndices << std::endl;
+			std::cout << "num of vert: " << m_Meshes[i].NumVertices << std::endl;
 			std::vector<glm::vec4> tempbonesofvertdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
 			std::vector<glm::vec4> tempweightdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
 			

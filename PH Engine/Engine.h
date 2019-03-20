@@ -130,7 +130,8 @@ private:
 	glm::vec3 position;
 	
 	
-	SA::SkeletalModel g_Animatedmodel;
+	SA::SkeletalModel g_Player1Model;
+	SA::SkeletalModel g_Player2Model;
 	SA::SkeletalModel g_MeshTest;
 	SA::SkeletalModel g_RunModel;
 	SA::SkeletalModel g_RollModel;

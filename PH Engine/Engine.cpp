@@ -51,7 +51,6 @@ bool Engine::startUp()
 		return false;
 	}
 
-
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -184,8 +183,9 @@ bool Engine::startUp()
 	objectTransform = glm::translate(objectTransform, glm::vec3(0.0f, 0.0f, 0.0f));
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	Player2Transform = glm::scale(Player1Transform, glm::vec3(0.2f, 0.2f, 0.2f));
-	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.01f, 0.01f, 0.01f));
+	//Player2Transform = glm::scale(Player1Transform, glm::vec3(0.001f, 0.001f, 0.001f));
+	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.007f, 0.007f, 0.007f));
+	Player2Transform = Player1Transform;
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	_draw.projection = cameraProjection;
 
@@ -203,8 +203,8 @@ bool Engine::startUp()
 	
 	Debris = Mesh();
 	Debris.loadFromFile("Contents/Models/Derbis.obj");
-
-	object2.loadFromFBX("ClemT.fbx");
+	//Debris.loadFromFBX("Debris4.fbx");
+	//object2.loadFromFBX("ClemT.fbx");
 	
 	rockMesh.loadFromFBX("Spear.fbx");
 	//testMat.loadFile("Contents/Materials/Final Map.mtl");
@@ -225,7 +225,7 @@ bool Engine::startUp()
 
 
 	
-	idleframe1.loadFromFBX("Clem.fbx");
+	//idleframe1.loadFromFBX("Debris4.fbx");
 
 
 	//Pose = &idleframe1;
@@ -253,13 +253,18 @@ bool Engine::startUp()
 	}
 
 	//IDLE ANIMATION AND SKELETON 
-	loadAssimpAnim("Idle4.fbx", &g_Animatedmodel);
-	g_Animatedmodel.GetAnimation().ID = 0;
-	g_Animatedmodel.GetAnimation().Loopable = true;
-	idle = g_Animatedmodel.GetAnimation();
-	g_Animatedmodel.m_Transition = idle;
+
+
+
+	loadAssimpAnim("Idle4.fbx", &g_Player1Model);
+	g_Player1Model.GetAnimation().ID = 0;
+	g_Player1Model.GetAnimation().Loopable = true;
+	idle = g_Player1Model.GetAnimation();
+	g_Player1Model.m_Transition = idle;
+
+
 	
-	
+
 	//RUN ANIMATION
 	loadAssimpAnim("Running2.fbx", &g_RunModel);
 	g_RunModel.GetAnimation().ID = 1;
@@ -279,21 +284,23 @@ bool Engine::startUp()
 	punch = g_PunchModel.GetAnimation();
 	punch.Loopable = false;
 	
+	g_Player1Model.loadHierarchy();
 
-	g_Animatedmodel.loadHierarchy();
+	g_Player2Model = g_Player1Model;
+
 	
 
+	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Player1Model);
+	testmesh2 = testmesh;
 
-	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Animatedmodel);
-
-	glm::mat4 tempspear = glm::rotate(360.0f, glm::vec3(0, 1, 0)) * glm::scale(objectTransform, glm::vec3(0.2f));
+	glm::mat4 tempspear = glm::rotate(0.0f, glm::vec3(0, 1, 0)) * glm::scale(objectTransform, glm::vec3(0.2f));
 	
 	Trees = Object(&Debris, &TreeTex, objectTransform, &testMat);
 	rockObject = Object(&rockMesh, &BaseTex, tempspear, &testMat);
 	rockObject2 = Object(&rockMesh, &BaseTex, tempspear, &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f);
-	Playertwo = Player(&idleframe1, &BaseTex, glm::translate(Player2Transform, glm::vec3(45, 2, 0)), &testMat, 120, 1.0f);
+	Playertwo = Player(&testmesh2, &BaseTex, glm::translate(Player2Transform, glm::vec3(1000, 0, 0)), &testMat, 120, 1.0f);
 
 	River = Object(&river, &test3, objectTransform, &testMat);
 
@@ -414,6 +421,17 @@ bool Engine::runAnimation(std::vector<Mesh*> poselist, float incr)
 }
 
 float PI = 3.14159265358979323846f;
+//pos1 is object pos2 is player
+bool checkCollision(glm::vec3 pos1, float rad1, glm::vec3 pos2, float rad2) {
+	float x = pos1.x - pos2.x;
+	float z = pos1.z - pos2.z;
+
+	if (sqrt((x*x) + (z*z)) <= sqrt((rad1 + rad2) * (rad1 + rad2))) {
+		return false;
+	}
+
+	return true;
+}
 
 void Engine::controllerInput(float Dt, int controller, float speed, Player *player, const float*axes, const unsigned char* buttons, Player* otherplayer, SA::SkeletalModel * playersmod)
 {
@@ -422,10 +440,12 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 	
 	if (controller == 1)
 	{
-		//1 is up/down = is left/right
+		//1 is up/down 0 is left/right
 		//std::cout << "0: "<<axes[0] << " 1: " << axes[1] << std::endl;
 		//std::cout << "2: " << axes[2] << " 5: " << axes[5] << std::endl;
-
+		//std::cout << axes[2] << std::endl;
+		// LEFT TRIGGER: std::cout << axes[3] << std::endl;
+		// RIGHT TRIGGER: std::cout << axes[4] << std::endl;
 
 		if (!playersmod->m_isPlayingStatic) {
 			if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
@@ -445,9 +465,16 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 
 				glm::vec3 tempdir2 = glm::vec3(glm::sin(glm::radians(tempangle)) * speed, 0, glm::cos(glm::radians(tempangle)) * speed);
 
+				
+				player->setTransform(glm::translate(player->getTransform(), glm::vec3(tempdir2.x, 0, 0)));
+				if (checkCollision(BasePlate.getPositionV3(), 7, player->getPositionV3(), 0)) {
+					player->setTransform(glm::translate(player->getTransform(), glm::vec3(-tempdir2.x, 0, 0)));
+				}
 
-				player->setTransform(glm::translate(player->getTransform(), glm::vec3(tempdir2.x, 0, tempdir2.z)));
-
+				player->setTransform(glm::translate(player->getTransform(), glm::vec3(0, 0, tempdir2.z)));
+				if (checkCollision(BasePlate.getPositionV3(), 7, player->getPositionV3(), 0)) {
+					player->setTransform(glm::translate(player->getTransform(), glm::vec3(0, 0, -tempdir2.z)));
+				}
 
 
 
@@ -485,8 +512,12 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 			}
 			//X
 			if (GLFW_PRESS == buttons[1]) {
-				playersmod->setAnimation2(&roll);
-				player->startRoll(2);
+				if(!playersmod->m_isBlending){
+					playersmod->setAnimation2(&roll);
+					player->startRoll(2);
+				
+				}
+			
 				//std::cout << "X" << std::endl;
 			}
 
@@ -608,7 +639,8 @@ void Engine::runGame()
 			frames = 0;
 			lastTime += 1.0;
 		}
-		g_Animatedmodel.Update(deltaTime);
+		g_Player1Model.Update(deltaTime);
+		g_Player2Model.Update(deltaTime);
 		playerInput(deltaTime);
 
 		
@@ -656,22 +688,31 @@ void Engine::render()
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	
-	//LUT.Bind3D(12);
-	//frameBuffer.clear();
-	//frameBuffer.bind();*/
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	animsh.use();
 	animsh.sendUniformMat4("projection", cameraProjection);
 	animsh.sendUniformMat4("view", _camera->getLookMatrix());
-	g_Animatedmodel.sendToShader(&animsh);
+	g_Player1Model.sendToShader(&animsh);
 	////Lights here
 	first.LoadLight(&animsh);
 	second.LoadLight(&animsh);
-	//
-	//
 	////Objects here//
-
 	Playerone.LoadObject(&animsh);
+
+	//
+	animsh.unuse();
+	
+	animsh.use();
+	animsh.sendUniformMat4("projection", cameraProjection);
+	animsh.sendUniformMat4("view", _camera->getLookMatrix());
+	g_Player2Model.sendToShader(&animsh);
+	////Lights here
+	first.LoadLight(&animsh);
+	second.LoadLight(&animsh);
+	////Objects here//
+	Playertwo.LoadObject(&animsh);
 
 	//
 	animsh.unuse();
@@ -688,7 +729,7 @@ void Engine::render()
 	////Objects here//
 	Trees.LoadObject(&sh2);
 	BasePlate.LoadObject(&sh2);
-	Playertwo.LoadObject(&sh2);
+	//Playertwo.LoadObject(&sh2);
 	rockObject.LoadObject(&sh2);
 	rockObject2.LoadObject(&sh2);
 	//
@@ -696,6 +737,7 @@ void Engine::render()
 
 	//---------------------------------------------------------
 	////TRANSPARENT OBJS HERE
+	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	sht.use();
@@ -710,27 +752,12 @@ void Engine::render()
 
 	sht.unuse();
 	glDisable(GL_BLEND);
-	//---------------------------------------------------------
-	/*frameBuffer.unbind();
-	LUTShader.use();
-	LUTShader.sendUniformMat4("projection", cameraProjection);
-	LUTShader.sendUniformMat4("view", _camera->getLookMatrix());
-	LUTShader.sendUniformFloat("uAmount", 1.0f);
-	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
-	frameBuffer.bindColorAsTexture(0, 13);
-	glDisable(GL_DEPTH_TEST);
-	frameBuffer.drawFSQ();
-	frameBuffer.unbindTexture(13);
-	LUTShader.unuse();
+	glDepthMask(GL_TRUE);
 
-	LUT.unbind3D(12);*/
-
-	//dynamicsWorld->debugDrawWorld();
 	glBindVertexArray(0);
 	TreeTex.Unbind();
 
-	//RenderAnimation();
-	//sh2.unuse();
+
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	
@@ -748,17 +775,17 @@ void Engine::playerInput(float t)
 	int count;
 	const unsigned char* buttons = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 5.0f, &Playerone, axes, buttons, &Playertwo, &g_Animatedmodel);
+	controllerInput(t, glfwJoystickPresent(GLFW_JOYSTICK_1), 7.5f, &Playerone, axes, buttons, &Playertwo, &g_Player1Model);
 	
 
 
-	/*int axesCount2;
+	int axesCount2;
 	const float *axes2 = glfwGetJoystickAxes(GLFW_JOYSTICK_2, &axesCount2);
 	int count2;
 	const unsigned char* buttons2 = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &count2);
 
-	controllerInput(t,glfwJoystickPresent(GLFW_JOYSTICK_2), 0.25f, &Playertwo, axes2, buttons2, &Playerone);
-*/
+	controllerInput(t,glfwJoystickPresent(GLFW_JOYSTICK_2), 7.5f, &Playertwo, axes2, buttons2, &Playerone, &g_Player2Model);
+
 
 
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_1))

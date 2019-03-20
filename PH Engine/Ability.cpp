@@ -95,12 +95,15 @@ void Skillshot::Attack(Player * target, float direction)
 {
 	if (timeLeft <= 0.0f) {
 
+		projDirection = direction;
+		
 		this->Target = target;
 		this->setTimeStore();
 		this->lerping = true;
 		projectileObject->setActive(true);
 
 		float theta = glm::radians(direction);
+		projectileObject->setOrientation(theta);
 		projTarget = glm::vec3(Wielder->getPositionV3().x + sin(theta) * projectileDist, Wielder->getPositionV3().y, Wielder->getPositionV3().z + cos(theta) * projectileDist);
 		projStart = Wielder->getPositionV3() + glm::vec3(sin(theta), 0, cos(theta));
 		projectileObject->setPosition(projStart);
@@ -157,6 +160,7 @@ void Skillshot::update(float Dt)
 	if(!lerping){
 		lerpParam = 0.0f;
 		projectileObject->setActive(false);
+		projectileObject->setRotationY(glm::radians(-projDirection));
 		hit = false;
 	}
 

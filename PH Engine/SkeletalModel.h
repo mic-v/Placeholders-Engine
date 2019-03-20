@@ -34,6 +34,7 @@ namespace SA
 		std::vector<glm::vec4> weightdata;
 		sAnimation                      m_Transition;
 		bool							m_isPlayingStatic = false;
+		bool							m_isBlending = false;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
@@ -45,7 +46,7 @@ namespace SA
 		float							m_SlerpTime;
 		float                           m_AnimationTime;
 		float                           m_AnimationTime2;
-		bool							m_isBlending = false;
+	
 	
 
 	private:

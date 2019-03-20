@@ -51,7 +51,7 @@ public:
 private:
 
 
-
+	float projDirection = 0;
 	Object* projectileObject;
 	float lerpParam = 0;
 	float projectileSpeed;
