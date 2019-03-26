@@ -7,7 +7,7 @@
 
 namespace SA
 {
-	SkeletalModel::SkeletalModel() 
+	SkeletalModel::SkeletalModel()
 		: m_AnimationTime(0.0f), m_AnimationTime2(0.0f)
 	{
 		Clear();
@@ -34,7 +34,7 @@ namespace SA
 			m_isBlending = true;
 		}
 		//else we can add animations to queues and play them later
-		
+
 	}
 
 	void SkeletalModel::startBlend(float Dt)
@@ -44,7 +44,7 @@ namespace SA
 			if (m_SlerpTime < 1.0f) {
 				m_SlerpTime += 3.5 * Dt;
 			}
-			else if(m_Animation2.Loopable){
+			else if (m_Animation2.Loopable) {
 				m_isBlending = false;
 				m_SlerpTime = 0.0f;
 				m_Animation = m_Animation2;
@@ -65,7 +65,7 @@ namespace SA
 		}
 	}
 
-	
+
 
 	void SkeletalModel::Clear()
 	{
@@ -105,7 +105,7 @@ namespace SA
 				float temptime2 = m_AnimationTime2 + Dt * m_Animation2.TicksPerSecond;
 				m_isPlayingStatic = true;
 				if (temptime2 - m_Animation2.Duration > 0) {
-					m_AnimationTime2 = temptime2 - (temptime2/m_Animation2.Duration) * m_Animation2.Duration;
+					m_AnimationTime2 = temptime2 - (temptime2 / m_Animation2.Duration) * m_Animation2.Duration;
 					m_Animation2.Played = true;
 				}
 				else {
@@ -117,7 +117,7 @@ namespace SA
 		if (!m_Animation.Played) {
 			float temptime1 = m_AnimationTime + Dt * m_Animation.TicksPerSecond;
 			if (temptime1 - m_Animation.Duration > 0) {
-				m_AnimationTime = temptime1 - (temptime1/m_Animation.Duration) * m_Animation.Duration;
+				m_AnimationTime = temptime1 - (temptime1 / m_Animation.Duration) * m_Animation.Duration;
 			}
 			else {
 				m_AnimationTime = temptime1;
@@ -131,10 +131,10 @@ namespace SA
 	void SkeletalModel::Update(float a_Dt)
 	{
 		startBlend(a_Dt);
-		
+
 		playAnimations(a_Dt);
 
-		
+
 		ReadNodeHierarchy(m_AnimationTime, m_AnimationTime2, m_Animation, m_Skeleton, m_Skeleton.Bones[0], m_Skeleton.Bones[0].NodeTransform);
 
 	}
@@ -149,13 +149,14 @@ namespace SA
 		glm::mat4x4 NodeTransformation(a_Bone.NodeTransform);
 		const sNodeAnimation* pNewNodeAnim = FindNodeAnim(a_Animation, NodeName);
 		const sNodeAnimation* pNewNodeAnim2 = nullptr;
-		
+
 		if (m_isBlending) {
 
 			pNewNodeAnim2 = FindNodeAnim(m_Animation2, NodeName);
 		}
 
-
+		
+		
 		if (pNewNodeAnim)
 		{
 			glm::vec3 Translation = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim, AnimationTime);
@@ -166,17 +167,17 @@ namespace SA
 			glm::mat4x4 TranslationM2;
 
 
-			if (m_isBlending) {
+			if (m_isBlending  ) {
 				glm::quat RotationQ2 = NodeAnimation_FindInterpolatedRotation(*pNewNodeAnim2, AnimationTime2);
 				RotationM2 = glm::toMat4(glm::slerp(RotationQ, RotationQ2, m_SlerpTime));
-				
+
 				TranslationM2 = glm::translate(Translation);
 				if (NodeName == "Hips") {
 					glm::vec3 Translation2 = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim2, AnimationTime2);
 					TranslationM2 = glm::translate(glm::lerp(Translation, Translation2, m_SlerpTime));
 				}
-				
-				
+
+
 
 			}
 			else {
@@ -188,7 +189,7 @@ namespace SA
 			// Combine the above transformations
 			NodeTransformation = TranslationM2 * RotationM2;// *ScalingM2;
 		}
-		
+
 		glm::mat4x4 GlobalTransformation = ParentTransform * NodeTransformation;
 
 		unsigned int BoneIndex = Skeleton_FindBoneIndex(a_Skeleton, NodeName);
@@ -197,10 +198,16 @@ namespace SA
 		{
 			sBone* pBone = &a_Skeleton.Bones[BoneIndex];
 			pBone->FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * pBone->OffsetMatrix;
-			
+
 		}
 		else {
 			std::cout << NodeName << std::endl;
+		}
+		//std::cout << NodeName << std::endl;
+		if (NodeName == "mixamorig:LeftHand") {
+
+			sBone* pBone = &a_Skeleton.Bones[BoneIndex];
+			this->m_RightHand = pBone->FinalTransformation;
 		}
 
 		for (unsigned int i = 0; i < a_Bone.NumChildren; i++)
@@ -217,7 +224,7 @@ namespace SA
 		for (int i = 0; i < this->GetSkeleton().Bones.size(); i++) {
 			temp->sendUniformMat4("BoneTransforms[" + std::to_string(i) + "]", this->GetSkeleton().Bones[i].FinalTransformation);
 		}
-		
+
 	}
 
 
@@ -227,24 +234,24 @@ namespace SA
 		{
 			// Reset mesh vertices and normals
 			sAnimatedMesh& AnimMesh = m_Meshes[i];
-			memset(AnimMesh.pTransformedVertices, 0, AnimMesh.NumVertices* sizeof(glm::vec3));
-			memset(AnimMesh.pTransformedNormals, 0, AnimMesh.NumVertices* sizeof(glm::vec3));
+			memset(AnimMesh.pTransformedVertices, 0, AnimMesh.NumVertices * sizeof(glm::vec3));
+			memset(AnimMesh.pTransformedNormals, 0, AnimMesh.NumVertices * sizeof(glm::vec3));
 
 
 			//EACH OF THESE CORRESPONDS WITH THE CORRECT ID OF THE VERTICES
-			std::cout << "mesh size: "<<m_Meshes.size() << std::endl;
+			std::cout << "mesh size: " << m_Meshes.size() << std::endl;
 			std::cout << "num of ind: " << m_Meshes[i].NumIndices << std::endl;
 			std::cout << "num of vert: " << m_Meshes[i].NumVertices << std::endl;
 			std::vector<glm::vec4> tempbonesofvertdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
 			std::vector<glm::vec4> tempweightdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
-			
-			
+
+
 
 			int weights = 0;
 			for (unsigned int i = 0; i < a_Skeleton.Bones.size(); ++i)
 			{
 				const sBone& Bone = a_Skeleton.Bones[i];
-				
+
 				glm::mat4x4 Transformation = Bone.FinalTransformation;
 
 				glm::mat3x3 Rotation = glm::mat3x3(Transformation);
@@ -271,16 +278,16 @@ namespace SA
 						tempweightdata[Weight.VertexID].w = Weight.Weight;
 					}
 				}
-				
-				
+
+
 			}
 
 			vertbonedata = tempbonesofvertdata;
 			weightdata = tempweightdata;
-			
+
 		}
 
-	
+
 	}
 
 

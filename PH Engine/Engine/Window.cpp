@@ -227,7 +227,7 @@ namespace plaho {
 
 			win->_mx = xpos;
 			win->_my = ypos;
-			win->_camera->processMouseMovement(xoff, yoff);
+			//win->_camera->processMouseMovement(xoff, yoff);
 		}
 		void processInput(GLFWwindow * window)
 		{

@@ -8,7 +8,7 @@ public:
 	Ability();
 
 	Ability(Player* wielder, float cooldown, float damage);
-		 
+
 
 	float getCooldown();
 	float getDamage();
@@ -20,7 +20,7 @@ public:
 
 	virtual void update();
 
-	virtual void Attack(Player* target);
+	virtual bool Attack(Player* target);
 
 protected:
 
@@ -44,7 +44,7 @@ public:
 
 	Skillshot(Player* wielder, float cooldown, float damage, float projspeed, float projdist, float projradius, Object* projobj);
 
-	void Attack(Player* target, float direction);
+	bool Attack(Player* target, float direction);
 
 	void update(float Dt);
 

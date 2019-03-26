@@ -19,6 +19,14 @@ std::string zeroPadNumber(unsigned int num, unsigned int padding)
 	std::string ret = std::to_string(num);
 	// Append zeros
 	for (unsigned int i = 0; i < padding - ret.length(); i++)
-	{	ret = "0" + ret;	}
+	{
+		ret = "0" + ret;
+	}
 	return ret;
+}
+
+void setOpenGLName(GLenum identifier, GLuint name, const std::string &label)
+{
+	std::string labelEdit = label + " (" + std::to_string(name) + ")";
+	glObjectLabel(identifier, name, static_cast<GLsizei>(labelEdit.size()), labelEdit.c_str());
 }

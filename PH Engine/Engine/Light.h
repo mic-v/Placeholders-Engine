@@ -32,7 +32,7 @@ struct PointLight {
 
 };
 
-class Light {
+class Light{
 public:
 	Light(){}
 	Light(glm::vec4 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 spec);

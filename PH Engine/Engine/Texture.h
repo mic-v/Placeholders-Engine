@@ -21,8 +21,22 @@ public:
 	void Bind3D(int textureSlot) const;
 	void unbind3D(int textureSlot) const;
 	void Unbind();
+	void generateMipMaps();
 	GLuint Textobj = 0;
 	GLuint _TexHandle;
 	GLenum _Target;
+
+	std::string filename;
+	std::string filetype;
+
+	GLenum _InternalFormat;
+	GLenum _Format;
+	
+
+	int sizeX;
+	int sizeY;
+	int channels;
+
+	static std::string _TextureDirectory;
 
 };

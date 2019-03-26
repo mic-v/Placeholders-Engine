@@ -1,61 +1,50 @@
 #pragma once
 #include <vector>
-#include "IO.h"
 #include "VertexBufferObject.h"
 
-
-
-struct DepthTarget {
-	DepthTarget() = default;
+//textures
+struct DepthTarget
+{
 	~DepthTarget();
 	void unload();
-
 	GLuint _Handle;
-	bool _IsActive = false;
-
+	bool _isActive = false;
 };
 
-struct ColorTarget {
-	ColorTarget() = default;
+struct ColorTarget
+{
 	~ColorTarget();
-
 	void unload();
-
-	std::vector<GLuint> _Handle; 
-	std::vector<GLenum> _Buffer;
+	std::vector<GLuint> _Handle;
 	std::vector<GLenum> _Format;
+	std::vector<GLenum> _Buffer;
 	unsigned _NumAttachments = 0;
-
 };
-class Framebuffer
+
+class FrameBuffer
 {
 public:
-	Framebuffer();
-
-	~Framebuffer();
-
+	~FrameBuffer();
 	void unload();
 
 	void init(unsigned width, unsigned height);
-
 	void addDepthTarget();
 	void addColorTarget(GLenum format);
-	void resize();
+	void resize(unsigned width, unsigned height);
 
 	void setViewport() const;
 	void bind() const;
 	void unbind() const;
-	void renderToFSQ() const;
+	void renderToFSQ() const; //Full Screen Quad
 
 	void bindColorAsTexture(unsigned colorBuffer, int textureSlot) const;
 	void bindDepthAsTexture(int textureSlot) const;
-	void unbindTexture(int textureSlot) const;
+	void unbindTexture(int textureSlot);
 
 	void clear() const;
 
-
-	GLuint _FBO; //Out Handle to the framebuffer
-	bool _IsInit = false;
+	GLuint _FBO;//Our handle to the framebuffer
+	bool _IsInit = false; //to see if framebuffer is initialized 
 
 	DepthTarget _Depth;
 	ColorTarget _Color;
@@ -68,13 +57,11 @@ public:
 
 	GLbitfield _ClearFlag = 0;
 
-	//Framebuffer Quad
-	static void initFrameBuffers();
-	static void drawFSQ(); //Draw Fullscreen Quad
+	static void initFramBuffers(); //initialize everything from framebuffer class
+	static void drawFSQ(); //draw fullscreen quad
 
 private:
 	static int _MaxColorAttachments;
 	static bool _IsInitFrameBuffers;
-	static VertexArrayObject _FullScreenQuad;
-
+	static VertexArrayObject _FullScreenQuad; //vertices 
 };

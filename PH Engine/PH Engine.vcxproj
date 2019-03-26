@@ -102,11 +102,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\SOIL2\include;$(SolutionDir)\External\assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\SOIL2\lib;$(SolutionDir)\External\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -149,11 +149,11 @@
     <ClCompile Include="..\External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Ability.cpp" />
     <ClCompile Include="AssimpConverter.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CUBE.cpp" />
     <ClCompile Include="Engine\DebugDraw.cpp" />
     <ClCompile Include="Engine\InputModule.cpp" />
     <ClCompile Include="Engine\Light.cpp" />
-    <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\FPSCamera.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
     <ClCompile Include="Engine\Shader.cpp" />
@@ -167,17 +167,19 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PostProcessBuffer.cpp" />
     <ClCompile Include="SkeletalModel.cpp" />
     <ClCompile Include="SkeletalModelSerializer.cpp" />
     <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="VertexBufferObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
     <ClInclude Include="AssimpConverter.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CUBE.h" />
     <ClInclude Include="Engine\AudioModule.h" />
-    <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\DebugDraw.h" />
     <ClInclude Include="Engine\FPSCamera.h" />
     <ClInclude Include="Engine\InputModule.h" />
@@ -196,9 +198,11 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PostProcessBuffer.h" />
     <ClInclude Include="SkeletalModel.h" />
     <ClInclude Include="SkeletalModelSerializer.h" />
     <ClInclude Include="Skybox.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Types.h" />
     <ClInclude Include="VertexBufferObject.h" />
   </ItemGroup>

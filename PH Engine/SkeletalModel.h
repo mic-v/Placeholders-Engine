@@ -35,10 +35,11 @@ namespace SA
 		sAnimation                      m_Transition;
 		bool							m_isPlayingStatic = false;
 		bool							m_isBlending = false;
+		glm::mat4						m_RightHand;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
-		
+
 		sAnimation                      m_Animation;
 		sAnimation                      m_Animation2;
 		glm::mat4x4                     m_GlobalInverseTransform;
@@ -46,8 +47,8 @@ namespace SA
 		float							m_SlerpTime;
 		float                           m_AnimationTime;
 		float                           m_AnimationTime2;
-	
-	
+
+
 
 	private:
 		void                            ReadNodeHierarchy(float AnimationTime, float AnimationTime2, sAnimation& a_Animation, sSkeleton& a_Skeleton, sBone& a_Bone, const glm::mat4x4& ParentTransform);
@@ -89,9 +90,9 @@ namespace SA
 
 
 
-	glm::quat NodeAnimation_FindInterpolatedRotation(const sNodeAnimation& a_NodeAnimation, float a_AnimationTime) 
-	{ 
-		return NodeAnimation_FindInterpolatedValue(a_NodeAnimation.RotationKeys, a_AnimationTime); 
+	glm::quat NodeAnimation_FindInterpolatedRotation(const sNodeAnimation& a_NodeAnimation, float a_AnimationTime)
+	{
+		return NodeAnimation_FindInterpolatedValue(a_NodeAnimation.RotationKeys, a_AnimationTime);
 	}
 
 

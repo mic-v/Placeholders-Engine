@@ -102,6 +102,10 @@ void VertexArrayObject::reuploadVAO()
 		glBindBuffer(GL_ARRAY_BUFFER, GL_NONE);
 		this->unbind();
 	}
+	else
+	{
+		SAT_DEBUG_LOG_WARNING("VAO #%d is not dynamic!", vaoHandle);
+	}
 }
 
 void VertexArrayObject::draw() const
@@ -126,7 +130,7 @@ void VertexArrayObject::unbind() const
 
 void VertexArrayObject::destroy()
 {
-	if(vaoHandle)
+	if (vaoHandle)
 	{//Delete the data on the GPU
 		glDeleteVertexArrays(1, &vaoHandle);
 		glDeleteBuffers((GLsizei)vboHandles.size(), &vboHandles[0]);

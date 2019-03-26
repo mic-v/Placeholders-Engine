@@ -3,18 +3,6 @@
 #include "IO.h"
 #include <vector>
 
-#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
-float anisotropyAmount = 16.0f;
-
-
-TextureWrap::TextureWrap()
-{
-	x = GL_REPEAT;
-	y = GL_REPEAT;
-	z = GL_REPEAT;
-}
-
-
 std::string facePath[] =
 {
 	"Right",
@@ -46,7 +34,7 @@ bool TextureCube::load(const std::string & file, bool mipmap)
 	{
 		std::string filepath = filename;
 		filepath.insert(filename.find_last_of('.'), facePath[i]);
-		//SAT_DEBUG_LOG("%s", filepath.c_str());
+		SAT_DEBUG_LOG("%s", filepath.c_str());
 		filepaths.push_back(filepath);
 	}
 	return load(filepaths, mipmap);
@@ -54,32 +42,27 @@ bool TextureCube::load(const std::string & file, bool mipmap)
 
 bool TextureCube::load(const std::vector<std::string>& file, bool mipmap)
 {
-	filename = "../assets/textures/cubemap/" + file[0];
+	filename = file[0];
 	size_t offset = file[0].find_last_of('.');
 	filetype = file[0].substr(offset + 1);
 
 	_Target = GL_TEXTURE_CUBE_MAP;
-	_InternalFormat = GL_RGB8;
+	_InternalFormat = GL_SRGB8;
 
 	glGenTextures(1, &this->_TexHandle);
-
-
-	glBindTexture(this->_Target, this->_TexHandle);
+	glBindTexture(_Target, this->_TexHandle);
 
 	std::vector<unsigned char*> textureData(6);
 
 	for (int i = 0; i < 6; ++i)
 	{
-		textureData[i] = SOIL_load_image(("../assets/textures/cubemap/" + file[i]).c_str(),
+		textureData[i] = SOIL_load_image((file[i]).c_str(),
 			&this->sizeX, &this->sizeY, &this->channels, SOIL_LOAD_RGB);
 
 		if (this->sizeX == 0 || this->sizeY == 0 || this->channels == 0)
 		{
-			
-			if (this->_TexHandle)
-			{
-				glDeleteTextures(1, &this->_TexHandle);
-			}
+			SAT_DEBUG_LOG_ERROR("TEXTURE BROKE: %s", this->filename.c_str());
+			Unload();
 			return false;
 		}
 
@@ -101,24 +84,22 @@ bool TextureCube::load(const std::vector<std::string>& file, bool mipmap)
 	{
 		glTexImage2D(
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-			0, GL_RGB, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData[i]);
+			0, _InternalFormat, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData[i]);
 		SOIL_free_image_data(textureData[i]);
 	}
 	if (mipmap)
 	{
-		
-		glGenerateTextureMipmap(this->_TexHandle);
-		glTexParameterf(this->_TexHandle, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropyAmount);
+		generateMipMaps();
 	}
 
-	_Wrap.x = GL_CLAMP_TO_EDGE;
-	_Wrap.y = GL_CLAMP_TO_EDGE;
+	/*_Wrap.x = GL_CLAMP_TO_EDGE;
+	_Wrap.y = GL_CLAMP_TO_EDGE;*/
 
-	glTexParameteri(this->_TexHandle, GL_TEXTURE_MIN_FILTER, this->_Filter.min);
-	glTexParameteri(this->_TexHandle, GL_TEXTURE_MAG_FILTER, this->_Filter.mag);
-	glTexParameteri(this->_TexHandle, GL_TEXTURE_WRAP_S, this->_Wrap.x);
-	glTexParameteri(this->_TexHandle, GL_TEXTURE_WRAP_T, this->_Wrap.y);
+	glTextureParameteri(this->_TexHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTextureParameteri(this->_TexHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureParameteri(this->_TexHandle, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTextureParameteri(this->_TexHandle, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	glBindTexture(this->_Target, GL_NONE);
+	this->Unbind();
 	return true;
 }

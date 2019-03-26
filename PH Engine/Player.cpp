@@ -5,16 +5,17 @@
 Player::Player()
 {
 }
-Player::Player(Mesh * tempmesh, Texture * temptext, glm::mat4 temptrans, Material * tempmat, int temphealth, float temprange) : Object(tempmesh, temptext, temptrans, tempmat)
+Player::Player(Mesh * tempmesh, Texture * temptext, glm::mat4 temptrans, Material * tempmat, int temphealth, float temprange, Object* Aim) : Object(tempmesh, temptext, temptrans, tempmat)
 {
 	Health = temphealth;
 	MeleeRange = temprange;
+	Pointer = Aim;
 }
 
 
-void Player::BaseAttack(Player * otherplayer)
+bool Player::BaseAttack(Player * otherplayer)
 {
-	Melee->Attack(otherplayer);
+	return Melee->Attack(otherplayer);
 }
 
 
@@ -35,9 +36,9 @@ void Player::setAbility(Skillshot * abil)
 {
 	FirstAbility = abil;
 }
-void Player::skillshotAttack(Player * otherplayer, float directionangle)
+bool Player::skillshotAttack(Player * otherplayer, float directionangle)
 {
-	FirstAbility->Attack(otherplayer, directionangle);
+	return FirstAbility->Attack(otherplayer, directionangle);
 
 }
 
@@ -71,8 +72,13 @@ void Player::lerpForRoll(float Dt)
 	if (p_isRolling) {
 		if (rollLerp < 1) {
 			rollLerp += 1 * Dt;
+			glm::vec3 originalpos = this->getPositionV3();
 			glm::vec3 lerpedposition = glm::vec3(glm::lerp(this->rollStart, this->rollTarget, rollLerp));
 			this->setPosition(lerpedposition);
+			if (this->checkCollisions()) {
+				this->setPosition(originalpos);
+			}
+
 		}
 		else {
 			p_isRolling = false;

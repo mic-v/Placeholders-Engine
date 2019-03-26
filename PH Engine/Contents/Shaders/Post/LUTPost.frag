@@ -1,4 +1,4 @@
-#version 460 //Version of OpenGL we're using. - 4.2
+#version 420 //Version of OpenGL we're using. - 4.2
 
 
 layout(binding = 12) uniform sampler3D uLUT3D;

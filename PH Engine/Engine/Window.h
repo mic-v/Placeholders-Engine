@@ -5,7 +5,7 @@
 //
 
 //#include "Camera.h"
-#include "Camera.h"
+#include "../Camera.h"
 #include "Shader.h"
 #include <iostream>
 

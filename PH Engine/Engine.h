@@ -19,21 +19,23 @@
 #include "CUBE.h" 
 #include "Player.h"
 #include "Engine/Math/math.h"
-#include "Engine/Camera.h"
+#include "Camera.h"
 #include "Engine/Light.h"
-#include "Engine/FPSCamera.h"
-
 #include "Engine/InputModule.h"
 #include "Engine/DebugDraw.h"
 #include <vector>
 #include "Material.h"
 #include "FrameBuffer.h"
+#include "PostProcessBuffer.h"
 #include "Ability.h"
 #include <btBulletDynamicsCommon.h>
 #include "AssimpConverter.h"
 #include "SkeletalModel.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+
+#include "Skybox.h"
+
 //#include "SOIL2.h"
 //
 using namespace plaho;
@@ -85,28 +87,41 @@ private:
 	float currentlerpparam = 0;
 	Camera *_camera;
 	Camera camera2;
-	FPSCamera camera1;
+	Camera cameraShadow;
 	Mesh Debris;
-	Mesh object2;
+	Mesh Pointer;
 	Mesh basemap;
 	Mesh river;
-	Mesh rockMesh;
+	Mesh Spear;
 
 	Mesh idleframe1;
 	
 
 	Mesh * Pose;
 	
+
+
 	
-	Object Trees;
+	Object Tree1;
+	Object Tree2;
+	Object Tree3;
+	Object Tree4;
+	Object TestSpear;
+	Object* Mover;
 	Object BasePlate;
 	Object River;
-	Object rockObject;
-	Object rockObject2;
+	Object Aim1;
+	Object Aim2;
+	Object Spear1;
+	Object Spear2;
+	Object testPBR;
+	Object SkyboxOBJ;
 	Player Playerone;
 	Player Playertwo;
 	Mesh testmesh;
 	Mesh testmesh2;
+	Mesh testPBRMesh;
+	Mesh SkyboxMesh;
 
 	Ability tempability;
 	Ability tempability2;
@@ -116,17 +131,42 @@ private:
 	Shader sh2;
 	Shader sht;
 	Shader LUTShader;
+	Shader PBRShader;
+	Shader SKYShader;
+	Shader ShadowShader;
+	Shader depthPass;
+	Shader depthPass2;
 	Light first;
 	Light second;
+	Light ShadowLight;
 	Texture TreeTex;
 	Texture BaseTex;
 	Texture test3;
+	Texture lightColor;
+	Texture arrow;
+
+	std::vector<std::string> skyboxTexture;
+	TextureCube *skybox;
+	//PBR
+	Texture metal;
+	Texture mMetal;
+	Texture NormalMap;
+	Texture rMetal;
+	Texture ambient;
+	Texture IBL_Lookup;
+	//PBR END
+
 	Material testMat;
-	Framebuffer frameBuffer;
+	FrameBuffer frameBuffer;
+	FrameBuffer shadowFramebuffer;
+
+	PostProcessBuffer postBuffer;
+
 	glm::mat4 objectTransform;
 	glm::mat4 Player1Transform;
 	glm::mat4 Player2Transform;
 	glm::mat4 cameraProjection;
+	glm::mat4 shadowProjection;
 	glm::vec3 position;
 	
 	
@@ -143,6 +183,8 @@ private:
 	SA::sAnimation punch;
 
 	CUBELoader LUT;
+
+	glm::mat4 depthBiasMVP;
 
 	bool skillshotPress = false;
 	

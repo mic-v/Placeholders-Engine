@@ -18,22 +18,35 @@ public:
 	glm::vec3 getPositionV3();
 	glm::vec4 getPositionV4();
 	glm::mat4 getTransform();
-	
+
 	float getOrientation();
 
 	bool getActive();
 	void setActive(bool temp);
 	void setOrientation(float angle);
+	void Rotate(float angle);
 	void setRotationX(float angle);
 	void setRotationY(float angle);
 	void setRotationZ(float angle);
 	void setTransform(glm::mat4 temp);
+	void setRadius(float temp);
+	float getRadius();
+	bool checkOutterCollision(Object*);
+	bool checkInnerCollision(Object*);
+	bool checkCollisions();
+	static vector<Object*> InnerColliders;
+	static vector<Object*> OutterColliders;
 private:
 	Mesh *ObjectMesh;
 	Texture *ObjectTexture;
 	glm::mat4 Transform;
 	Material *ObjectMat;
 	float orientation = 0;
+	float Radius = 0.0f;
 	bool active = true;
 
 };
+
+
+
+

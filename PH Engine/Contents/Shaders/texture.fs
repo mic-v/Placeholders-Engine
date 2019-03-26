@@ -31,6 +31,8 @@ uniform PointLight pointLights[NR_POINT_LIGHTS];
 //goes from 0-32, 
 //if multitexturing is needed, utilize other slots
 uniform sampler2D uTex;
+uniform mat4 depthBiasMVP;
+layout (binding = 13) uniform sampler2D uTexShadowDepth;
 
 
 //stuff coming in from frag shader
@@ -51,9 +53,21 @@ void CalcPointLight(PointLight light){
 
 	float NdotL = dot(normal, lightDir);
 
-	if (NdotL > 0.0){
-		//how much the light affects this surface
+vec4 shadowcoord = depthBiasMVP * vec4(pos, 1.0);
 
+float shadowDepth = texture(uTexShadowDepth, shadowcoord.xy).r;
+
+float shadowAmount = 1.0f;
+
+	// shadowAmount is multiplied into the diffuse and specular equations, meaning there will be no lighting if shadowAmount is 0!
+	if(shadowDepth < shadowcoord.z - 0.00022)
+	{
+		shadowAmount = 0.1f;
+	}
+
+	
+		//how much the light affects this surface
+if(NdotL > 0.0){
 		//calculate attenuation
 		float attenuation = 1.0 / (light.Attenuation_Constant + (light.Attenuation_Linear * dist)+ (light.Attenuation_Quadratic * dist * dist));
 
@@ -66,7 +80,7 @@ void CalcPointLight(PointLight light){
 		//calcluate specular contribution 
 		outColor.rgb += light.LightSpecular * pow(NdotHV, light.LightSpecularExponent) * attenuation;
 
-	}
+}
 	
 }
 

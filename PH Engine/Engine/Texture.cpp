@@ -10,6 +10,13 @@ Texture::Texture() {
 Texture::~Texture() {
 	Unload();
 }
+
+void Texture::generateMipMaps()
+{
+	glGenerateTextureMipmap(this->_TexHandle);
+	glTextureParameterf(this->_TexHandle, GL_TEXTURE_MAX_ANISOTROPY, 16.f);
+}
+
 bool Texture::LoadTexture(const std::string& filename) {
 	int height;
 	int width;
