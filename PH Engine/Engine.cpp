@@ -12,7 +12,7 @@ int controllertype = 4;
 
 Engine* Engine::_instance = nullptr;
 float currentAngle = 135.0f;
-
+//new
 float Engine::hp1 = 100.f;
 float Engine::hp2 = 100.f;
 int Engine::win1 = 0.f;
