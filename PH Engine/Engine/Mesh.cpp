@@ -340,7 +340,8 @@ bool Mesh::loadFromFBX(std::string filename)
 	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/Models/" + filename,
 		aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
-		aiProcess_SortByPType);
+		aiProcess_SortByPType| 
+		aiProcess_FlipUVs);
 
 	std::cout << tempimporter.GetErrorString() << std::endl;
 	

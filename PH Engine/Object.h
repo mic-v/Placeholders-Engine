@@ -10,8 +10,8 @@
 class Object {
 public:
 	Object();
-	Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material *tempmat);
-
+	Object(Mesh *tempmesh, std::vector<Texture *>temptext, glm::mat4 temptrans, Material *tempmat);
+	Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material* tempmat);
 	void LoadObject(Shader *tempshader);
 	void setPosition(glm::vec3 newpos);
 	void setPosition(glm::vec4 newpos);
@@ -38,7 +38,7 @@ public:
 	static vector<Object*> OutterColliders;
 private:
 	Mesh *ObjectMesh;
-	Texture *ObjectTexture;
+	std::vector<Texture*> Textures;
 	glm::mat4 Transform;
 	Material *ObjectMat;
 	float orientation = 0;

@@ -36,7 +36,10 @@ layout (binding = 13) uniform sampler2D uTexShadowDepth;
 in vec2 texcoord;
 in vec3 norm;
 in vec3 pos;
-out vec4 outColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 maskColor;
+
+ float brightness;
 
 
 
@@ -89,5 +92,6 @@ void main()
 	vec4 textureColor = texture(uTex, texcoord);
 	outColor.rgb *= textureColor.rgb;
 	outColor.a = textureColor.a;
+	maskColor = vec4(0.0, 0.0, 0.0, 0.0);
 	
 }

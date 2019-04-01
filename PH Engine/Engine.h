@@ -16,6 +16,7 @@
 
 
 #include "Engine/Window.h"
+#include "FmodWrapper.h"
 #include "CUBE.h" 
 #include "Player.h"
 #include "Engine/Math/math.h"
@@ -85,8 +86,10 @@ private:
 	float skillshotT = 0.0f;
 	bool keyCheck = false;
 	float currentlerpparam = 0;
+	float TotalGameTime = 0;
 	Camera *_camera;
 	Camera camera2;
+	
 	Camera cameraShadow;
 	Mesh Debris;
 	Mesh Pointer;
@@ -114,8 +117,17 @@ private:
 	Object Aim2;
 	Object Spear1;
 	Object Spear2;
+	Object SecondSpear1;
+	Object SecondSpear2;
 	Object testPBR;
+	Object Mountain;
 	Object SkyboxOBJ;
+	Object healthHUD;
+	Object spawn;
+	Mesh healthHUDMesh;
+	Mesh mountainMesh;
+	Mesh spawnMesh;
+
 	Player Playerone;
 	Player Playertwo;
 	Mesh testmesh;
@@ -127,8 +139,11 @@ private:
 	Ability tempability2;
 	Skillshot playoneskillshot;
 	Skillshot playtwoskillshot;
+	Skillshot playoneskillshot2;
+	Skillshot playtwoskillshot2;
 	Shader animsh;
 	Shader sh2;
+	Shader watershader;
 	Shader sht;
 	Shader LUTShader;
 	Shader PBRShader;
@@ -136,17 +151,37 @@ private:
 	Shader ShadowShader;
 	Shader depthPass;
 	Shader depthPass2;
+	Shader bloomShader;
+	Shader brightPass;
+	Shader bloomPass;
+	Shader bloomBlurX;
+	Shader bloomBlurY;
+	Shader xrayPass;
+	Shader sobelPass;
+	Shader addPass;
+	Shader invertPass;
+	Shader pass;
 	Light first;
 	Light second;
 	Light ShadowLight;
+	Texture mapMask;
+	Texture overlay;
 	Texture TreeTex;
 	Texture BaseTex;
 	Texture test3;
 	Texture lightColor;
+	Texture waterNorm;
 	Texture arrow;
+	Texture Clem;
 
+	FMOD_VECTOR player1 = {0,0,0};
+	FMOD_VECTOR player2 = { 0,0,0 };
+	FMOD_VECTOR listener = { 0,0,0 };
+	FMOD::Channel * Player1Channel;
+	FMOD::Channel * Player2Channel;
 	std::vector<std::string> skyboxTexture;
 	TextureCube *skybox;
+	std::vector<Texture*> test;
 	//PBR
 	Texture metal;
 	Texture mMetal;
@@ -154,11 +189,33 @@ private:
 	Texture rMetal;
 	Texture ambient;
 	Texture IBL_Lookup;
+
+	Texture mountColor;
+	Texture mountMetal;
+	Texture mountNormal;
+	Texture mountAO;
+	Texture mountRough;
+
+	Texture debrisColor;
+	Texture debrisMetal;
+	Texture debrisNormal;
+	Texture debrisAO;
+	Texture debrisRough;
+
+	Texture spawnColor;
+	Texture spawnMetal;
+	Texture spawnNormal;
+	Texture spawnAO;
+	Texture spawnRough;
 	//PBR END
 
 	Material testMat;
 	FrameBuffer frameBuffer;
 	FrameBuffer shadowFramebuffer;
+
+	FrameBuffer bloomFramebuffer;
+	FrameBuffer xrayFramebuffer;
+	FrameBuffer sobelFramebuffer;
 
 	PostProcessBuffer postBuffer;
 
@@ -176,11 +233,13 @@ private:
 	SA::SkeletalModel g_RunModel;
 	SA::SkeletalModel g_RollModel;
 	SA::SkeletalModel g_PunchModel;
+	SA::SkeletalModel g_ThrowModel;
 
 	SA::sAnimation idle;
 	SA::sAnimation run;
 	SA::sAnimation roll;
 	SA::sAnimation punch;
+	SA::sAnimation Throw;
 
 	CUBELoader LUT;
 

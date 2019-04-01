@@ -12,7 +12,8 @@ in vec3 pos;
 in vec3 out_tangents;
 in vec3 out_bitangents;
 
-out vec4 outColor;
+layout (location = 0) out vec4 outColor;
+layout (location = 1) out vec4 maskColor;
 
 uniform vec3 uCameraPosition;
 uniform mat4 iView;
@@ -20,11 +21,11 @@ uniform mat4 depthBiasMVP;
 
 
 
-layout(binding = 20) uniform sampler2D uAlbedoMap; //Albedo Data
-layout(binding = 21) uniform sampler2D uRoughnessMap; //Roughness [0-1]
-layout(binding = 22) uniform sampler2D uMetallicMap; //Metalicness [0-1]
-layout(binding = 23) uniform sampler2D uAoMap; //Ambient Occlusion map [0-1]
-layout(binding = 24) uniform sampler2D uNormalMap; //Normal map [0-1]
+layout(binding = 0) uniform sampler2D uAlbedoMap; //Albedo Data
+layout(binding = 1) uniform sampler2D uRoughnessMap; //Roughness [0-1]
+layout(binding = 2) uniform sampler2D uMetallicMap; //Metalicness [0-1]
+layout(binding = 3) uniform sampler2D uAoMap; //Ambient Occlusion map [0-1]
+layout(binding = 4) uniform sampler2D uNormalMap; //Normal map [0-1]
 layout(binding = 25) uniform samplerCube uTexSpecularIrradiance;
 layout(binding = 26) uniform samplerCube uTexIrradiance;
 layout(binding = 27) uniform sampler2D uTexSpecularBRDF;
@@ -193,7 +194,7 @@ F = fresnelSchlickRoughness(max(dot(normal, cameraVec), 0.0), f0, uRoughness);
 	vec3 specularIrradiance = textureLod(uTexSpecularIrradiance, reflected,  uRoughness * 4.0f).rgb;
 
 
-	vec3 specularIBL = (F * specularBDRF.x + specularBDRF.y) * specularIrradiance * shadowAmount;
+	vec3 specularIBL = (F * specularBDRF.x + specularBDRF.y) * specularIrradiance;
 
 
 
@@ -207,6 +208,7 @@ F = fresnelSchlickRoughness(max(dot(normal, cameraVec), 0.0), f0, uRoughness);
 	color = pow(color, vec3(1.0/2.2f));
 
 	outColor = vec4(color, 1.0f);
-	//outColor.rgb = specular.rgb * 50;
+	//outColor.rgb =  bitangents * 0.5 + 0.5;
+	maskColor = vec4(0.0, 0.0, 0.0, 0.0);
 }
 

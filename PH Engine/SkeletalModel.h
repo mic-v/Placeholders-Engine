@@ -35,7 +35,6 @@ namespace SA
 		sAnimation                      m_Transition;
 		bool							m_isPlayingStatic = false;
 		bool							m_isBlending = false;
-		glm::mat4						m_RightHand;
 	private:
 		std::vector<sAnimatedMesh>      m_Meshes;
 		sSkeleton                       m_Skeleton;
@@ -47,7 +46,7 @@ namespace SA
 		float							m_SlerpTime;
 		float                           m_AnimationTime;
 		float                           m_AnimationTime2;
-
+		
 
 
 	private:
@@ -92,6 +91,7 @@ namespace SA
 
 	glm::quat NodeAnimation_FindInterpolatedRotation(const sNodeAnimation& a_NodeAnimation, float a_AnimationTime)
 	{
+		
 		return NodeAnimation_FindInterpolatedValue(a_NodeAnimation.RotationKeys, a_AnimationTime);
 	}
 
@@ -105,6 +105,10 @@ namespace SA
 		if (a_Keys.size() == 1)
 		{
 			return a_Keys[0].Value;
+		}
+		if (a_Keys.size() == 2)
+		{
+			return a_Keys[1].Value;
 		}
 
 		unsigned int PositionIndex = NodeAnimation_FindIndex(a_Keys, a_AnimationTime);
@@ -128,11 +132,15 @@ namespace SA
 	{
 		for (unsigned int i = 0; i < a_Keys.size() - 1; ++i)
 		{
-			if (a_AnimationTime < a_Keys[i + 1].Time)
+			if (a_AnimationTime < a_Keys[i + 1].Time) {
 				return i;
+			}
+			
 		}
 
 		//CORE_ASSERT(false);
-		return -1;
+		//return -1;
+
+		return a_Keys.size() - 2;
 	}
 }

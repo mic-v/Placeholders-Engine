@@ -32,13 +32,19 @@ void Player::setAttack(Ability * abil)
 {
 	Melee = abil;
 }
-void Player::setAbility(Skillshot * abil)
+void Player::setFirstAbility(Skillshot * abil)
 {
 	FirstAbility = abil;
+	AbilPointer = FirstAbility;
+}
+void Player::setSecondAbility(Skillshot * abil)
+{
+	SecondAbility = abil;
+	
 }
 bool Player::skillshotAttack(Player * otherplayer, float directionangle)
 {
-	return FirstAbility->Attack(otherplayer, directionangle);
+	return AbilPointer->Attack(otherplayer, directionangle);
 
 }
 
@@ -51,6 +57,7 @@ void Player::update(float Dt)
 {
 	Melee->update();
 	FirstAbility->update(Dt);
+	SecondAbility->update(Dt);
 	lerpForRoll(Dt);
 }
 
@@ -85,5 +92,16 @@ void Player::lerpForRoll(float Dt)
 			rollLerp = 0;
 		}
 
+	}
+}
+
+void Player::SwapSkillShot()
+{
+	
+	if (AbilPointer == FirstAbility) {
+		AbilPointer = SecondAbility;
+	}
+	else {
+		AbilPointer = FirstAbility;
 	}
 }

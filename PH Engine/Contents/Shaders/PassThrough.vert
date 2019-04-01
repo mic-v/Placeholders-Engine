@@ -1,11 +1,18 @@
-#version 420 
+#version 460
 
-layout(location = 0)	in vec3 in_vert;	
-layout(location = 1)	in vec2 in_uv;		
+uniform mat4 view;
+uniform mat4 model;
+uniform mat4 projection;
+
+layout (location = 0) in vec3 vert;
+layout (location = 1) in vec2 uv;
+layout (location = 2) in vec3 normal;
+
 out vec2 texcoord;
 
 void main()
 {
-	texcoord = in_uv;
-	gl_Position = vec4(in_vert, 1.0); 
+	texcoord = uv;
+	gl_Position = vec4(vert, 1.0);
+
 }

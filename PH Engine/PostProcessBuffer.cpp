@@ -7,8 +7,8 @@ void PostProcessBuffer::init(unsigned width, unsigned height)
 		for (int i = 0; i < 2; ++i) {
 			m_PFramebuffers[i].addColorTarget(m_pFormat);
 			m_PFramebuffers[i].init(width, height);
-			/*setOpenGLName(GL_TEXTURE, 
-				m_PFramebuffers->_Color._Tex[0].getID(), 
+			/*setOpenGLName(GL_TEXTURE,
+				m_PFramebuffers->_Color._Tex[0].getID(),
 				"PostProcessing FBO #" + std::to_string(i));*/
 		}
 
@@ -50,24 +50,33 @@ void PostProcessBuffer::drawToPost()
 
 }
 
-void PostProcessBuffer::draw()
+void PostProcessBuffer::draw(float bind)
 {
 	SAT_ASSERT(_IsInit == true, "Post Processing Buffer ot initialzed!");
 
-	m_pReadBuffer->bindColorAsTexture(0, 0);
+	m_pReadBuffer->bindColorAsTexture(0, bind);
 	m_pWriteBuffer->renderToFSQ();
-	m_pReadBuffer->unbindTexture(0);
+	m_pReadBuffer->unbindTexture(bind);
 	swap();
 }
 
-void PostProcessBuffer::drawToScreen()
+void PostProcessBuffer::drawNoFSQ(float bind)
+{
+	m_pReadBuffer->bindColorAsTexture(0, bind);
+	m_pWriteBuffer->bind();
+	m_pWriteBuffer->unbind();
+	m_pReadBuffer->unbindTexture(bind);
+	swap();
+}
+
+void PostProcessBuffer::drawToScreen(float bind)
 {
 	SAT_ASSERT(_IsInit == true, "Post Processing Buffer ot initialzed!");
 
 	m_pWriteBuffer->unbind();
-	m_pReadBuffer->bindColorAsTexture(0, 0);
+	m_pReadBuffer->bindColorAsTexture(0, bind);
 	FrameBuffer::drawFSQ();
-	m_pReadBuffer->unbindTexture(0);
+	m_pReadBuffer->unbindTexture(bind);
 }
 
 void PostProcessBuffer::swap()

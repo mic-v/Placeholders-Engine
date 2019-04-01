@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)External\Bullet\lib;$(SolutionDir)External\GLFW\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\FMOD\include;$(SolutionDir)External\Bullet\include;$(SolutionDir)\External\glad\include;$(SolutionDir)\External\glm;$(SolutionDir)\External;$(SolutionDir)\External\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\Bullet\lib;$(SolutionDir)External\FMOD\lib;$(SolutionDir)External\GLFW\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Configuration)\Intermediates\</IntDir>
   </PropertyGroup>
@@ -88,12 +88,12 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp14</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\External\assimp\include;$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\External\assimp\include;$(SolutionDir)External\FMOD\include;$(SolutionDir)\External\SOIL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)\External\assimp\lib;$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;soil2-debug.lib;BulletSoftBody_Debug.lib;LinearMath_Debug.lib;BulletCollision_Debug.lib;BulletDynamics_Debug.lib;assimp-vc140-mt.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\External\assimp\lib;$(SolutionDir)External\FMOD\lib;$(SolutionDir)\External\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -160,6 +160,7 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Window.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="FmodWrapper.cpp" />
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="IO.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Window.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="FmodWrapper.h" />
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="IO.h" />
     <ClInclude Include="Material.h" />

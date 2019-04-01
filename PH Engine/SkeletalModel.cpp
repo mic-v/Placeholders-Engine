@@ -28,7 +28,7 @@ namespace SA
 
 	void SkeletalModel::setAnimation2(sAnimation * temp)
 	{
-		if (!m_isBlending && temp->ID != m_Animation.ID) {
+		if ((!m_isBlending || (temp->ID == 4 || temp->ID == 3)) && temp->ID != m_Animation.ID) {
 			m_Animation2 = *temp;
 			m_GlobalInverseTransform2 = temp->GlobalInverseTransform;
 			m_isBlending = true;
@@ -42,7 +42,11 @@ namespace SA
 
 		if (m_isBlending && m_Animation2.ID != m_Animation.ID) {
 			if (m_SlerpTime < 1.0f) {
-				m_SlerpTime += 3.5 * Dt;
+				m_SlerpTime += 2.5f * Dt;
+				//std::cout << m_SlerpTime << std::endl;
+				if (m_SlerpTime > 1.0f) {
+					m_SlerpTime = 1.0f;
+				}
 			}
 			else if (m_Animation2.Loopable) {
 				m_isBlending = false;
@@ -104,8 +108,9 @@ namespace SA
 			else {
 				float temptime2 = m_AnimationTime2 + Dt * m_Animation2.TicksPerSecond;
 				m_isPlayingStatic = true;
-				if (temptime2 - m_Animation2.Duration > 0) {
-					m_AnimationTime2 = temptime2 - (temptime2 / m_Animation2.Duration) * m_Animation2.Duration;
+				//normally > 0
+				if (temptime2 - m_Animation2.Duration > -1.0f) {
+					m_AnimationTime2 = m_Animation2.Duration - 1.0f * Dt;//temptime2 - (temptime2 / m_Animation2.Duration) * m_Animation2.Duration;
 					m_Animation2.Played = true;
 				}
 				else {
@@ -155,8 +160,7 @@ namespace SA
 			pNewNodeAnim2 = FindNodeAnim(m_Animation2, NodeName);
 		}
 
-		
-		
+		//std::cout << NodeName << std::endl;
 		if (pNewNodeAnim)
 		{
 			glm::vec3 Translation = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim, AnimationTime);
@@ -166,17 +170,26 @@ namespace SA
 			glm::mat4x4 RotationM2;
 			glm::mat4x4 TranslationM2;
 
-
-			if (m_isBlending  ) {
+			
+			if (m_isBlending && pNewNodeAnim2) {
 				glm::quat RotationQ2 = NodeAnimation_FindInterpolatedRotation(*pNewNodeAnim2, AnimationTime2);
 				RotationM2 = glm::toMat4(glm::slerp(RotationQ, RotationQ2, m_SlerpTime));
 
 				TranslationM2 = glm::translate(Translation);
-				if (NodeName == "Hips") {
+				/*if (NodeName == "Hips") {
+					glm::vec3 Translation2 = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim2, AnimationTime2);
+					TranslationM2 = glm::translate(glm::lerp(Translation, Translation2, m_SlerpTime));
+					NodeName == "FootCtrl.L" || NodeName == "HipsCtrl" || NodeName == "FootCtrl.R"  || NodeName == "Armature.012"
+				}*/
+
+		/*		if (NodeName == "mixamorig:Hips" ) {
+					glm::vec3 Translation2 = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim2, AnimationTime2);
+					TranslationM2 = glm::translate(glm::lerp(Translation, Translation2, m_SlerpTime));
+				}*/
+				if (NodeName == "Armature.012" || NodeName == "HipsCtrl") {
 					glm::vec3 Translation2 = NodeAnimation_FindInterpolatedPosition(*pNewNodeAnim2, AnimationTime2);
 					TranslationM2 = glm::translate(glm::lerp(Translation, Translation2, m_SlerpTime));
 				}
-
 
 
 			}
@@ -202,12 +215,6 @@ namespace SA
 		}
 		else {
 			std::cout << NodeName << std::endl;
-		}
-		//std::cout << NodeName << std::endl;
-		if (NodeName == "mixamorig:LeftHand") {
-
-			sBone* pBone = &a_Skeleton.Bones[BoneIndex];
-			this->m_RightHand = pBone->FinalTransformation;
 		}
 
 		for (unsigned int i = 0; i < a_Bone.NumChildren; i++)
@@ -239,9 +246,6 @@ namespace SA
 
 
 			//EACH OF THESE CORRESPONDS WITH THE CORRECT ID OF THE VERTICES
-			std::cout << "mesh size: " << m_Meshes.size() << std::endl;
-			std::cout << "num of ind: " << m_Meshes[i].NumIndices << std::endl;
-			std::cout << "num of vert: " << m_Meshes[i].NumVertices << std::endl;
 			std::vector<glm::vec4> tempbonesofvertdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
 			std::vector<glm::vec4> tempweightdata(m_Meshes[i].NumVertices, glm::vec4(0.0f));
 

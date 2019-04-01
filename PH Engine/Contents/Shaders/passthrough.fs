@@ -1,16 +1,10 @@
 #version 450
 
+layout(binding = 30) uniform sampler2D uTex;
+in vec2 texcoord;
 out vec4 outColor;
 
-in vec3 textNormal;
-
-uniform sampler2D uTex;
-
-void main()
+void main() 
 {
-	vec4 newText = texture(uTex, textNormal);
-	
-	outColor.rgb = newText.rgb;
-	//SET TRANSPARENCY/ALPHA TO PICTURES TRANSPARENCY/ALPHA
-	outColor.a = texture.a;
+	outColor = texture(uTex, texcoord);
 }

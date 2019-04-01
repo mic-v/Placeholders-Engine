@@ -2,11 +2,11 @@
 
 
 layout(binding = 12) uniform sampler3D uLUT3D;
-layout(binding = 13) uniform sampler2D uSceneTex;
+layout(binding = 30) uniform sampler2D uSceneTex;
 
 
 uniform float LUTSize;
-uniform float uAmount = 1.0f;
+uniform float uAmount = 0.0f;
 
 in vec2 texcoord;
 out vec4 outColor;

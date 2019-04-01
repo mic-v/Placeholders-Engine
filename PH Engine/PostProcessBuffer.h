@@ -59,7 +59,10 @@ public:
 		swapping which buffer is being read and written, the rest of our code
 		will get a lot cleaner!
 	*/
-	void draw();
+	void draw(float);
+
+
+	void drawNoFSQ(float);
 
 	/*
 		Once we are done with post processing, we can draw the final result to the screen!
@@ -68,7 +71,8 @@ public:
 		(useful for anyone doing Split Screen!) and need to combine them together before
 		drawing them to the screen.
 	*/
-	void drawToScreen();
+	void drawToScreen(float);
+
 
 protected:
 	void swap();

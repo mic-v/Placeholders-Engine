@@ -16,7 +16,8 @@ public:
 	float getRange();
 	void setHealth(float newhealth);
 	void setAttack(Ability* abil);
-	void setAbility(Skillshot* abil);
+	void setFirstAbility(Skillshot* abil);
+	void setSecondAbility(Skillshot* abil);
 
 	bool BaseAttack(Player *otherplayer);
 	bool skillshotAttack(Player *otherplayer, float directionangle);
@@ -25,9 +26,13 @@ public:
 	void update(float Dt);
 	void startRoll(float tempdistance);
 	void lerpForRoll(float Dt);
+	void SwapSkillShot();
 	Object * getPointer() {
 		return Pointer;
 	}
+	bool Pressed2 = false;
+	bool Pressed1 = false;
+	
 private:
 	float Health;
 	float MeleeRange;
@@ -38,6 +43,9 @@ private:
 	bool p_isRolling = false;
 	Ability *Melee;
 	Skillshot *FirstAbility;
+	Skillshot *SecondAbility;
+
+	Skillshot *AbilPointer;
 	float baseAttackTime = 0;
 
 

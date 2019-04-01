@@ -8,7 +8,10 @@ layout (location = 0) in vec3 vert;
 layout (location = 1) in vec2 uv;
 layout (location = 2) in vec3 normal;
 
+out vec2 texcoord;
+
 void main()
 {
+	texcoord = uv;
 	 gl_Position =  projection * view * model * vec4(vert, 1.0);
 }

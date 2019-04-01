@@ -10,10 +10,19 @@ Object::Object()
 vector<Object*> Object::InnerColliders;
 vector<Object*> Object::OutterColliders;
 
+Object::Object(Mesh *tempmesh, std::vector<Texture *>temptext, glm::mat4 temptrans, Material* tempmat)
+{
+	ObjectMesh = tempmesh;
+	Textures = temptext;
+	ObjectMat = tempmat;
+	Transform = temptrans;
+
+
+}
 Object::Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material* tempmat)
 {
 	ObjectMesh = tempmesh;
-	ObjectTexture = temptext;
+	Textures = {temptext};
 	ObjectMat = tempmat;
 	Transform = temptrans;
 
@@ -23,11 +32,19 @@ Object::Object(Mesh *tempmesh, Texture *temptext, glm::mat4 temptrans, Material*
 void Object::LoadObject(Shader *tempshader)
 {
 	if (this->active) {
-		ObjectTexture->Bind(0);
+
+		for (int i = 0; i < Textures.size(); i++) {
+			Textures[i]->Bind(i);
+		}
+		
 		glBindVertexArray(ObjectMesh->VAO);
 		tempshader->sendUniformMat4("model", Transform);
 		glDrawArrays(GL_TRIANGLES, 0, ObjectMesh->getNumVertices());
-		ObjectTexture->Unbind();
+
+
+		for (int i = 0; i < Textures.size(); i++) {
+			Textures[i]->Unbind();
+		}
 		glBindVertexArray(0);
 	}
 }

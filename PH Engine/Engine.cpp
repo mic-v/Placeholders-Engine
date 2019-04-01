@@ -179,6 +179,7 @@ bool Engine::startUp()
 
 
 
+
 	position = glm::vec3(-4.0f, 0.4f, 0.0f);
 	objectTransform = glm::mat4(1.0f);
 	Player1Transform = glm::mat4(1.0f);
@@ -186,7 +187,7 @@ bool Engine::startUp()
 	Player1Transform = glm::translate(Player1Transform, position);
 	Player1Transform = glm::rotate(Player1Transform, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//Player2Transform = glm::scale(Player1Transform, glm::vec3(0.001f, 0.001f, 0.001f));
-	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.007f, 0.007f, 0.007f));
+	Player1Transform = glm::scale(Player1Transform, glm::vec3(0.002f, 0.002f, 0.002f));
 	Player2Transform = Player1Transform;
 	cameraProjection = glm::perspective(glm::radians(45.f), 1280.f / 720.f, 0.1f, 100.f);
 	shadowProjection = glm::ortho(35.0f, -35.0f, -35.0f, 35.0f, 1.0f, 50.0f);
@@ -199,27 +200,54 @@ bool Engine::startUp()
 	FrameBuffer::initFramBuffers();
 	frameBuffer.addDepthTarget();
 	frameBuffer.addColorTarget(GL_RGB8);
-	frameBuffer.addColorTarget(GL_R11F_G11F_B10F);
+	frameBuffer.addColorTarget(GL_R16F);
 	frameBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	shadowFramebuffer.addDepthTarget();
 	//shadowFramebuffer.addColorTarget(GL_R11F_G11F_B10F);
 	shadowFramebuffer.init(4096, 4096);
 
-	postBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	postBuffer.setFormat(GL_R11F_G11F_B10F);
+	postBuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	bloomFramebuffer.addDepthTarget();
+	bloomFramebuffer.addColorTarget(GL_RGB32F);
+	bloomFramebuffer.addColorTarget(GL_RGB8);
+	bloomFramebuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	
+	xrayFramebuffer.addDepthTarget();
+	xrayFramebuffer.addColorTarget(GL_RGB8);
+	xrayFramebuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
+	
+	sobelFramebuffer.addDepthTarget();
+	sobelFramebuffer.addColorTarget(GL_RGB8);
+	sobelFramebuffer.init(SCREEN_WIDTH, SCREEN_HEIGHT);
 	//Shader ex = Shader("Engine/Point.vs", "Engine/Point.fs");
 	//_draw.line = ex;
 	animsh = Shader("Contents/Shaders/textureskinned.vs", "Contents/Shaders/texture.fs");
 	sh2 = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/DirectionLight.fs");
+	watershader = Shader("Contents/Shaders/texturewater.vs", "Contents/Shaders/DirectionLightwater.fs");
 	sht = Shader("Contents/Shaders/texture.vs", "Contents/Shaders/trans.fs");
 	LUTShader = Shader("Contents/Shaders/PassThrough.vert","Contents/Shaders/Post/LUTPost.frag");
 	PBRShader = Shader("Contents/Shaders/PBR/PBR.vert", "Contents/Shaders/PBR/PBR.frag");
 	SKYShader = Shader("Contents/Shaders/skybox.vert", "Contents/Shaders/skybox.fs");
 	depthPass = Shader("Contents/Shaders/depthPass.vert", "Contents/Shaders/depthPass.fs");
 	depthPass2 = Shader("Contents/Shaders/textureskinned.vs", "Contents/Shaders/depthPass.fs");
+	xrayPass = Shader("Contents/Shaders/textureskinned.vs", "Contents/Shaders/xrayPass1.fs");
+
+	sobelPass = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/sobelPass.fs");
+
+	bloomPass = Shader("Contents/Shaders/depthPass.vert", "Contents/Shaders/bloomPass.frag");
+	bloomBlurX = Shader("Contents/Shaders/PassThrough.vert","Contents/Shaders/bloomBlurX.frag");
+	bloomBlurY = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/bloomBlurY.frag");
+
+	bloomShader = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/bloom.frag");
+
+	brightPass = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/brightPass.frag");
+
+	pass = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/passthrough.fs");
 	
+	addPass = Shader("Contents/Shaders/PassThrough.vert", "Contents/Shaders/addFBdiscard.frag");
 	//Debris = Mesh();
 	//Debris.loadFromFile("Contents/Models/Derbis.obj");
 	Debris.loadFromFBX("Debris1.fbx");
@@ -228,6 +256,9 @@ bool Engine::startUp()
 	Spear.loadFromFBX("Spear.fbx");
 	Pointer = Spear;
 	testPBRMesh.loadFromFBX("Sphere.fbx");
+
+	mountainMesh.loadFromFBX("MOUNTAINS.fbx");
+	healthHUDMesh.loadFromFBX("HealthHUD.fbx");
 	//testMat.loadFile("Contents/Materials/Final Map.mtl");
 
 	SkyboxMesh.loadFromFBX("skyboxTest.fbx");
@@ -276,12 +307,29 @@ bool Engine::startUp()
 		exit(0);
 	}
 
+	if (!overlay.LoadTexture("Contents/Textures/testHP.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!mapMask.LoadTexture("Contents/Textures/mapBaseMask.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
 	if (!BaseTex.LoadTexture("Contents/Textures/mapBase_UV.png")) {
 		cout << "Texture failed to load" << endl;
 		system("Pause");
 		exit(0);
 	}
 
+	if (!Clem.LoadTexture("Contents/Textures/Clem/black.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
 	if (!arrow.LoadTexture("Contents/Textures/arrow.png")) {
 		cout << "Texture failed to load" << endl;
 		system("Pause");
@@ -295,6 +343,11 @@ bool Engine::startUp()
 	}
 
 	if (!metal.LoadTexture("Contents/Textures/Titanium.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+	if (!waterNorm.LoadTexture("Contents/Textures/waternormal.png")) {
 		cout << "Texture failed to load" << endl;
 		system("Pause");
 		exit(0);
@@ -335,12 +388,102 @@ bool Engine::startUp()
 		system("Pause");
 		exit(0);
 	}
+
+	if (!mountColor.LoadTexture("Contents/Textures/Mountain/basecolor.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!mountMetal.LoadTexture("Contents/Textures/Mountain/metallic.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!mountNormal.LoadTexture("Contents/Textures/Mountain/normal.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!mountAO.LoadTexture("Contents/Textures/Mountain/ambientOcclusion.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!mountRough.LoadTexture("Contents/Textures/Mountain/roughness.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!debrisColor.LoadTexture("Contents/Textures/Debris/basecolor.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!debrisMetal.LoadTexture("Contents/Textures/Debris/metallic.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!debrisNormal.LoadTexture("Contents/Textures/Debris/normal.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!debrisAO.LoadTexture("Contents/Textures/Debris/ambientOcclusion.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!debrisRough.LoadTexture("Contents/Textures/Debris/roughness.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!spawnColor.LoadTexture("Contents/Textures/Spawn/basecolor.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!spawnMetal.LoadTexture("Contents/Textures/Spawn/metallic.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!spawnNormal.LoadTexture("Contents/Textures/Spawn/normal.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!spawnAO.LoadTexture("Contents/Textures/Spawn/ambientOcclusion.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
+
+	if (!spawnRough.LoadTexture("Contents/Textures/Spawn/roughness.png")) {
+		cout << "Texture failed to load" << endl;
+		system("Pause");
+		exit(0);
+	}
 	
 	//IDLE ANIMATION AND SKELETON 
 
 
 
-	loadAssimpAnim("Idle4.fbx", &g_Player1Model);
+	loadAssimpAnim("New/Idle.fbx", &g_Player1Model);
 	g_Player1Model.GetAnimation().ID = 0;
 	g_Player1Model.GetAnimation().Loopable = true;
 	idle = g_Player1Model.GetAnimation();
@@ -350,23 +493,30 @@ bool Engine::startUp()
 
 
 	//RUN ANIMATION
-	loadAssimpAnim("Running3.fbx", &g_RunModel);
+	loadAssimpAnim("New/Running.fbx", &g_RunModel);
 	g_RunModel.GetAnimation().ID = 1;
 	run = g_RunModel.GetAnimation();
 	run.Loopable = true;
 
 
 	//ROLL ANIMATION
-	loadAssimpAnim("Roll.fbx", &g_RollModel);
+	loadAssimpAnim("New/Roll.fbx", &g_RollModel);
 	g_RollModel.GetAnimation().ID = 2;
 	roll = g_RollModel.GetAnimation();
 	roll.Loopable = false;
 
 	//PUNCH ANIMATION
-	loadAssimpAnim("Punch.fbx", &g_PunchModel);
+	loadAssimpAnim("New/Throw.fbx", &g_PunchModel);
 	g_PunchModel.GetAnimation().ID = 3;
 	punch = g_PunchModel.GetAnimation();
 	punch.Loopable = false;
+
+
+	//THROW ANIMATION
+	loadAssimpAnim("New/Throw.fbx", &g_ThrowModel);
+	g_ThrowModel.GetAnimation().ID = 4;
+	Throw = g_ThrowModel.GetAnimation();
+	Throw.Loopable = false;
 
 	g_Player1Model.loadHierarchy();
 
@@ -377,20 +527,44 @@ bool Engine::startUp()
 	testmesh.loadFromAnimatedModel("Contents/Models/meshskin.obj2", g_Player1Model);
 	testmesh2 = testmesh;
 
+	std::vector<Texture *> debrisVector;
+	debrisVector.push_back(&debrisColor);
+	debrisVector.push_back(&debrisMetal);
+	debrisVector.push_back(&debrisNormal);
+	debrisVector.push_back(&debrisAO);
+	debrisVector.push_back(&debrisRough);
 
+	std::vector <Texture *> spawnVector;
+	spawnVector.push_back(&spawnColor);
+	spawnVector.push_back(&spawnMetal);
+	spawnVector.push_back(&spawnNormal);
+	spawnVector.push_back(&spawnAO);
+	spawnVector.push_back(&spawnRough);
+
+	std::vector <Texture *> mountainVector;
+	mountainVector.push_back(&mountColor);
+	mountainVector.push_back(&mountMetal);
+	mountainVector.push_back(&mountNormal);
+	mountainVector.push_back(&mountAO);
+	mountainVector.push_back(&mountRough);
 	
 
 	glm::mat4 tempspear = glm::rotate(360.0f, glm::vec3(0, 1, 0)) * glm::scale(objectTransform, glm::vec3(0.2f));
 
 	testPBR = Object(&testPBRMesh, &metal, glm::translate(objectTransform, glm::vec3(0, 6, 0)), &testMat);
 	
-	Tree1 = Object(&Debris, &TreeTex, glm::scale(objectTransform, glm::vec3(0.003f)), &testMat);
+	Tree1 = Object(&Debris, debrisVector, glm::scale(objectTransform, glm::vec3(0.003f)), &testMat);
 	Aim1 = Object(&Pointer, &arrow, glm::scale(objectTransform, glm::vec3(0.3f)), &testMat);
 	Aim2 = Aim1;
 	Spear1 = Object(&Spear, &BaseTex, tempspear, &testMat);
 	Spear2 = Object(&Spear, &BaseTex, tempspear, &testMat);
+	SecondSpear1 = Object(&Spear, &BaseTex, tempspear, &testMat);
+	SecondSpear2 = Object(&Spear, &BaseTex, tempspear, &testMat);
 	BasePlate = Object(&basemap, &BaseTex, objectTransform, &testMat);
 	River = Object(&river, &test3, objectTransform, &testMat);
+	Mountain = Object(&mountainMesh, mountainVector, glm::rotate(objectTransform, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f)), &testMat);
+	healthHUD = Object(&healthHUDMesh, &overlay, glm::rotate(objectTransform, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)), &testMat);
+	spawn = Object(&spawnMesh, spawnVector, objectTransform, &testMat);
 	TestSpear = Aim1;
 	BasePlate.setRadius(5.9f);
 	
@@ -413,7 +587,7 @@ bool Engine::startUp()
 
 
 	Playerone = Player(&testmesh, &BaseTex, Player1Transform, &testMat, 100, 1.0f, &Aim1);
-	Playertwo = Player(&testmesh2, &BaseTex, Player2Transform, &testMat, 120, 1.0f, &Aim2);
+	Playertwo = Player(&testmesh2, &Clem, Player2Transform, &testMat, 120, 1.0f, &Aim2);
 	Playertwo.setPosition(glm::vec3( -3.0f, Playertwo.getPositionV3().y, Playertwo.getPositionV3().z));
 
 	Playerone.setRadius(0.2f);
@@ -424,12 +598,18 @@ bool Engine::startUp()
 	playoneskillshot = Skillshot(&Playerone, 3.0f, 15.0f, 1.6f, 4.0f, 0.5f, &Spear1);
 
 	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 15.0f, 1.6f, 4.0f, 0.5f, &Spear2);
+	
+	playoneskillshot2 = Skillshot(&Playerone, 3.0f, 100.0f, 0.5f, 4.0f, 0.5f, &SecondSpear1);
+	playtwoskillshot2 = Skillshot(&Playertwo, 3.0f, 100.0f, 0.5f, 4.0f, 0.5f, &SecondSpear2);
+	
 
 	Playerone.setAttack(&tempability);
-	Playerone.setAbility(&playoneskillshot);
+	Playerone.setFirstAbility(&playoneskillshot);
+	Playerone.setSecondAbility(&playoneskillshot2);
 
 	Playertwo.setAttack(&tempability2);
-	Playertwo.setAbility(&playtwoskillshot);
+	Playertwo.setFirstAbility(&playtwoskillshot);
+	Playertwo.setSecondAbility(&playtwoskillshot2);
 
 	
 	
@@ -438,11 +618,13 @@ bool Engine::startUp()
 
 	Spear1.setActive(false);
 	Spear2.setActive(false);
+	SecondSpear1.setActive(false);
+	SecondSpear2.setActive(false);
 	Aim1.setActive(false);
 	Aim2.setActive(false);
 	TestSpear.setActive(true);
 	//SkyboxOBJ.setActive(false);
-	Mover = &TestSpear;
+	Mover = &spawn;
 	glfwGetTime();
 	return true;
 }
@@ -508,7 +690,8 @@ void Engine::loadAssimpAnim(std::string filename, SA::SkeletalModel * tempskele)
 		aiProcess_LimitBoneWeights |
 		aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace|
-		aiProcess_SortByPType);
+		aiProcess_SortByPType | 
+		aiProcess_Triangulate );
 	if (pscene->HasMeshes()) {
 		if (pscene->mMeshes[0]->HasTextureCoords(0)) {
 			cout << "does have" << endl;
@@ -559,7 +742,14 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 		//std::cout << axes[2] << std::endl;
 		// LEFT TRIGGER: std::cout << axes[3] << std::endl;
 		// RIGHT TRIGGER: std::cout << axes[4] << std::endl;
-
+		//left = 17
+		//std::cout << 17<< " "<<buttons[17] << std::endl;
+		////down = 16
+		//std::cout << 16 << " " << buttons[16] << std::endl;
+		////right = 15
+		//std::cout << 15 << " " << buttons[15] << std::endl;
+		////up = 14
+		//std::cout << 14 << " " << buttons[14] << std::endl;
 		if (!playersmod->m_isPlayingStatic) {
 			if ((axes[0] <= -0.3f || axes[0] >= 0.3f) || (axes[1] <= -0.3f || axes[1] >= 0.3f))
 			{
@@ -616,6 +806,7 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 					}
 
 					
+					
 					aim = tempangle;
 				}
 				float temprad = glm::radians(aim);
@@ -624,11 +815,18 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 				tempobj->setPosition(player->getPositionV3() + (glm::vec3(1) * glm::vec3(sin(temprad), 1, cos(temprad))));
 				tempobj->setOrientation(-tempobj->getOrientation());
 				tempobj->setOrientation(aim);
+				
 
 				//SQUARE
 				if (GLFW_PRESS == buttons[0]) {
 					//std::cout << "SQUARE" << std::endl;
-					player->skillshotAttack(otherplayer, aim);
+					if (player->skillshotAttack(otherplayer, aim)) {
+						player->setOrientation(-player->getOrientation());
+						player->setOrientation(aim);
+
+						playersmod->setAnimation2(&Throw);
+						tempobj->setActive(false);
+					}
 				}
 			}
 			else {
@@ -668,6 +866,28 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 				playersmod->setAnimation2(&punch);
 			}
 
+
+			if (GLFW_PRESS == buttons[14] && !player->Pressed1) {
+				//std::cout << "O" << std::endl;
+				player->SwapSkillShot();
+				player->Pressed1 = true;
+			}
+			if (GLFW_PRESS != buttons[14] && player->Pressed1) {
+
+				player->Pressed1 = false;
+			}
+
+			if (GLFW_PRESS == buttons[16] && !player->Pressed2) {
+				//std::cout << "O" << std::endl;
+				player->SwapSkillShot();
+				player->Pressed2 = true;
+			}
+			
+			if (GLFW_PRESS != buttons[16] && player->Pressed2) {
+
+				player->Pressed2 = false;
+			}
+			
 		}
 	}
 
@@ -727,8 +947,8 @@ void Engine::runGame()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		double currentTime = glfwGetTime();
-		timer = currentTime;
+		TotalGameTime += deltaTime;
+		timer = TotalGameTime;
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
 
@@ -797,6 +1017,9 @@ void Engine::runGame()
 
 		Playerone.update(deltaTime);
 		Playertwo.update(deltaTime);
+		//float puredist = (Playerone.getPositionV3().x - Playertwo.getPositionV3().x);
+		//float actualdist = sqrt(puredist * puredist);
+		//_camera->setPositionZ(2 + actualdist * 2);
 		Tree1.Rotate(rotation);
 		first.setPosition(glm::vec4(cameraShadow.getPosition(), 1.0f));
 		ShadowLight.setPosition(glm::vec4(cameraShadow.getPosition(), 1.0f));
@@ -829,33 +1052,39 @@ void Engine::render()
 	glm::vec3 cameraPos = _camera->getPosition();
 	glm::vec3 lightPos = first.getPosition();
 
-	//glClear(GL_DEPTH_BUFFER_BIT);
+
 	glEnable(GL_DEPTH_TEST);
 	
-//	LUT.Bind3D(12);
-	
-	
-	//frameBuffer.clear();
-	//frameBuffer.bind();
 
 	shadowFramebuffer.clear();
+
+	frameBuffer.clear();
+
+	postBuffer.clear();
+
+	xrayFramebuffer.clear();
+
+	bloomFramebuffer.clear();
+
+	sobelFramebuffer.clear();
+
 	shadowFramebuffer.bind();
 	glViewport(0, 0, 4096, 4096);
 	depthPass.use();
 	depthPass.sendUniformMat4("projection", shadowProjection);
 	depthPass.sendUniformMat4("view", glm::inverse(cameraShadow.getView()));
-	//first.LoadLight(&depthPass);
-	//ShadowLight.LoadLight(&depthPass);
+
 	
 	Tree1.LoadObject(&depthPass);
 	Tree2.LoadObject(&depthPass);
 	Tree3.LoadObject(&depthPass);
 	Tree4.LoadObject(&depthPass);
-	//BasePlate.LoadObject(&depthPass);
-	//River.LoadObject(&depthPass);
+
 	
 	Spear1.LoadObject(&depthPass);
 	Spear2.LoadObject(&depthPass);
+	SecondSpear1.LoadObject(&depthPass);
+	SecondSpear2.LoadObject(&depthPass);
 	testPBR.LoadObject(&depthPass);
 	depthPass.unuse();
 	//player1
@@ -873,6 +1102,61 @@ void Engine::render()
 	Playertwo.LoadObject(&depthPass2);
 	depthPass2.unuse();
 	shadowFramebuffer.unbind();
+
+
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	mapMask.Bind(5);
+	bloomFramebuffer.bind();
+	bloomPass.use();
+	bloomPass.sendUniformMat4("projection", cameraProjection);
+	bloomPass.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	BasePlate.LoadObject(&bloomPass);
+	bloomPass.unuse();
+	mapMask.Unbind();
+	bloomFramebuffer.unbind();
+
+	xrayFramebuffer.bind();
+	animsh.use();
+	animsh.sendUniformMat4("projection", cameraProjection);
+	animsh.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	g_Player1Model.sendToShader(&animsh);
+	//////Lights here
+	first.LoadLight(&animsh);
+	second.LoadLight(&animsh);
+	////
+	////
+	//////Objects here//
+	Playerone.LoadObject(&animsh);
+	animsh.unuse();
+
+	animsh.use();
+	animsh.sendUniformMat4("projection", cameraProjection);
+	animsh.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	g_Player2Model.sendToShader(&animsh);
+	//////Lights here
+	first.LoadLight(&animsh);
+	second.LoadLight(&animsh);
+	////
+	////
+	//////Objects here//
+	Playertwo.LoadObject(&animsh);
+	animsh.unuse();
+	xrayFramebuffer.unbind();
+
+	sobelFramebuffer.bind();
+	sobelPass.use();
+	glm::vec3 sSize = glm::vec3(SCREEN_WIDTH, SCREEN_HEIGHT, 1.0f);
+	sobelPass.sendUniformMat4("projection", cameraProjection);
+	sobelPass.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	xrayFramebuffer.bindColorAsTexture(0, 30);
+	sobelPass.sendUniformVec3("screenSize", sSize);
+	//g_Animatedmodel.sendToShader(&sobelPass);
+	//Playerone.LoadObject(&sobelPass);
+	xrayFramebuffer.drawFSQ();
+	xrayFramebuffer.unbindTexture(30);
+	sobelPass.unuse();
+	sobelFramebuffer.unbind();
+
 
 
 	//---------------------------------------------------------
@@ -908,6 +1192,7 @@ void Engine::render()
 	LUTShader.unuse();
 	LUT.unbind3D(12);*/
 	//shadowFramebuffer.drawFSQ();
+	frameBuffer.bind();
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	sh2.use();
 
@@ -939,39 +1224,86 @@ void Engine::render()
 	//
 	////Objects here//
 
-	Tree1.LoadObject(&sh2);
-	Tree2.LoadObject(&sh2);
-	Tree3.LoadObject(&sh2);
-	Tree4.LoadObject(&sh2);
-	BasePlate.LoadObject(&sh2);
-	River.LoadObject(&sh2);
 	Aim1.LoadObject(&sh2);
 	Aim2.LoadObject(&sh2);
 	TestSpear.LoadObject(&sh2);
 	Spear1.LoadObject(&sh2);
 	Spear2.LoadObject(&sh2);
+	SecondSpear1.LoadObject(&sh2);
+	SecondSpear2.LoadObject(&sh2);
+	BasePlate.LoadObject(&sh2);
 	//
 	shadowFramebuffer.unbindTexture(13);
-	sh2.unuse();
 	
+	sh2.unuse();
+
+	watershader.use();
+	waterNorm.Bind(14);
+	watershader.sendUniformMat4("projection", cameraProjection);
+	watershader.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	watershader.sendUniformVec4("LightDirection", cameraV);
+	watershader.sendUniformMat4("depthBiasMVP", depthBiasMVP);
+	watershader.sendUniformFloat("uTime", TotalGameTime);
+
+	first.LoadLight(&watershader);
+	River.LoadObject(&watershader);
+	
+	
+	waterNorm.Unbind();
+	
+	watershader.unuse();
+
+
+	glDepthMask(GL_FALSE);
+	glDepthFunc(GL_GREATER);
+	xrayPass.use();
+	xrayPass.sendUniformMat4("projection", cameraProjection);
+	xrayPass.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	xrayPass.sendUniformFloat("uTime", deltaTime);
+	g_Player1Model.sendToShader(&xrayPass);
+	Playerone.LoadObject(&xrayPass);
+	xrayPass.unuse();
+
+	xrayPass.use();
+	xrayPass.sendUniformMat4("projection", cameraProjection);
+	xrayPass.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	xrayPass.sendUniformFloat("uTime", deltaTime);
+	g_Player2Model.sendToShader(&xrayPass);
+	Playertwo.LoadObject(&xrayPass);
+	xrayPass.unuse();
+
 
 	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthFunc(GL_LESS);
 	animsh.use();
 	animsh.sendUniformMat4("projection", cameraProjection);
 	animsh.sendUniformMat4("view", glm::inverse(_camera->getView()));
 	g_Player1Model.sendToShader(&animsh);
+	//////Lights here
 	first.LoadLight(&animsh);
 	second.LoadLight(&animsh);
+	////
+	////
+	//////Objects here//
+
 	Playerone.LoadObject(&animsh);
+
 	animsh.unuse();
 
 	animsh.use();
 	animsh.sendUniformMat4("projection", cameraProjection);
 	animsh.sendUniformMat4("view", glm::inverse(_camera->getView()));
 	g_Player2Model.sendToShader(&animsh);
+	//////Lights here
 	first.LoadLight(&animsh);
 	second.LoadLight(&animsh);
+	////
+	////
+	//////Objects here//
+
 	Playertwo.LoadObject(&animsh);
+
 	animsh.unuse();
 
 
@@ -984,11 +1316,6 @@ void Engine::render()
 	SKYShader.unuse();
 	skybox->unbind3D(25);
 
-	metal.Bind(20);
-	rMetal.Bind(21);
-	mMetal.Bind(22);
-	ambient.Bind(23);
-	NormalMap.Bind(24);
 	skybox->Bind3D(25);
 	skybox->Bind3D(26);
 	IBL_Lookup.Bind(27);
@@ -1005,17 +1332,123 @@ void Engine::render()
 	PBRShader.sendUniformMat4("iView", _camera->getView());
 
 	testPBR.LoadObject(&PBRShader);
+
+	Tree1.LoadObject(&PBRShader);
+	Tree2.LoadObject(&PBRShader);
+	Tree3.LoadObject(&PBRShader);
+	Tree4.LoadObject(&PBRShader);
+
+	spawn.LoadObject(&PBRShader);
+
+	//BasePlate.LoadObject(&PBRShader);
 	PBRShader.unuse();
 
-	metal.Unbind();
-	rMetal.Unbind();
-	mMetal.Unbind();
-	ambient.Unbind();
-	NormalMap.Unbind();
 	skybox->unbind3D(25);
 	skybox->unbind3D(26);
 	IBL_Lookup.Unbind();
 	lightColor.Unbind();
+
+	frameBuffer.unbind();
+
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	//glDisable(GL_CULL_FACE);
+	sh2.use();
+	sh2.sendUniformMat4("projection", shadowProjection);
+	sh2.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	healthHUD.LoadObject(&sh2);
+	sh2.unuse();
+	//overlay.Unbind();
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_CULL_FACE);
+
+	//Post process draw
+
+	xrayFramebuffer.bind();
+	bloomShader.use();
+	sobelFramebuffer.bindColorAsTexture(0, 29);
+	frameBuffer.bindColorAsTexture(1, 30);
+	sobelFramebuffer.drawFSQ();
+	sobelFramebuffer.unbindTexture(29);
+	frameBuffer.unbindTexture(30);
+	bloomShader.unuse();
+	xrayFramebuffer.unbind();
+
+	frameBuffer.bind();
+	bloomShader.use();
+	xrayFramebuffer.bindColorAsTexture(0, 29);
+	frameBuffer.bindColorAsTexture(0, 30);
+	xrayFramebuffer.drawFSQ();
+	xrayFramebuffer.unbindTexture(29);
+	frameBuffer.unbindTexture(30);
+	bloomShader.unuse();
+	frameBuffer.unbind();
+
+
+
+	pass.use();
+	frameBuffer.bindColorAsTexture(0, 30);
+	postBuffer.drawToPost();
+	frameBuffer.unbindTexture(30);
+	pass.unuse();
+
+	pass.use();
+	postBuffer.draw(30);
+	pass.unuse();
+
+	//Adds bloomMap texture and Framebuffer texture together.
+	frameBuffer.bind();
+	bloomShader.use();
+	bloomFramebuffer.bindColorAsTexture(1, 29);
+	postBuffer.draw(30);
+	bloomFramebuffer.unbindTexture(29);
+	bloomShader.unuse();
+	frameBuffer.unbind();
+
+	//Does brightPass check
+	brightPass.use();
+	postBuffer.draw(30);
+	brightPass.unuse();
+
+	for (int i = 0; i < 15; i++) {
+		bloomBlurX.use();
+		bloomBlurX.sendUniformFloat("width", SCREEN_WIDTH);
+		postBuffer.draw(30);
+		bloomBlurX.unuse();
+
+		bloomBlurY.use();
+		bloomBlurY.sendUniformFloat("height", SCREEN_HEIGHT);
+		postBuffer.draw(30);
+		bloomBlurY.unuse();
+	}
+
+	bloomShader.use();
+	frameBuffer.bindColorAsTexture(0, 30);
+	postBuffer.draw(29);
+	frameBuffer.unbindTexture(30);
+	bloomShader.unuse();
+
+
+
+
+	LUT.Bind3D(12);
+	LUTShader.use();
+	LUTShader.sendUniformMat4("projection", cameraProjection);
+	LUTShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
+	LUTShader.sendUniformFloat("uAmount", 0.0f);
+	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
+	glDisable(GL_DEPTH_TEST);
+	postBuffer.draw(30);
+	LUTShader.unuse();
+	LUT.unbind3D(12);
+
+
+	pass.use();
+	//frameBuffer.unbind();
+	postBuffer.drawToScreen(30);
+	//frameBuffer.unbindTexture(30);
+	pass.unuse();
 
 	//dynamicsWorld->debugDrawWorld();
 	glBindVertexArray(0);
@@ -1029,7 +1462,7 @@ void Engine::render()
 	glfwSwapBuffers(glfwGetCurrentContext());
 	glfwPollEvents();
 }
-float playerspeed = 300.0f;
+float playerspeed = 1150.0f;
 void Engine::playerInput(float t)
 {
 	
@@ -1080,7 +1513,7 @@ void Engine::playerInput(float t)
 		//second.setPosition(glm::vec4(second.getPosition().x, second.getPosition().y, second.getPosition().z - 0.1f, second.getPosition().w));
 		//Player.setPosition(glm::vec3(second.getPosition()));
 		//Playerone.setPosition(Playerone.getPositionV3() - glm::vec3(0.0f, 0.0f, 0.1f));
-		cameraShadow.setPositionZ(cameraShadow.getPositionZ() + 0.2f);
+		_camera->setPositionZ(_camera->getPositionZ() - 0.2f);
 		std::cout << "test" << std::endl;
 		
 		//_camera->processKeyboard(FORWARD, deltaTime);
@@ -1090,42 +1523,42 @@ void Engine::playerInput(float t)
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_S))
 	{
 
-		cameraShadow.setPositionZ(cameraShadow.getPositionZ() - 0.2f);
+		_camera->setPositionZ(_camera->getPositionZ() + 0.2f);
 		//second.setPosition(glm::vec4(second.getPosition().x, second.getPosition().y, second.getPosition().z + 0.1f, second.getPosition().w));
 		//Player.setPosition(glm::vec3(second.getPosition()));
-		Playerone.setPosition(Playerone.getPositionV3() + glm::vec3(0.0f, 0.0f, 0.1f));
+		//Playerone.setPosition(Playerone.getPositionV3() + glm::vec3(0.0f, 0.0f, 0.1f));
 		//animation3run = true;
 		//_camera->processKeyboard(BACKWARD, deltaTime);
 	}
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_A))
 	{
-		cameraShadow.setPositionX(cameraShadow.getPositionX() - 0.2f);
+		_camera->setPositionX(_camera->getPositionX() - 0.2f);
 		//second.setPosition(glm::vec4(second.getPosition().x - 0.1f, second.getPosition().y, second.getPosition().z, second.getPosition().w));
 		//Player.setPosition(glm::vec3(second.getPosition()));
-		Playerone.setPosition(Playerone.getPositionV3() - glm::vec3(0.1f, 0.0f, 0.0f));
+		//Playerone.setPosition(Playerone.getPositionV3() - glm::vec3(0.1f, 0.0f, 0.0f));
 		//animation2run = true;
 		//_camera->processKeyboard(LEFT, deltaTime);
 	}
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_D))
 	{
-		cameraShadow.setPositionX(cameraShadow.getPositionX() + 0.2f);
+		_camera->setPositionX(_camera->getPositionX() + 0.2f);
 		//second.setPosition(glm::vec4(second.getPosition().x + 0.1f, second.getPosition().y, second.getPosition().z, second.getPosition().w));
 		//Player.setPosition(glm::vec3(second.getPosition()));
-		Playerone.setPosition(Playerone.getPositionV3() + glm::vec3(0.1f, 0.0f, 0.0f));
+		//Playerone.setPosition(Playerone.getPositionV3() + glm::vec3(0.1f, 0.0f, 0.0f));
 		//animation3run = true;
 
 		//_camera->processKeyboard(RIGHT, deltaTime);
 	}
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_R))
 	{
-		cameraShadow.setPositionY(cameraShadow.getPositionY() + 0.2f);
+		_camera->setPositionY(_camera->getPositionY() + 0.2f);
 		second.setPosition(glm::vec4(second.getPosition().x, second.getPosition().y + 0.1f, second.getPosition().z, second.getPosition().w));
 		//Player.setPosition(glm::vec3(second.getPosition()));
 		//_camera->moveUp();
 	}
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_F))
 	{
-		cameraShadow.setPositionY(cameraShadow.getPositionY() - 0.2f);
+		_camera->setPositionY(_camera->getPositionY() - 0.2f);
 		second.setPosition(glm::vec4(second.getPosition().x, second.getPosition().y - 0.1f, second.getPosition().z, second.getPosition().w));
 		//_camera->moveDown();
 	}
@@ -1173,7 +1606,7 @@ void Engine::playerInput(float t)
 		//Trees.setPosition(Trees.getPositionV3() + glm::vec3(0, -0.1f, 0));
 		//Playertwo.BaseAttack(&Playerone);
 		std::cout << Mover->getPositionV3().x << " " << Mover->getPositionV3().y << " " << Mover->getPositionV3().z << std::endl;
-		std::cout << Mover->getOrientation() << std::endl;
+		std::cout << rotation << std::endl;
 	}
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_E))
 	{
