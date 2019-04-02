@@ -20,7 +20,7 @@ struct Listener
 {
 	FMOD_VECTOR pos = { 0.0f,0.0f,0.0f };
 	FMOD_VECTOR vel = { 0.0f,0.0f,0.0f };
-	FMOD_VECTOR foreward{ 0.0f,0.0f,1.0f };
+	FMOD_VECTOR foreward{ 0.0f,0.0f,-1.0f };
 	FMOD_VECTOR up = { 0.0f,1.0f,0.0f };
 };
 

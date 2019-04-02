@@ -290,7 +290,7 @@ bool Mesh::loadFromAnimatedModel(const char *file, const  SA::SkeletalModel& ani
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_UVS);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textureData.size(), &textureData[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textureData.size() * 2, &textureData[0], GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, BUFFER_OFFSET(0));
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
@@ -340,8 +340,7 @@ bool Mesh::loadFromFBX(std::string filename)
 	const aiScene * pscene = tempimporter.ReadFile("Contents/FBX/Models/" + filename,
 		aiProcess_Triangulate |
 		aiProcess_CalcTangentSpace |
-		aiProcess_SortByPType| 
-		aiProcess_FlipUVs);
+		aiProcess_SortByPType | aiProcess_FlipUVs);
 
 	std::cout << tempimporter.GetErrorString() << std::endl;
 	

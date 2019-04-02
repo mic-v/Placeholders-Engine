@@ -2,9 +2,12 @@
 #include "Object.h"
 
 
+#include "FmodWrapper.h"
+
 //forward declare
 class Ability;
 class Skillshot;
+
 
 
 
@@ -32,8 +35,20 @@ public:
 	}
 	bool Pressed2 = false;
 	bool Pressed1 = false;
-	
+
+	std::vector<Sound *> NothingSounds;
+	std::vector<Sound *> AttackSounds;
+	std::vector<Sound *> EnemyAttackMissSounds;
+	std::vector<Sound *> DeathSounds;
+
+	Sound* ReturnSound = nullptr;
+	FMOD_VECTOR SoundPos = { 0,0,0 };
+	float AudioTimer = 0;
+	bool Override = false;
+	bool Death = false;
+	int wins = 0;
 private:
+
 	float Health;
 	float MeleeRange;
 	glm::vec3 rollTarget;

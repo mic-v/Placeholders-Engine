@@ -19,7 +19,7 @@ void FmodErrorCheck(FMOD_RESULT result)
 	{
 		if (result != FMOD_OK)
 		{
-			 cout << FMOD_ErrorString(result) << endl;
+			cout << FMOD_ErrorString(result) << endl;
 			system("pause");
 			//exit(0);
 		}
@@ -49,7 +49,7 @@ bool SoundEngine::Init()
 			Set the distance units. (meters/feet etc).
 		*/
 		result = system->set3DSettings(1.0, 1.0f, 1.0f);
-		
+
 		FmodErrorCheck(result);
 
 		//Got this far, it must have worked  
@@ -101,9 +101,9 @@ bool Sound::Load(const char * fileName)
 		result = engine.system->createSound(fileName, FMOD_3D, 0, &sound);
 		FmodErrorCheck(result);
 		if (result != FMOD_OK)return false;
-		result = sound->set3DMinMaxDistance(50.0f, 550.0f);
+		result = sound->set3DMinMaxDistance(5.0f, 30.0f);
 		//engine.system->setAdvancedSettings(FMOD_INIT_3D_RIGHTHANDED);
-		
+
 		FmodErrorCheck(result);
 
 		init = true;
@@ -141,14 +141,14 @@ void Sound::switchMode()
 {
 	if (!switched) {
 		channel->setMode(FMOD_3D_LINEARROLLOFF);
-		
+
 		switched = true;
 	}
 	else if (switched) {
 		channel->setMode(FMOD_3D_INVERSEROLLOFF);
 		switched = false;
 	}
-	
+
 }
 
 void Sound::SetPosition(FMOD::Channel * thisChannel, FMOD_VECTOR newPos, FMOD_VECTOR newVel)

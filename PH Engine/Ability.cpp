@@ -1,5 +1,6 @@
 #include "Ability.h"
 
+int EnemyAttackMissPtr = 0;
 Ability::Ability()
 {
 	//std::cout << "ABILITY CLASS NOT SETUP CORRECTLY, USING DEFAULT CONSTRUCTOR." << std::endl;
@@ -68,15 +69,15 @@ bool Ability::Attack(Player * target)
 		if (sqrt((x*x) + (z*z)) <= Wielder->getRange()) {
 
 			target->setHealth(target->getHealth() - Damage);
-			std::cout << "hit" << std::endl;
+			//std::cout << "hit" << std::endl;
 		}
 		else {
-			std::cout << "attack missed" << std::endl;
+			//std::cout << "attack missed" << std::endl;
 		}
 		return true;
 	}
 	else {
-		std::cout << "cooldown active" << std::endl;
+		//std::cout << "cooldown active" << std::endl;
 	}
 	return false;
 }
@@ -105,7 +106,7 @@ bool Skillshot::Attack(Player * target, float direction)
 		projectileObject->setActive(true);
 
 		float theta = glm::radians(direction);
-		
+
 		projectileObject->setOrientation(-projectileObject->getOrientation());
 		projectileObject->setOrientation(direction + 255.0f);
 		projTarget = glm::vec3(Wielder->getPositionV3().x + sin(theta) * projectileDist, Wielder->getPositionV3().y + 1.0f, Wielder->getPositionV3().z + cos(theta) * projectileDist);
@@ -114,7 +115,7 @@ bool Skillshot::Attack(Player * target, float direction)
 
 		return true;
 	}
-	
+
 	return false;
 
 
@@ -167,8 +168,19 @@ void Skillshot::update(float Dt)
 	}
 
 	if (!lerping) {
+		if (Target != nullptr && lerpParam >= 1.0f) {
+			if (!hit && Target->ReturnSound == nullptr) {
+				Target->Override = true;
+				Target->ReturnSound = Target->EnemyAttackMissSounds[EnemyAttackMissPtr];
+				EnemyAttackMissPtr++;
+				if (EnemyAttackMissPtr > Target->EnemyAttackMissSounds.size() - 1) {
+					EnemyAttackMissPtr = 0;
+				}
+			}
+		}
 		lerpParam = 0.0f;
 		projectileObject->setActive(false);
+
 		//projectileObject->setRotationY(glm::radians(-projDirection));
 		hit = false;
 	}

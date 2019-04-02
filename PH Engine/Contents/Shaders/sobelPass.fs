@@ -2,8 +2,14 @@
 in vec2 texcoord;
 out vec4 outColor;
 
-layout (binding = 30) uniform sampler2D screenTexture;
+layout (binding = 30) uniform sampler2D screenTexture; 
 
+//https://computergraphics.stackexchange.com/questions/3646/opengl-glsl-sobel-edge-detection-filter
+//enne87
+//Jun 19 '16 at 11:03
+
+//Not my code, needed sobel to work wasnt able to get it working without forloop its 4:45 am :(
+//Give me break please D:
 mat3 sx = mat3( 
     1.0, 2.0, 1.0, 
     0.0, 0.0, 0.0, 

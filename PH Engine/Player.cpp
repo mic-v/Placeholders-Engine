@@ -2,6 +2,11 @@
 #include "Ability.h"
 
 
+int AttackPtr = 0;
+
+int NothingPtr = 0;
+int DeathPtr = 0;
+
 Player::Player()
 {
 }
@@ -19,7 +24,7 @@ bool Player::BaseAttack(Player * otherplayer)
 }
 
 
-glm::vec3 target;
+
 float Player::getRange()
 {
 	return MeleeRange;
@@ -40,12 +45,19 @@ void Player::setFirstAbility(Skillshot * abil)
 void Player::setSecondAbility(Skillshot * abil)
 {
 	SecondAbility = abil;
-	
+
 }
 bool Player::skillshotAttack(Player * otherplayer, float directionangle)
 {
-	return AbilPointer->Attack(otherplayer, directionangle);
-
+	if (AbilPointer->Attack(otherplayer, directionangle)) {
+		ReturnSound = AttackSounds[AttackPtr];
+		AttackPtr++;
+		if (AttackPtr > AttackSounds.size() - 1) {
+			AttackPtr = 0;
+		}
+		return true;
+	}
+	return false;
 }
 
 float Player::getHealth()
@@ -59,6 +71,20 @@ void Player::update(float Dt)
 	FirstAbility->update(Dt);
 	SecondAbility->update(Dt);
 	lerpForRoll(Dt);
+	SoundPos = FMOD_VECTOR{ this->getPositionV3().x, this->getPositionV3().y, this->getPositionV3().z };
+	this->AudioTimer += Dt;
+
+	if (this->AudioTimer >= 30.0f) {
+		this->AudioTimer = 0;
+		if (ReturnSound == nullptr) {
+			ReturnSound = NothingSounds[NothingPtr];
+			NothingPtr++;
+			if (NothingPtr > NothingSounds.size() - 1) {
+				NothingPtr = 0;
+			}
+		}
+	}
+
 }
 
 void Player::startRoll(float tempdistance)
@@ -97,7 +123,7 @@ void Player::lerpForRoll(float Dt)
 
 void Player::SwapSkillShot()
 {
-	
+
 	if (AbilPointer == FirstAbility) {
 		AbilPointer = SecondAbility;
 	}

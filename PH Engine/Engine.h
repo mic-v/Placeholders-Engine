@@ -77,7 +77,9 @@ private:
 	btAlignedObjectArray<btCollisionShape*> collisionShapes;
 
 	DebugDraw _draw;
-
+	//MERGE START
+	bool roundend = false;
+	//MERGE END
 	bool animation1run = false;
 	bool animation2run = false;
 	bool animation3run = false;
@@ -94,7 +96,7 @@ private:
 	Mesh Debris;
 	Mesh Pointer;
 	Mesh basemap;
-	Mesh river;
+	Mesh riverMesh;
 	Mesh Spear;
 
 	Mesh idleframe1;
@@ -124,9 +126,16 @@ private:
 	Object SkyboxOBJ;
 	Object healthHUD;
 	Object spawn;
+	Object spawn2;
+	Object center;
+	Object tiles;
+	Object tilesCenter;
 	Mesh healthHUDMesh;
 	Mesh mountainMesh;
 	Mesh spawnMesh;
+	Mesh spawnMesh2;
+	Mesh tilesMesh;
+	Mesh tilesCenterMesh;
 
 	Player Playerone;
 	Player Playertwo;
@@ -134,6 +143,7 @@ private:
 	Mesh testmesh2;
 	Mesh testPBRMesh;
 	Mesh SkyboxMesh;
+	Mesh centerMesh;
 
 	Ability tempability;
 	Ability tempability2;
@@ -141,6 +151,7 @@ private:
 	Skillshot playtwoskillshot;
 	Skillshot playoneskillshot2;
 	Skillshot playtwoskillshot2;
+
 	Shader animsh;
 	Shader sh2;
 	Shader watershader;
@@ -161,10 +172,14 @@ private:
 	Shader addPass;
 	Shader invertPass;
 	Shader pass;
+	Shader HUD;
+
 	Light first;
 	Light second;
 	Light ShadowLight;
 	Texture mapMask;
+	Texture spawnMask;
+	Texture centerMask;
 	Texture overlay;
 	Texture TreeTex;
 	Texture BaseTex;
@@ -173,12 +188,43 @@ private:
 	Texture waterNorm;
 	Texture arrow;
 	Texture Clem;
+	//MERGE START
+	int roundCount = 0;
+	bool gameover = false;
+	bool playeronewin = false;
+	bool playertwowin = false;
+	Player PlayerOneHolder;
+	Player PlayerTwoHolder;
+	SA::SkeletalModel Player1Hold;
+	SA::SkeletalModel Player2Hold;
 
-	FMOD_VECTOR player1 = {0,0,0};
-	FMOD_VECTOR player2 = { 0,0,0 };
+	FMOD_VECTOR player1 = { 0.0f,0.0f,0.0f };
+	FMOD_VECTOR player2 = { 0.0f,0.0f,0.0f };
 	FMOD_VECTOR listener = { 0,0,0 };
-	FMOD::Channel * Player1Channel;
-	FMOD::Channel * Player2Channel;
+
+	//Attack sounds
+	Sound TakeThis;
+	Sound EverySpear;
+	//Nothing sounds
+	Sound FightWithFist;
+	Sound DontSeeBlood;
+	Sound WhyIFight;
+	Sound SharperThanSpear;
+	Sound ToughestFights;
+	//Attack missed sounds
+	Sound Laugh;
+	Sound EvenTrying;
+	//Death sounds
+	Sound Dying;
+
+	FMOD::Channel* Ambience;
+	FMOD::Channel* Music;
+	FMOD::Channel* Player1Channel;
+	FMOD::Channel* Player2Channel;
+
+	//MERGE END
+
+	
 	std::vector<std::string> skyboxTexture;
 	TextureCube *skybox;
 	std::vector<Texture*> test;
@@ -207,6 +253,43 @@ private:
 	Texture spawnNormal;
 	Texture spawnAO;
 	Texture spawnRough;
+
+	Texture playerColor;
+	Texture playerMetal;
+	Texture playerNormal;
+	Texture playerAO;
+	Texture playerRough;
+
+	Texture centerColor;
+	Texture centerMetal;
+	Texture centerNormal;
+	Texture centerAO;
+	Texture centerRough;
+
+	Texture riverColor;
+	Texture riverMetal;
+	Texture riverNormal;
+	Texture riverAO;
+	Texture riverRough;
+
+	Texture spearColor;
+	Texture spearMetal;
+	Texture spearNormal;
+	Texture spearAO;
+	Texture spearRough;
+
+	Texture tilesColor;
+	Texture tilesMetal;
+	Texture tilesNormal;
+	Texture tilesAO;
+	Texture tilesRough;
+			
+	Texture tilesCenterColor;
+	Texture tilesCenterMetal;
+	Texture tilesCenterNormal;
+	Texture tilesCenterAO;
+	Texture tilesCenterRough;
+
 	//PBR END
 
 	Material testMat;
@@ -234,13 +317,16 @@ private:
 	SA::SkeletalModel g_RollModel;
 	SA::SkeletalModel g_PunchModel;
 	SA::SkeletalModel g_ThrowModel;
+	SA::SkeletalModel g_DeathModel;
 
 	SA::sAnimation idle;
 	SA::sAnimation run;
 	SA::sAnimation roll;
 	SA::sAnimation punch;
 	SA::sAnimation Throw;
-
+	//MERGE START
+	SA::sAnimation death;
+	//MERGE END
 	CUBELoader LUT;
 
 	glm::mat4 depthBiasMVP;
