@@ -1251,7 +1251,7 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 				float temprad = glm::radians(aim);
 
 				tempobj->setActive(true);
-				tempobj->setPosition(player->getPositionV3() + (glm::vec3(1) * glm::vec3(sin(temprad), 1, cos(temprad))));
+				tempobj->setPosition(player->getPositionV3() + (glm::vec3(0.25f) * glm::vec3(sin(temprad), 4.0f, cos(temprad))));
 				tempobj->setOrientation(-tempobj->getOrientation());
 				tempobj->setOrientation(aim);
 
