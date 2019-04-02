@@ -19,6 +19,9 @@ int Engine::win1 = 0.f;
 int Engine::win2 = 0.f;
 float Engine::timer = 120.0f;
 float r = 192.9f;
+
+bool a = false;
+bool press = false;
 /*
 	This is the Singleton Pattern. Read more here:
 	http://Engineprogrammingpatterns.com/singleton.html
@@ -264,7 +267,7 @@ bool Engine::startUp()
 	
 	
 	Spear.loadFromFBX("Spear.fbx");
-	Pointer = Spear;
+	Pointer.loadFromFBX("Arrow.fbx");
 	testPBRMesh.loadFromFBX("Sphere.fbx");
 
 	mountainMesh.loadFromFBX("MOUNTAINS.fbx");
@@ -311,6 +314,16 @@ bool Engine::startUp()
 	skyboxTexture.push_back("Contents/Skybox/sky_c04.bmp");
 	skyboxTexture.push_back("Contents/Skybox/sky_c05.bmp");
 	skybox = new TextureCube(skyboxTexture);
+
+
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c00.bmp");
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c01.bmp");
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c02.bmp");
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c03.bmp");
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c04.bmp");
+	skyboxTexture2.push_back("Contents/Skybox2/sky_c05.bmp");
+	skybox2 = new TextureCube(skyboxTexture2);
+
 	glm::mat4 objectSkyboxTransform = objectTransform;
 	objectSkyboxTransform = glm::rotate(objectSkyboxTransform, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	SkyboxOBJ = Object(&SkyboxMesh, skybox, glm::scale(objectTransform, glm::vec3(25.0, 25.0, 25.0)), &testMat);
@@ -374,7 +387,11 @@ bool Engine::startUp()
 		system("PAUSE");
 		exit(0);
 	}
-
+	if (!AmbienceSound.Load("Contents/Audio/Ambience.wav")) {
+		std::cout << "Media file didnt load, loading default instead" << std::endl;
+		system("PAUSE");
+		exit(0);
+	}
 
 
 	//MERGE END
@@ -736,6 +753,12 @@ bool Engine::startUp()
 		system("Pause");
 		exit(0);
 	}
+
+	if (!clemMask.LoadTexture("Contents/Textures/Clem/clemMask.png")) {
+		cout << "Texture failed to load Rough" << endl;
+		system("Pause");
+		exit(0);
+	}
 	//IDLE ANIMATION AND SKELETON 
 
 
@@ -850,6 +873,13 @@ bool Engine::startUp()
 	tilesVector.push_back(&tilesCenterAO);
 	tilesVector.push_back(&tilesCenterNormal);
 
+	std::vector<Texture *> spearVector;
+	spearVector.push_back(&spearColor);
+	spearVector.push_back(&spearRough);
+	spearVector.push_back(&spearMetal);
+	spearVector.push_back(&spearAO);
+	spearVector.push_back(&spearNormal);
+
 	
 
 	glm::mat4 tempspear = glm::rotate(360.0f, glm::vec3(0, 1, 0)) * glm::scale(objectTransform, glm::vec3(0.2f));
@@ -860,12 +890,12 @@ bool Engine::startUp()
 	Tree1 = Object(&Debris, debrisVector, tempRotate, &testMat);
 	Aim1 = Object(&Pointer, &arrow, glm::scale(objectTransform, glm::vec3(0.3f)), &testMat);
 	Aim2 = Aim1;
-	Spear1 = Object(&Spear, &BaseTex, tempspear, &testMat);
-	Spear2 = Object(&Spear, &BaseTex, tempspear, &testMat);
-	SecondSpear1 = Object(&Spear, &BaseTex, tempspear, &testMat);
-	SecondSpear2 = Object(&Spear, &BaseTex, tempspear, &testMat);
+	Spear1 = Object(&Spear, &spearColor, tempspear, &testMat);
+	Spear2 = Object(&Spear, &spearColor, tempspear, &testMat);
+	SecondSpear1 = Object(&Spear, &spearColor, tempspear, &testMat);
+	SecondSpear2 = Object(&Spear, &spearColor, tempspear, &testMat);
 	BasePlate = Object(&basemap, &BaseTex, glm::scale(objectTransform, glm::vec3(0.915)), &testMat);
-	River = Object(&riverMesh, riverVector, objectTransform, &testMat); //glm::scale(objectTransform, glm::vec3(8.0f, 0.0f, 8.0)
+	River = Object(&riverMesh, &riverColor, glm::scale(objectTransform, glm::vec3(0.915)), &testMat); //glm::scale(objectTransform, glm::vec3(8.0f, 0.0f, 8.0)
 	Mountain = Object(&mountainMesh, mountainVector, glm::scale(objectTransform, glm::vec3(5.5)), &testMat);
 	healthHUD = Object(&healthHUDMesh, &overlay, glm::rotate(objectTransform, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)), &testMat);
 	spawn = Object(&spawnMesh, spawnVector, glm::scale(objectTransform, glm::vec3(0.23)), &testMat);
@@ -874,9 +904,9 @@ bool Engine::startUp()
 	tiles = Object(&tilesMesh, tilesVector, objectTransform, &testMat);
 	tilesCenter = Object(&tilesCenterMesh, tilesCenterVector, objectTransform, &testMat);
 	TestSpear = Aim1;
-	BasePlate.setRadius(5.9f);
+	BasePlate.setRadius(5.4f);
 	
-	Tree1.setRadius(2.0f);
+	Tree1.setRadius(2.4f);
 
 	Tree1.setRotationX(glm::radians(-90.0f));
 	spawn.setRotationX(glm::radians(-90.0f));
@@ -884,7 +914,7 @@ bool Engine::startUp()
 	spawn2.setRotationZ(glm::radians(-180.0f));
 	center.setRotationX(glm::radians(-90.0f));
 	center.setRotationZ(glm::radians(-14.0f));
-	River.setRotationX(glm::radians(-90.0f));
+	//River.setRotationX(glm::radians(-90.0f));
 	tiles.setRotationX(glm::radians(-90.0f));
 	tilesCenter.setRotationX(glm::radians(-90.0f));
 	Mountain.setRotationX(glm::radians(-90.0f));
@@ -893,40 +923,65 @@ bool Engine::startUp()
 	center.setPosition(glm::vec3(0.1, 0.4, -0.0816998));
 	spawn.setPosition(glm::vec3(7.59999, 0.3, - 1.49012e-08));
 	spawn2.setPosition(glm::vec3(-7.59999, 0.3, -1.49012e-08));
-	River.setPosition(glm::vec3(0.2, 0.3, - 7.45058e-08));
+	River.setPosition(glm::vec3(-0.2, 1.49012e-08, - 0.4));
 	Mountain.setPosition(glm::vec3(-15.6, - 8.6, - 30.2001));
 	BasePlate.setPosition(glm::vec3(-0.2, 0.0, - 0.4));
 	Tree2 = Tree1;
 	Tree3 = Tree1;
 	Tree4 = Tree1;
-	Tree2.setPosition(glm::vec3(3.1f, 0.9f, -3.1f));
-	Tree2.setOrientation(113.0f);
-	Tree3.setPosition(glm::vec3(2.6f, 0.9f, 3.6f));
-	Tree3.setOrientation(27.0f);
-	Tree4.setPosition(glm::vec3(-3.0f, 0.9f, 3.2f));
-	Tree4.setOrientation(299.0f);
+	Tree5 = Tree1;
+	Tree6 = Tree1;
+	Tree3.setRadius(1.5f);
+	Tree2.setRadius(1.6f);
+	Tree4.setRadius(1.5f);
+	Tree5.setRadius(1.5f);
+	Tree6.setRadius(1.5f);
+	Tree2.setPosition(glm::vec3(3.3, - 0.1, - 2.7));
+	Tree2.setRotationZ(glm::radians(54.0f));
+	Tree2.setTransform(Tree2.getTransform() * scale(objectTransform, glm::vec3(0.7)));
+	//Tree2.setOrientation(113.0f);
+	Tree3.setPosition(glm::vec3(1.6, - 0.1, - 4.4));
+	Tree3.setRotationZ(glm::radians(87.0f));
+	Tree3.setTransform(Tree3.getTransform() * scale(objectTransform, glm::vec3(0.65)));
+	//Tree3.setOrientation(27.0f);
+	Tree4.setPosition(glm::vec3(-3.4, - 0.1, 2.8));
+	Tree4.setRotationZ(glm::radians(173.0f));
+	Tree4.setTransform(Tree4.getTransform() * scale(objectTransform, glm::vec3(0.68)));
+	//Tree4.setOrientation(299.0f);
+	Tree5.setPosition(glm::vec3(3, - 0.1, 1.9));
+	Tree5.setRotationZ(glm::radians(17.0f));
+	Tree5.setTransform(Tree5.getTransform() * scale(objectTransform, glm::vec3(0.68)));
+
+	Tree6.setPosition(glm::vec3(1.2, - 0.1, 3.1));
+	Tree6.setRotationZ(glm::radians(54.0f));
+	Tree6.setTransform(Tree6.getTransform() * scale(objectTransform, glm::vec3(0.65)));
+
+
 	Object::InnerColliders.push_back(&BasePlate);
 	Object::OutterColliders.push_back(&Tree1);
 	Object::OutterColliders.push_back(&Tree2);
 	Object::OutterColliders.push_back(&Tree3);
 	Object::OutterColliders.push_back(&Tree4);
+	Object::OutterColliders.push_back(&Tree5);
+	Object::OutterColliders.push_back(&Tree6);
 
 
 	Playerone = Player(&testmesh, &playerColor, Player1Transform, &testMat, 100, 1.0f, &Aim1);
 	Playertwo = Player(&testmesh2, &playerColor, Player2Transform, &testMat, 120, 1.0f, &Aim2);
-	Playertwo.setPosition(glm::vec3( -3.0f, Playertwo.getPositionV3().y, Playertwo.getPositionV3().z));
+	Playertwo.setPosition(glm::vec3(4.5, 0.4, -0.3));
 
 	Playerone.setRadius(0.2f);
 	Playertwo.setRadius(0.2f);
 
-	tempability = Ability(&Playerone, 3.0f, 5.0f);
-	tempability2 = Ability(&Playertwo, 3.0f, 5.0f);
-	playoneskillshot = Skillshot(&Playerone, 3.0f, 15.0f, 1.6f, 4.0f, 0.5f, &Spear1);
+	//MERGE 2 START
+	tempability = Ability(&Playerone, 2.0f, 4.0f);
+	tempability2 = Ability(&Playertwo, 2.0f, 4.0f);
+	playoneskillshot = Skillshot(&Playerone, 3.0f, 10.0f, 1.6f, 5.0f, 0.8f, &Spear1);
+	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 10.0f, 1.6f, 5.0f, 0.8f, &Spear2);
 
-	playtwoskillshot = Skillshot(&Playertwo, 3.0f, 15.0f, 1.6f, 4.0f, 0.5f, &Spear2);
-	
-	playoneskillshot2 = Skillshot(&Playerone, 3.0f, 100.0f, 0.5f, 4.0f, 0.5f, &SecondSpear1);
-	playtwoskillshot2 = Skillshot(&Playertwo, 3.0f, 100.0f, 0.5f, 4.0f, 0.5f, &SecondSpear2);
+	playoneskillshot2 = Skillshot(&Playerone, 6.0f, 20.0f, 1.0f, 5.0f, 0.8f, &SecondSpear1);
+	playtwoskillshot2 = Skillshot(&Playertwo, 6.0f, 20.0f, 1.0f, 5.0f, 0.8f, &SecondSpear2);
+	//MERGE 2 END
 	
 
 	Playerone.setAttack(&tempability);
@@ -964,13 +1019,14 @@ bool Engine::startUp()
 	Aim2.setActive(false);
 	TestSpear.setActive(true);
 	//SkyboxOBJ.setActive(false);
-	Mover = &BasePlate;
+	Mover = &Playertwo;
 	//MERGE START
 	PlayerOneHolder = Playerone;
 	PlayerTwoHolder = Playertwo;
 
 	Player1Hold = g_Player1Model;
 	Player2Hold = g_Player2Model;
+	Music = AmbienceSound.Play(true);
 	//MERGE END
 	return true;
 }
@@ -1102,8 +1158,6 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 		if (gameover && GLFW_PRESS == buttons[8]) {
 			gameover = false;
 			roundend = false;
-			playeronewin = false;
-			playertwowin = false;
 			roundCount = 0;
 
 			PlayerOneHolder.wins = 0;
@@ -1116,11 +1170,10 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 			g_Player2Model = Player2Hold;
 			TotalGameTime = 0;
 
-
 		}
 
 
-		if (roundend && GLFW_PRESS == buttons[9]) {
+		if (!gameover && roundend && GLFW_PRESS == buttons[9]) {
 			roundend = false;
 			roundCount++;
 
@@ -1303,8 +1356,6 @@ void Engine::controllerInput(float Dt, int controller, float speed, Player *play
 
 
 
-
-
 void Engine::checkAnimation() {
 	
 	
@@ -1359,19 +1410,61 @@ void Engine::runGame()
 		if (show_demo_window)
 			ImGui::ShowDemoWindow(&show_demo_window);
 
+		//MERGE 2 START
+		if (gameover) {
+			ImGui::Begin("GAME OVER");
+			if (Playerone.wins >= 3) {
+				ImGui::Text("       Player One Wins The Game");
+				ImGui::Text("       Press Share Button to restart game");
+			}
+			else if (Playertwo.wins >= 3) {
+				ImGui::Text("       Player Two Wins The Game");
+				ImGui::Text("       Press Share Button to restart game");
+			}
+			ImGui::SetWindowSize(ImVec2(400, 100));
+			ImGui::SetWindowPos(ImVec2(700, 250));
+			ImGui::End();
+		}
+		if (!gameover && roundend) {
+
+			if (roundCount == 0) {
+				ImGui::Begin("ROUND 1 OVER");
+			}
+			if (roundCount == 1) {
+				ImGui::Begin("ROUND 2 OVER");
+			}
+			if (roundCount == 2) {
+				ImGui::Begin("ROUND 3 OVER");
+			}
+
+			if (Playerone.wins > PlayerOneHolder.wins) {
+				ImGui::Text("       Player One Wins This Round");
+				ImGui::Text("       Press Options Button to go to next round");
+			}
+			else if (Playertwo.wins > PlayerTwoHolder.wins) {
+				ImGui::Text("       Player Two Wins This Round");
+				ImGui::Text("       Press Options Button to go to next round");
+			}
+			ImGui::SetWindowSize(ImVec2(400, 100));
+			ImGui::SetWindowPos(ImVec2(700, 250));
+			ImGui::End();
+		}
 		{
 			ImGui::Begin("Player 1");
 			ImGui::Text("Health = %f", Playerone.getHealth());
-			ImGui::Text("Ability 1 = %i", static_cast<int>(playoneskillshot.getTimeLeft()));
-			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::Text("Rounds Won = %i", Playerone.wins);
+			ImGui::SetWindowSize(ImVec2(250, 100));
 			ImGui::SetWindowPos(ImVec2(100, 75));
 			ImGui::End();
 
 		}
 		{
-			ImGui::Begin("Player 1 wins");
-			ImGui::Text("Wins = %i", Playerone.wins);
-			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::Begin("Player 1 Attacks");
+
+			ImGui::Text("Melee Attack Cooldown = %i", static_cast<int>(tempability.getTimeLeft()));
+			ImGui::Text("Spear One Cooldown = %i", static_cast<int>(playoneskillshot.getTimeLeft()));
+			ImGui::Text("Spear Two Cooldown  = %i", static_cast<int>(playoneskillshot2.getTimeLeft()));
+			ImGui::SetWindowSize(ImVec2(250, 100));
 			ImGui::SetWindowPos(ImVec2(100, 150));
 			ImGui::End();
 
@@ -1380,26 +1473,37 @@ void Engine::runGame()
 		{
 			ImGui::Begin("Player 2");
 			ImGui::Text("Health = %f", Playertwo.getHealth());
-			ImGui::Text("Ability 1 = %i", static_cast<int>(playtwoskillshot.getTimeLeft()));
-			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::Text("Rounds Won = %i", Playertwo.wins);
+
+			ImGui::SetWindowSize(ImVec2(250, 100));
 			ImGui::SetWindowPos(ImVec2(1300, 75));
 			ImGui::End();
 
 		}
 		{
-			ImGui::Begin("Player 2 wins");
-			ImGui::Text("Wins = %i", Playertwo.wins);
+			ImGui::Begin("Player 2 Attacks");
+			ImGui::Text("Melee Attack Cooldown = %i", static_cast<int>(tempability2.getTimeLeft()));
+			ImGui::Text("Spear One Cooldown = %i", static_cast<int>(playtwoskillshot.getTimeLeft()));
+			ImGui::Text("Spear Two Cooldown  = %i", static_cast<int>(playtwoskillshot2.getTimeLeft()));
 
-			ImGui::SetWindowSize(ImVec2(200, 75));
+			ImGui::SetWindowSize(ImVec2(250, 100));
 			ImGui::SetWindowPos(ImVec2(1300, 150));
 			ImGui::End();
 
 		}
-
+		//MERGE 2 END
 		{
-			ImGui::Begin("");
+			if (roundCount == 0) {
+				ImGui::Begin("ROUND 1");
+			}
+			if (roundCount == 1) {
+				ImGui::Begin("ROUND 2");
+			}
+			if (roundCount == 2) {
+				ImGui::Begin("ROUND 3");
+			}
 			ImGui::Text("Time: %i", static_cast<int>(timer));
-			
+
 			ImGui::SetWindowSize(ImVec2(100, 75));
 			ImGui::SetWindowPos(ImVec2(SCREEN_WIDTH / 2.0f - 30.0f, 75));
 			ImGui::End();
@@ -1474,6 +1578,11 @@ void Engine::runGame()
 		bool playertwoplaying = false;
 		Player2Channel->isPlaying(&playertwoplaying);
 
+		bool musicplaying = false;
+		Music->isPlaying(&musicplaying);
+
+
+
 		if ((Playerone.ReturnSound != nullptr && !playeroneplaying && !playertwoplaying) || Playerone.Override) {
 			Player1Channel = Playerone.ReturnSound->Play(false);
 			Playerone.ReturnSound = nullptr;
@@ -1492,7 +1601,9 @@ void Engine::runGame()
 			Playertwo.ReturnSound = nullptr;
 		}
 
-
+		if (musicplaying) {
+			Sound::SetPosition(Music, Vec3ToFmod(BasePlate.getPositionV3()));
+		}
 		if (playeroneplaying) {
 			Sound::SetPosition(Player1Channel, Playerone.SoundPos);
 		}
@@ -1540,13 +1651,15 @@ void Engine::render()
 	Tree2.LoadObject(&depthPass);
 	Tree3.LoadObject(&depthPass);
 	Tree4.LoadObject(&depthPass);
+	Tree5.LoadObject(&depthPass);
+	Tree6.LoadObject(&depthPass);
 
 	
 	Spear1.LoadObject(&depthPass);
 	Spear2.LoadObject(&depthPass);
 	SecondSpear1.LoadObject(&depthPass);
 	SecondSpear2.LoadObject(&depthPass);
-	testPBR.LoadObject(&depthPass);
+	//testPBR.LoadObject(&depthPass);
 	depthPass.unuse();
 	//player1
 	depthPass2.use();
@@ -1698,7 +1811,7 @@ void Engine::render()
 	
 	sh2.unuse();
 
-	/*watershader.use();
+	watershader.use();
 	waterNorm.Bind(14);
 	watershader.sendUniformMat4("projection", cameraProjection);
 	watershader.sendUniformMat4("view", glm::inverse(_camera->getView()));
@@ -1712,11 +1825,11 @@ void Engine::render()
 	
 	waterNorm.Unbind();
 	
-	watershader.unuse();*/
+	watershader.unuse();
 
 	
 	skybox->Bind3D(25);
-	skybox->Bind3D(26);
+	skybox2->Bind3D(26);
 	IBL_Lookup.Bind(27);
 
 
@@ -1733,12 +1846,17 @@ void Engine::render()
 	//testPBR.LoadObject(&PBRShader);
 
 	Tree1.LoadObject(&PBRShader);
-	Playerone.LoadObject(&PBRShader);
-	Playertwo.LoadObject(&PBRShader);
+	Tree2.LoadObject(&PBRShader);
+	Tree3.LoadObject(&PBRShader);
+	Tree4.LoadObject(&PBRShader);
+	Tree5.LoadObject(&PBRShader);
+	Tree6.LoadObject(&PBRShader);
+	//Playerone.LoadObject(&PBRShader);
+	//Playertwo.LoadObject(&PBRShader);
 	//center.LoadObject(&PBRShader);
 	//spawn.LoadObject(&PBRShader);
 	//spawn2.LoadObject(&PBRShader);
-	River.LoadObject(&PBRShader);
+	//River.LoadObject(&PBRShader);
 	//tiles.LoadObject(&PBRShader);
 	//tilesCenter.LoadObject(&PBRShader);
 	Mountain.LoadObject(&PBRShader);
@@ -1748,7 +1866,7 @@ void Engine::render()
 	//BasePlate.LoadObject(&PBRShader);
 	PBRShader.unuse();
 	skybox->unbind3D(25);
-	skybox->unbind3D(26);
+	skybox2->unbind3D(26);
 	IBL_Lookup.Unbind();
 	lightColor.Unbind();
 
@@ -1904,7 +2022,12 @@ void Engine::render()
 	LUTShader.use();
 	LUTShader.sendUniformMat4("projection", cameraProjection);
 	LUTShader.sendUniformMat4("view", glm::inverse(_camera->getView()));
-	LUTShader.sendUniformFloat("uAmount", 0.0f);
+	if (a == true) {
+		LUTShader.sendUniformFloat("uAmount", 1.0);
+	}
+	if (a == false) {
+		LUTShader.sendUniformFloat("uAmount", 0.0);
+	}
 	LUTShader.sendUniformFloat("LUTSize", LUT.getSize());
 	glDisable(GL_DEPTH_TEST);
 	postBuffer.draw(30);
@@ -1988,6 +2111,21 @@ void Engine::playerInput(float t)
 
 		//animation2run = true;
 	}
+
+	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_Z))
+	{
+		if (a == true && press == false) {
+			a = false;
+			press = true;
+		}
+		else {
+			a = true;
+			press = false;
+		}
+
+		
+	}
+
 	if (InputModule::getInstance().isKeyPressed(GLFW_KEY_S))
 	{
 

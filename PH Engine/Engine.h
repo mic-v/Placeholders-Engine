@@ -111,6 +111,8 @@ private:
 	Object Tree2;
 	Object Tree3;
 	Object Tree4;
+	Object Tree5;
+	Object Tree6;
 	Object TestSpear;
 	Object* Mover;
 	Object BasePlate;
@@ -217,6 +219,9 @@ private:
 	//Death sounds
 	Sound Dying;
 
+	Sound AmbienceSound;
+
+	Texture clemMask;
 	FMOD::Channel* Ambience;
 	FMOD::Channel* Music;
 	FMOD::Channel* Player1Channel;
@@ -226,7 +231,9 @@ private:
 
 	
 	std::vector<std::string> skyboxTexture;
+	std::vector<std::string> skyboxTexture2;
 	TextureCube *skybox;
+	TextureCube *skybox2;
 	std::vector<Texture*> test;
 	//PBR
 	Texture metal;
